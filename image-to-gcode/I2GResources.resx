@@ -1,0 +1,662 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="PF_Initializing" xml:space="preserve">
+    <value>Initializing...</value>
+  </data>
+  <data name="PF_GeneratingGCode" xml:space="preserve">
+    <value>Generating G-code...</value>
+  </data>
+  <data name="PF_Run" xml:space="preserve">
+    <value>&amp;RUN</value>
+  </data>
+  <data name="PF_Pause" xml:space="preserve">
+    <value>&amp;PAUSE</value>
+  </data>
+  <data name="PF_Abort" xml:space="preserve">
+    <value>&amp;ABORT</value>
+  </data>
+  <data name="PF_SendingFile" xml:space="preserve">
+    <value>Sending NC-file...</value>
+  </data>
+  <data name="PF_SendingData" xml:space="preserve">
+    <value>Sending data...</value>
+  </data>
+  <data name="Grbl_InvalidResponse" xml:space="preserve">
+    <value>Invalid response from Controller!</value>
+  </data>
+  <data name="Grbl_NotResponding" xml:space="preserve">
+    <value>Controller is not responding!</value>
+  </data>
+  <data name="InvalidPresetFile" xml:space="preserve">
+    <value>'{0}' is an invalid preset file!</value>
+  </data>
+  <data name="Menu_File" xml:space="preserve">
+    <value>&amp;File</value>
+  </data>
+  <data name="Menu_Open" xml:space="preserve">
+    <value>&amp;Open...</value>
+  </data>
+  <data name="Menu_Reload" xml:space="preserve">
+    <value>&amp;Reload</value>
+  </data>
+  <data name="Menu_SaveGCode" xml:space="preserve">
+    <value>&amp;Save G-code...</value>
+  </data>
+  <data name="Menu_Close" xml:space="preserve">
+    <value>&amp;Close</value>
+  </data>
+  <data name="Menu_Language" xml:space="preserve">
+    <value>&amp;Language</value>
+  </data>
+  <data name="Menu_Exit" xml:space="preserve">
+    <value>E&amp;xit</value>
+  </data>
+  <data name="Menu_Image" xml:space="preserve">
+    <value>I&amp;mage</value>
+  </data>
+  <data name="Menu_OpenFromClipboard" xml:space="preserve">
+    <value>Open from cli&amp;pboard</value>
+  </data>
+  <data name="Menu_SaveImage" xml:space="preserve">
+    <value>S&amp;ave a copy as...</value>
+  </data>
+  <data name="Menu_CropBorder" xml:space="preserve">
+    <value>&amp;Crop border</value>
+  </data>
+  <data name="Menu_Preset" xml:space="preserve">
+    <value>P&amp;reset</value>
+  </data>
+  <data name="Menu_PresetLoad" xml:space="preserve">
+    <value>&amp;Load Preset from</value>
+  </data>
+  <data name="Menu_PresetSave" xml:space="preserve">
+    <value>&amp;Save Preset to</value>
+  </data>
+  <data name="Menu_PresetFile" xml:space="preserve">
+    <value>&amp;File...</value>
+  </data>
+  <data name="Menu_MachineType" xml:space="preserve">
+    <value>&amp;Machine Type ({0})</value>
+  </data>
+  <data name="Menu_MachineOrigin" xml:space="preserve">
+    <value>Machine &amp;Origin ({0})</value>
+  </data>
+  <data name="Menu_Machine" xml:space="preserve">
+    <value>Mac&amp;hine</value>
+  </data>
+  <data name="Menu_SerialPort" xml:space="preserve">
+    <value>Serial &amp;Port ({0})</value>
+  </data>
+  <data name="Menu_BaudRate" xml:space="preserve">
+    <value>&amp;Baud Rate ({0})</value>
+  </data>
+  <data name="Menu_Send" xml:space="preserve">
+    <value>S&amp;end...</value>
+  </data>
+  <data name="Menu_SendFile" xml:space="preserve">
+    <value>Send NC-&amp;file...</value>
+  </data>
+  <data name="Menu_Configuration" xml:space="preserve">
+    <value>&amp;Configuration...</value>
+  </data>
+  <data name="Menu_Help" xml:space="preserve">
+    <value>H&amp;elp</value>
+  </data>
+  <data name="Menu_Website" xml:space="preserve">
+    <value>Image2GCode Web&amp;site</value>
+  </data>
+  <data name="Menu_Donate" xml:space="preserve">
+    <value>&amp;Donate</value>
+  </data>
+  <data name="Menu_About" xml:space="preserve">
+    <value>&amp;About...</value>
+  </data>
+  <data name="Btn_Open" xml:space="preserve">
+    <value>Open...</value>
+  </data>
+  <data name="Btn_SaveGCode" xml:space="preserve">
+    <value>Save G-code...</value>
+  </data>
+  <data name="Btn_Send" xml:space="preserve">
+    <value>Send...</value>
+  </data>
+  <data name="Status_Ready" xml:space="preserve">
+    <value>Ready</value>
+  </data>
+  <data name="Status_Zoom" xml:space="preserve">
+    <value>Zoom: {0}%</value>
+  </data>
+  <data name="Status_ImageSize" xml:space="preserve">
+    <value>Image size: {0} x {1}</value>
+  </data>
+  <data name="Status_BurningArea" xml:space="preserve">
+    <value>Burning area: {0:0.#} cm^2</value>
+  </data>
+  <data name="Status_YStepover" xml:space="preserve">
+    <value>Y stepover: {0:0.0##} mm</value>
+  </data>
+  <data name="Status_ApproxRunTimeUnknown" xml:space="preserve">
+    <value>Approx run time: unknown</value>
+  </data>
+  <data name="Status_ApproxRunTimeSeconds" xml:space="preserve">
+    <value>Approx run time: ~{0}s</value>
+  </data>
+  <data name="Status_ApproxRunTimeMinutes" xml:space="preserve">
+    <value>Approx run time: ~{0}m</value>
+  </data>
+  <data name="Status_ApproxRunTimeHours" xml:space="preserve">
+    <value>Approx run time: ~{0}h</value>
+  </data>
+  <data name="Status_ApproxRunTime" xml:space="preserve">
+    <value>Approx run time: ~{0}h {1}m</value>
+  </data>
+  <data name="Im_1BitPalette" xml:space="preserve">
+    <value>Use &amp;1-bit palette</value>
+  </data>
+  <data name="Im_Dithering" xml:space="preserve">
+    <value>&amp;Dithering:</value>
+  </data>
+  <data name="Im_BlackThreshold" xml:space="preserve">
+    <value>Black threshold:</value>
+  </data>
+  <data name="Im_InvertColors" xml:space="preserve">
+    <value>&amp;Invert colors</value>
+  </data>
+  <data name="Im_SharpenForce" xml:space="preserve">
+    <value>Sharpen Force:</value>
+  </data>
+  <data name="Im_Brightness" xml:space="preserve">
+    <value>Brightness:</value>
+  </data>
+  <data name="Im_Contrast" xml:space="preserve">
+    <value>Contrast:</value>
+  </data>
+  <data name="Im_Gamma" xml:space="preserve">
+    <value>Gamma:</value>
+  </data>
+  <data name="Im_Resolution" xml:space="preserve">
+    <value>Image resolution (&amp;DPI):</value>
+  </data>
+  <data name="Im_XDpi" xml:space="preserve">
+    <value>X:</value>
+  </data>
+  <data name="Im_YDpi" xml:space="preserve">
+    <value>Y:</value>
+  </data>
+  <data name="Im_SameAsX" xml:space="preserve">
+    <value>S&amp;ame as X</value>
+  </data>
+  <data name="Im_RotateFlip" xml:space="preserve">
+    <value>Rotate/Flip Image:</value>
+  </data>
+  <data name="Im_Left" xml:space="preserve">
+    <value>X:</value>
+  </data>
+  <data name="Im_Top" xml:space="preserve">
+    <value>Y:</value>
+  </data>
+  <data name="Im_Width" xml:space="preserve">
+    <value>&amp;Width:</value>
+  </data>
+  <data name="Im_Height" xml:space="preserve">
+    <value>Hei&amp;ght:</value>
+  </data>
+  <data name="Im_Interpolation" xml:space="preserve">
+    <value>Inter&amp;polation:</value>
+  </data>
+  <data name="Im_AspectRatio" xml:space="preserve">
+    <value>Aspect ratio:</value>
+  </data>
+  <data name="Im_KeepAspectRatio" xml:space="preserve">
+    <value>&amp;Keep aspect ratio</value>
+  </data>
+  <data name="Gc_Speed" xml:space="preserve">
+    <value>Spee&amp;d:</value>
+  </data>
+  <data name="Gc_Power" xml:space="preserve">
+    <value>&amp;Power:</value>
+  </data>
+  <data name="Gc_Accel" xml:space="preserve">
+    <value>A&amp;ccel:</value>
+  </data>
+  <data name="Menu_G0Spd" xml:space="preserve">
+    <value>Rapid Spee&amp;d ({0:0.#})</value>
+  </data>
+  <data name="Gc_Shift" xml:space="preserve">
+    <value>Shif&amp;t:</value>
+  </data>
+  <data name="Gc_HeatDelay" xml:space="preserve">
+    <value>Heat &amp;Delay:</value>
+  </data>
+  <data name="Gc_AirAssist" xml:space="preserve">
+    <value>Air Assist</value>
+  </data>
+  <data name="Gc_ChangeSpeedOnWhite" xml:space="preserve">
+    <value>Cha&amp;nge speed on white</value>
+  </data>
+  <data name="Gc_WhiteSpeed" xml:space="preserve">
+    <value>&amp;White Speed:</value>
+  </data>
+  <data name="Gc_WhiteDistance" xml:space="preserve">
+    <value>Min &amp;Distance:</value>
+  </data>
+  <data name="Gc_MaxMinSpeed" xml:space="preserve">
+    <value>Max/Min Spee&amp;d:</value>
+  </data>
+  <data name="Gc_MinMaxPower" xml:space="preserve">
+    <value>Min/Max &amp;Power:</value>
+  </data>
+  <data name="Gc_Bidirectional" xml:space="preserve">
+    <value>&amp;Bidirectional</value>
+  </data>
+  <data name="Gc_BurnToTheCleaningStrip" xml:space="preserve">
+    <value>B&amp;urn to the Cleaning Strip</value>
+  </data>
+  <data name="Gc_CleaningStrategy" xml:space="preserve">
+    <value>Cleaning Strate&amp;gy:</value>
+  </data>
+  <data name="Gc_StripSide" xml:space="preserve">
+    <value>S&amp;trip Position:</value>
+  </data>
+  <data name="Gc_StripWidth" xml:space="preserve">
+    <value>&amp;Width:</value>
+  </data>
+  <data name="Gc_StripSpeed" xml:space="preserve">
+    <value>Sp&amp;d on the Strip:</value>
+  </data>
+  <data name="Gc_CleaningField" xml:space="preserve">
+    <value>Cleaning Fiel&amp;d:</value>
+  </data>
+  <data name="Gc_CleaningSpd" xml:space="preserve">
+    <value>Cleaning Spee&amp;d:</value>
+  </data>
+  <data name="Gc_CleaningCycles" xml:space="preserve">
+    <value>&amp;Cycles:</value>
+  </data>
+  <data name="Gc_NumberOfPasses" xml:space="preserve">
+    <value>Number of &amp;Passes:</value>
+  </data>
+  <data name="Menu_GoToNextLine" xml:space="preserve">
+    <value>&amp;Go to Next Line ({0})</value>
+  </data>
+  <data name="Menu_ReturnToOrigin" xml:space="preserve">
+    <value>Return to O&amp;rigin ({0})</value>
+  </data>
+  <data name="Menu_DoNotReturnY" xml:space="preserve">
+    <value>Do not return Y to O&amp;rigin</value>
+  </data>
+  <data name="Gc_PrependImageFrame" xml:space="preserve">
+    <value>Prepend Image Frame to G-code</value>
+  </data>
+  <data name="Gc_FrameSpeed" xml:space="preserve">
+    <value>Frame Spee&amp;d:</value>
+  </data>
+  <data name="Gc_FramePower" xml:space="preserve">
+    <value>Frame &amp;Power:</value>
+  </data>
+  <data name="Gc_FrameWorkArea" xml:space="preserve">
+    <value>Image work area</value>
+  </data>
+  <data name="Gc_EditGraph" xml:space="preserve">
+    <value>EDIT GRAPH</value>
+  </data>
+  <data name="DefaultPresetName" xml:space="preserve">
+    <value>Standard Preset</value>
+  </data>
+  <data name="Gc_CleaningRowsCount" xml:space="preserve">
+    <value>Ro&amp;ws count:</value>
+  </data>
+  <data name="Gc_CleaningDistance" xml:space="preserve">
+    <value>&amp;Distance:</value>
+  </data>
+  <data name="Im_ResultPreview" xml:space="preserve">
+    <value>Result Preview:</value>
+  </data>
+  <data name="Im_Background" xml:space="preserve">
+    <value>Ba&amp;ckground:</value>
+  </data>
+  <data name="Im_TextureWrapMode" xml:space="preserve">
+    <value>&amp;Wrap Mode:</value>
+  </data>
+  <data name="Im_TextureSize" xml:space="preserve">
+    <value>Si&amp;ze:</value>
+  </data>
+  <data name="Im_PreviewColor" xml:space="preserve">
+    <value>&amp;Color:</value>
+  </data>
+  <data name="Menu_DownloadCH340Driver" xml:space="preserve">
+    <value>Do&amp;wnload COM-port driver</value>
+  </data>
+  <data name="Menu_CheckForUpdates" xml:space="preserve">
+    <value>Check for &amp;updates</value>
+  </data>
+  <data name="About_Title" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="About_MakeASmallDonation" xml:space="preserve">
+    <value>If you found this software useful, make a small donation.</value>
+  </data>
+  <data name="Status_LoadingImage" xml:space="preserve">
+    <value>Loading image...</value>
+  </data>
+  <data name="Status_AppIsLoading" xml:space="preserve">
+    <value>Application is loading...</value>
+  </data>
+  <data name="Status_AppIsClosing" xml:space="preserve">
+    <value>Application is closing...</value>
+  </data>
+  <data name="Status_ApplyingFilters" xml:space="preserve">
+    <value>Applying filters...</value>
+  </data>
+  <data name="Status_ApplyingDithering" xml:space="preserve">
+    <value>Applying dithering...</value>
+  </data>
+  <data name="Status_PreparingTexture" xml:space="preserve">
+    <value>Preparing texture...</value>
+  </data>
+  <data name="Status_GeneratingPreview" xml:space="preserve">
+    <value>Generating preview...</value>
+  </data>
+  <data name="Status_CalculatingWorkTime" xml:space="preserve">
+    <value>Calculating work time...</value>
+  </data>
+  <data name="Status_ResizingImage" xml:space="preserve">
+    <value>Resizing image...</value>
+  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="PresetCheckedIcon" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAADpJREFUOE9j
+        GAVkgf9QmiwA0gzDJAOiNOOSJFozNkW4xLECdMXofKIAsiaSNcMARZphgCLNQwYwMAAABksf4Uy1J2QA
+        AAAASUVORK5CYII=
+</value>
+  </data>
+  <data name="WO_Ok" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="WO_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="WO_MmPerRevolutionX" xml:space="preserve">
+    <value>MM per R&amp;evolution X:</value>
+  </data>
+  <data name="WO_MmPerRevolutionY" xml:space="preserve">
+    <value>MM per R&amp;evolution Y:</value>
+  </data>
+  <data name="WO_CylinderDiameter" xml:space="preserve">
+    <value>&amp;Diameter of Cylinder:</value>
+  </data>
+  <data name="WO_AxisBeingWrapped" xml:space="preserve">
+    <value>&amp;Axis Being Wrapped:</value>
+  </data>
+  <data name="WO_label5" xml:space="preserve">
+    <value>Image is wrapped {0:0.#} degrees around the cylinder.</value>
+  </data>
+  <data name="Menu_SpeedGraphReset" xml:space="preserve">
+    <value>Reset Sp&amp;eed Graph to</value>
+  </data>
+  <data name="Menu_PowerGraphReset" xml:space="preserve">
+    <value>Reset Po&amp;wer Graph to</value>
+  </data>
+  <data name="Menu_GraphLinear" xml:space="preserve">
+    <value>Li&amp;near</value>
+  </data>
+  <data name="Menu_GraphDefault" xml:space="preserve">
+    <value>&amp;Default</value>
+  </data>
+  <data name="Menu_SaveGCodeWO" xml:space="preserve">
+    <value>Save G-code (&amp;Wrapped Output)...</value>
+  </data>
+  <data name="Menu_SendWO" xml:space="preserve">
+    <value>Send (&amp;Wrapped Output)...</value>
+  </data>
+  <data name="WO_Title" xml:space="preserve">
+    <value>Wrapped Output</value>
+  </data>
+  <data name="CouldNotFindFile" xml:space="preserve">
+    <value>Couldn't find '{0}'!</value>
+  </data>
+  <data name="InvalidImageFile" xml:space="preserve">
+    <value>'{0}' does not have a valid image format!</value>
+  </data>
+  <data name="GrblSet_Title" xml:space="preserve">
+    <value>Grbl Settings</value>
+  </data>
+  <data name="GrblSet_XAxis" xml:space="preserve">
+    <value>X Axis</value>
+  </data>
+  <data name="GrblSet_YAxis" xml:space="preserve">
+    <value>Y Axis</value>
+  </data>
+  <data name="GrblSet_ZAxis" xml:space="preserve">
+    <value>Z Axis</value>
+  </data>
+  <data name="GrblSet_StepsPerMm" xml:space="preserve">
+    <value>S&amp;teps per MM:</value>
+  </data>
+  <data name="GrblSet_MaxVelocity" xml:space="preserve">
+    <value>Max &amp;Velocity:</value>
+  </data>
+  <data name="GrblSet_MaxAccel" xml:space="preserve">
+    <value>A&amp;cceleration:</value>
+  </data>
+  <data name="GrblSet_MaxTravel" xml:space="preserve">
+    <value>Ta&amp;ble Size:</value>
+  </data>
+  <data name="GrblSet_FastJog" xml:space="preserve">
+    <value>&amp;Fast Jog:</value>
+  </data>
+  <data name="GrblSet_SlowJog" xml:space="preserve">
+    <value>Slo&amp;w Jog:</value>
+  </data>
+  <data name="GrblSet_InvertSTEP" xml:space="preserve">
+    <value>Invert STEP</value>
+  </data>
+  <data name="GrblSet_InvertDIR" xml:space="preserve">
+    <value>Invert DIR</value>
+  </data>
+  <data name="GrblSet_HomingDirInv" xml:space="preserve">
+    <value>Homing DIR Invert</value>
+  </data>
+  <data name="GrblSet_StepPulseLen" xml:space="preserve">
+    <value>STEP Pulse Le&amp;ngth:</value>
+  </data>
+  <data name="GrblSet_StepIdleDelay" xml:space="preserve">
+    <value>STEP Idle &amp;Delay:</value>
+  </data>
+  <data name="GrblSet_JunctionDeviation" xml:space="preserve">
+    <value>&amp;Junction Deviation:</value>
+  </data>
+  <data name="GrblSet_ArcTolerance" xml:space="preserve">
+    <value>&amp;Arc Tolerance:</value>
+  </data>
+  <data name="GrblSet_StatusReport" xml:space="preserve">
+    <value>Status Report:</value>
+  </data>
+  <data name="GrblSet_PositionType" xml:space="preserve">
+    <value>MP&amp;os</value>
+  </data>
+  <data name="GrblSet_BufferData" xml:space="preserve">
+    <value>B&amp;uffer Data</value>
+  </data>
+  <data name="GrblSet_InvertStEnablePin" xml:space="preserve">
+    <value>Invert Stepper Enable/Disable Pin</value>
+  </data>
+  <data name="GrblSet_InvertLimitPins" xml:space="preserve">
+    <value>Invert Limit Pins</value>
+  </data>
+  <data name="GrblSet_InvertProbePin" xml:space="preserve">
+    <value>Invert Probe Pin</value>
+  </data>
+  <data name="GrblSet_ReportInches" xml:space="preserve">
+    <value>&amp;Report Inches</value>
+  </data>
+  <data name="GrblSet_CoreXY" xml:space="preserve">
+    <value>CoreXY/H-bot &amp;Kinematics</value>
+  </data>
+  <data name="GrblSet_EnableHoming" xml:space="preserve">
+    <value>Enable Ho&amp;ming Cycle</value>
+  </data>
+  <data name="GrblSet_SoftLimits" xml:space="preserve">
+    <value>Enable &amp;Soft Limits</value>
+  </data>
+  <data name="GrblSet_HardLimits" xml:space="preserve">
+    <value>Enable &amp;Hard Limits</value>
+  </data>
+  <data name="GrblSet_HomingFeedRate" xml:space="preserve">
+    <value>Homing &amp;Feed Rate:</value>
+  </data>
+  <data name="GrblSet_HomingSeekRate" xml:space="preserve">
+    <value>Homing S&amp;eek Rate:</value>
+  </data>
+  <data name="GrblSet_HomingDebounceDelay" xml:space="preserve">
+    <value>Debounce &amp;Delay:</value>
+  </data>
+  <data name="GrblSet_HomingPulloff" xml:space="preserve">
+    <value>Homing Pull-o&amp;ff:</value>
+  </data>
+  <data name="GrblSet_LaserMode" xml:space="preserve">
+    <value>&amp;Laser Mode</value>
+  </data>
+  <data name="GrblSet_MaxRPM" xml:space="preserve">
+    <value>Max Spi&amp;ndle Speed:</value>
+  </data>
+  <data name="GrblSet_MinRPM" xml:space="preserve">
+    <value>Min S&amp;pindle Speed:</value>
+  </data>
+  <data name="GrblSet_FastGrid" xml:space="preserve">
+    <value>&amp;Fast Grid:</value>
+  </data>
+  <data name="GrblSet_SlowGrid" xml:space="preserve">
+    <value>Slo&amp;w Grid:</value>
+  </data>
+  <data name="GrblSet_OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="GrblSet_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="GrblSet_Apply" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="PF_RetrievingGrblSettings" xml:space="preserve">
+    <value>Retrieving Grbl Settings...</value>
+  </data>
+</root>
