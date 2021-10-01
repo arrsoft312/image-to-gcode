@@ -16,7 +16,7 @@ class ProgressForm:Form {
     public Label label3;
     public Label label2;
     private TableLayoutPanel tableLayoutPanel3;
-    private TableLayoutPanel tableLayoutPanel2;
+    public TableLayoutPanel tableLayoutPanel2;
     public ProgressBar progressBar1;
     public Label label1;
     private TableLayoutPanel tableLayoutPanel1;
@@ -85,16 +85,15 @@ class ProgressForm:Form {
         progressBar1.TabIndex = 1;
         
         tableLayoutPanel2.AutoSize = true;
-        tableLayoutPanel2.ColumnCount = 1;
-        tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle());
+        tableLayoutPanel2.ColumnCount = 2;
+        tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
         tableLayoutPanel2.Controls.Add(tableLayoutPanel3, 0, 0);
         tableLayoutPanel2.Controls.Add(trackBar1, 0, 1);
-        tableLayoutPanel2.Controls.Add(tableLayoutPanel4, 0, 2);
-        tableLayoutPanel2.Controls.Add(trackBar2, 0, 3);
+        tableLayoutPanel2.Controls.Add(tableLayoutPanel4, 1, 0);
+        tableLayoutPanel2.Controls.Add(trackBar2, 1, 1);
         tableLayoutPanel2.Dock = DockStyle.Fill;
-        tableLayoutPanel2.RowCount = 4;
-        tableLayoutPanel2.RowStyles.Add(new RowStyle());
-        tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
+        tableLayoutPanel2.RowCount = 2;
         tableLayoutPanel2.RowStyles.Add(new RowStyle());
         tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
         tableLayoutPanel2.TabIndex = 2;
@@ -128,7 +127,7 @@ class ProgressForm:Form {
         trackBar1.Maximum = 200;
         trackBar1.Minimum = 10;
         trackBar1.TabIndex = 1;
-        trackBar1.Tag = "zz";
+        trackBar1.Tag = 425;
         trackBar1.TickStyle = TickStyle.None;
         trackBar1.Value = 100;
         
@@ -161,7 +160,7 @@ class ProgressForm:Form {
         trackBar2.Maximum = 200;
         trackBar2.Minimum = 10;
         trackBar2.TabIndex = 3;
-        trackBar2.Tag = "zz";
+        trackBar2.Tag = 426;
         trackBar2.TickStyle = TickStyle.None;
         trackBar2.Value = 100;
         
