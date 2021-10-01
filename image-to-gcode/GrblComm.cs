@@ -15,7 +15,7 @@ partial class image2gcode {
             progressForm3.Top = (this.Top + (this.Height - progressForm3.Height)/2);
             
             progressForm3.Show(this);
-            Application.DoEvents();
+            progressForm3.Update();
             
             try {
                 serialPort1.BaudRate = baudRate;
