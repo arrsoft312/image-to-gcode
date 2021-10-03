@@ -659,4 +659,10 @@
   <data name="PF_RetrievingGrblSettings" xml:space="preserve">
     <value>Retrieving Grbl Settings...</value>
   </data>
+  <data name="PF_FeedOverride" xml:space="preserve">
+    <value>Feed Override:</value>
+  </data>
+  <data name="PF_PowerOverride" xml:space="preserve">
+    <value>Power Override:</value>
+  </data>
 </root>

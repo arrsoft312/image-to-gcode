@@ -9,6 +9,9 @@ partial class image2gcode {
     private ProgressForm2 progressForm2;
     private ProgressForm2 progressForm3;
     
+    private int new_f_override = 100;
+    private int new_s_override = 100;
+    
     private void SettingsToolStripMenuItemClick(object sender, EventArgs e) {
         try {
             progressForm3.Left = (this.Left + (this.Width - progressForm3.Width)/2);
@@ -123,7 +126,42 @@ partial class image2gcode {
     }
     
     private void Grbl_GetSync(GrblAbort callback = null) {
+        if (callback == null) {
+            callback = () => false;
+        }
         
+        int prevReadTimeout = serialPort1.ReadTimeout;
+        try {
+            serialPort1.ReadTimeout = 250;
+            for (int i = 0; i < 10; i++) {
+                serialPort1.Write("\n");
+                try {
+                    for (;;) {
+                        serialPort1.ReadTo("\r\n");
+                    }
+                } catch (TimeoutException) {
+                    if (callback()) {
+                        return;
+                    }
+                }
+                
+                serialPort1.Write("\n");
+                try {
+                    if (serialPort1.ReadTo("ok\r\n") == "") {
+                        return;
+                    }
+                    throw new Exception(resources.GetString("Grbl_InvalidResponse", culture));
+                } catch (TimeoutException) {
+                    if (callback()) {
+                        return;
+                    }
+                }
+            }
+            
+            throw new Exception(resources.GetString("Grbl_NotResponding", culture));
+        } finally {
+            serialPort1.ReadTimeout = prevReadTimeout;
+        }
     }
     
     private unsafe void Grbl_GetBuildInfo(bool* isKaskade, int* rxBufferSize = null) {
@@ -138,7 +176,7 @@ partial class image2gcode {
             }
             
             string[] ver = resp[0].Split(new string[] { ":", ".", }, 5, StringSplitOptions.None);
-            if (ver.Length < 4) {
+            if (ver.Length != 5) {
                 throw new Exception(resources.GetString("Grbl_InvalidResponse", culture));
             }
             if (ver[0] != "[VER") {
@@ -153,7 +191,7 @@ partial class image2gcode {
                 throw new Exception(resources.GetString("Grbl_InvalidResponse", culture));
             }
             
-            *isKaskade = (ver[1] == "0");
+            *isKaskade = (ver[4] == "KASKADE");
             if (rxBufferSize != null) {
                 *rxBufferSize = Int32.Parse(opt[3], invariantCulture);
             }

@@ -104,15 +104,15 @@
     <Compile Include="WrappedOutputDialog.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="I2GResources.be.resx">
+    <None Include="I2GResources.be.resx">
       <DependentUpon>I2GResources.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="I2GResources.hu.resx">
+    </None>
+    <None Include="I2GResources.hu.resx">
       <DependentUpon>I2GResources.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="I2GResources.ro.resx">
+    </None>
+    <None Include="I2GResources.ro.resx">
       <DependentUpon>I2GResources.cs</DependentUpon>
-    </EmbeddedResource>
+    </None>
     <EmbeddedResource Include="I2GResources.ru.resx">
       <DependentUpon>I2GResources.cs</DependentUpon>
     </EmbeddedResource>

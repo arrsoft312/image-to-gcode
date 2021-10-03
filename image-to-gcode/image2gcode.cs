@@ -34,7 +34,7 @@ using Microsoft.Win32;
 partial class image2gcode:Form {
     public const string AppTitle = "image2gcode";
     public const string AppVersion = "3.1.1";
-    public const string AppVersionBuild = "2021-09-26";
+    public const string AppVersionBuild = "2021-10-03";
     public const string AppAuthor = "Artur Kurpukov";
     public const string AppCopyright = "Copyright (C) 2017-2021 Artur Kurpukov";
     private const string SettingsVersion = "3.1";
@@ -506,6 +506,9 @@ partial class image2gcode:Form {
         });
         
         progressForm1 = new ProgressForm();
+        progressForm1.Load += (sender2, e2) => {
+            ((Form)sender2).ClientSize = new Size(418, -1);
+        };
         progressForm1.Shown += (sender2, e2) => {
             backgroundWorker2.RunWorkerAsync(null);
         };
@@ -521,7 +524,7 @@ partial class image2gcode:Form {
         progressForm1.button1.Click += (sender2, e2) => serialPort1.Write(new byte[] { (byte)'~', }, 0, 1);
         progressForm1.button2.Click += (sender2, e2) => serialPort1.Write(new byte[] { (byte)'!', }, 0, 1);
         
-        progressForm2 = new ProgressForm2(null);
+        //progressForm2 = new ProgressForm2(null);
         
         progressForm3 = new ProgressForm2(resources.GetString("PF_RetrievingGrblSettings", culture));
         progressForm3.Load += (sender2, e2) => {
@@ -1164,6 +1167,7 @@ partial class image2gcode:Form {
         progressForm1.label1.Text = resources.GetString("PF_GeneratingGCode", culture);
         progressForm1.progressBar1.Value = 0;
         
+        progressForm1.tableLayoutPanel2.Visible = false;
         progressForm1.button1.Visible = false;
         progressForm1.button2.Visible = false;
         
@@ -1200,6 +1204,7 @@ partial class image2gcode:Form {
         progressForm1.label1.Text = resources.GetString("PF_Initializing", culture);
         progressForm1.progressBar1.Value = 0;
         
+        progressForm1.tableLayoutPanel2.Visible = false;
         progressForm1.button1.Visible = true;
         progressForm1.button2.Visible = true;
         
@@ -1221,6 +1226,7 @@ partial class image2gcode:Form {
         progressForm1.label1.Text = resources.GetString("PF_Initializing", culture);
         progressForm1.progressBar1.Value = 0;
         
+        progressForm1.tableLayoutPanel2.Visible = false;
         progressForm1.button1.Visible = true;
         progressForm1.button2.Visible = true;
         
@@ -1347,6 +1353,8 @@ partial class image2gcode:Form {
         this.ResumeLayout2();
         
         progressForm1.SuspendLayout2();
+        progressForm1.label2.Text = resources.GetString("PF_FeedOverride", culture);
+        progressForm1.label4.Text = resources.GetString("PF_PowerOverride", culture);
         progressForm1.button1.Text = resources.GetString("PF_Run", culture);
         progressForm1.button2.Text = resources.GetString("PF_Pause", culture);
         progressForm1.button3.Text = resources.GetString("PF_Abort", culture);
@@ -1661,6 +1669,16 @@ partial class image2gcode:Form {
             case 5:
             imSharpenForce = int_value;
             label41.Text = (int_value / 10F).ToString("0.0", culture);
+            break;
+            
+            case 41:
+            new_f_override = int_value;
+            progressForm1.label3.Text = int_value.ToString("0", culture);
+            break;
+            
+            case 42:
+            new_s_override = int_value;
+            progressForm1.label5.Text = int_value.ToString("0", culture);
             break;
             
             case 9:

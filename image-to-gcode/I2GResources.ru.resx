@@ -654,4 +654,10 @@
   <data name="TranslationAuthor" xml:space="preserve">
     <value>Artur Kurpukov</value>
   </data>
+  <data name="PF_FeedOverride" xml:space="preserve">
+    <value>Корректировка скорости:</value>
+  </data>
+  <data name="PF_PowerOverride" xml:space="preserve">
+    <value>Корректировка мощности:</value>
+  </data>
 </root>

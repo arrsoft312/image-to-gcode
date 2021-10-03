@@ -139,6 +139,9 @@ partial class image2gcode {
             bool isKaskade = false;
             int rxBufferSize = 0;
             
+            int f_override = 100;
+            int s_override = 100;
+            
             int sum_c_line = 0;
             List<int> c_line = new List<int>();
             
@@ -166,18 +169,29 @@ partial class image2gcode {
                 
                 if (!isKaskade) {
                     
+                    
+                    progressForm1.trackBar1.Value = f_override;
+                    progressForm1.trackBar2.Value = s_override;
+                    
+                    Control_ValueChanged(progressForm1.trackBar1, EventArgs.Empty);
+                    Control_ValueChanged(progressForm1.trackBar2, EventArgs.Empty);
+                    
+                    progressForm1.Invoke((MethodInvoker)(() => progressForm1.tableLayoutPanel2.Visible = true), null);
                 }
                 
                 progressForm1.button1.Enabled = true;
                 progressForm1.button2.Enabled = true;
                 
                 SendToGrblController = () => {
-                    
+                    for (int j = 0; j < i; j++) {
+                        
+                    }
                 };
                 
                 if (readFromFile) {
                     ((BackgroundWorker)sender).ReportProgress(0, resources.GetString("PF_SendingFile", culture));
                     
+                    return;
                 }
                 
                 ((BackgroundWorker)sender).ReportProgress(0, resources.GetString("PF_SendingData", culture));
