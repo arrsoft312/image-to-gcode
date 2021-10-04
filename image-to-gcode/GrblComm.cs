@@ -126,36 +126,34 @@ partial class image2gcode {
     }
     
     private void Grbl_GetSync(GrblAbort callback = null) {
-        if (callback == null) {
-            callback = () => false;
-        }
-        
         int prevReadTimeout = serialPort1.ReadTimeout;
         try {
             serialPort1.ReadTimeout = 250;
-            for (int i = 0; i < 10; i++) {
-                serialPort1.Write("\n");
+            for (int i = 0; i < 15; i++) {
+                serialPort1.Write("\n\n");
+                
+                string resp = null;
                 try {
                     for (;;) {
-                        serialPort1.ReadTo("\r\n");
+                        resp = serialPort1.ReadTo("\r\n");
                     }
                 } catch (TimeoutException) {
+                }
+                
+                if (callback != null) {
                     if (callback()) {
                         return;
                     }
                 }
                 
-                serialPort1.Write("\n");
-                try {
-                    if (serialPort1.ReadTo("ok\r\n") == "") {
-                        return;
-                    }
-                    throw new Exception(resources.GetString("Grbl_InvalidResponse", culture));
-                } catch (TimeoutException) {
-                    if (callback()) {
-                        return;
-                    }
+                if (resp == null) {
+                    continue;
                 }
+                if (resp != "ok") {
+                    throw new Exception(resources.GetString("Grbl_InvalidResponse", culture));
+                }
+                
+                return;
             }
             
             throw new Exception(resources.GetString("Grbl_NotResponding", culture));
