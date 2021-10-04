@@ -125,17 +125,14 @@ partial class image2gcode {
         bool sendToDevice = bWorker2SendToDevice;
         bool readFromFile = bWorker2ReadFromFile;
         
-        StreamWriter fileStream;
+        StreamWriter outFile;
         if (sendToDevice) {
-            fileStream = StreamWriter.Null;
+            outFile = StreamWriter.Null;
         } else {
-            fileStream = new StreamWriter(saveFileDialog1.FileName, false, Encoding.ASCII);
+            outFile = new StreamWriter(saveFileDialog1.FileName, false, Encoding.ASCII);
         }
         
         try {
-            Action SendToGrblController;
-            StreamReader fileStream2;
-            
             bool isKaskade = false;
             int rxBufferSize = 0;
             
@@ -150,7 +147,8 @@ partial class image2gcode {
             string[] s_list = new string[MaxImageSize*2+4];
             int i = 0x7FFFFFFF;
             
-            //fileStream2 = new StreamReader(openFileDialog2.FileName, Encoding.ASCII, false);
+            Action SendToGrblController;
+            
             //serialPort1.ReadTo("\r\n");
             //serialPort1.Write("");
             if (sendToDevice) {
@@ -191,6 +189,13 @@ partial class image2gcode {
                 if (readFromFile) {
                     ((BackgroundWorker)sender).ReportProgress(0, resources.GetString("PF_SendingFile", culture));
                     
+                    StreamReader inFile = new StreamReader(openFileDialog2.FileName, Encoding.ASCII, false);
+                    try {
+                        
+                    } finally {
+                        inFile.Close();
+                    }
+                    
                     return;
                 }
                 
@@ -198,7 +203,7 @@ partial class image2gcode {
             } else {
                 SendToGrblController = () => {
                     for (int j = 0; j < i; j++) {
-                        fileStream.Write(s_list[j] + "\n");
+                        outFile.Write(s_list[j] + "\n");
                     }
                 };
             }
@@ -950,7 +955,7 @@ partial class image2gcode {
             
             ((BackgroundWorker)sender).ReportProgress(1000, null);
         } finally {
-            fileStream.Close();
+            outFile.Close();
             serialPort1.Close();
         }
     }

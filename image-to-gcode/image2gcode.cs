@@ -34,7 +34,7 @@ using Microsoft.Win32;
 partial class image2gcode:Form {
     public const string AppTitle = "image2gcode";
     public const string AppVersion = "3.1.1";
-    public const string AppVersionBuild = "2021-10-03";
+    public const string AppVersionBuild = "2021-10-04";
     public const string AppAuthor = "Artur Kurpukov";
     public const string AppCopyright = "Copyright (C) 2017-2021 Artur Kurpukov";
     private const string SettingsVersion = "3.1";
@@ -1146,8 +1146,7 @@ partial class image2gcode:Form {
         gcMultiplierX = 1F;
         gcMultiplierY = 1F;
         
-        bool wrappedOutput = (bool)((ToolStripItem)sender).Tag;
-        if (wrappedOutput) {
+        if ((bool)((ToolStripItem)sender).Tag) {
             if (wrappedOutputDialog1.ShowDialog(this) != DialogResult.OK) {
                 return;
             }
@@ -1187,8 +1186,7 @@ partial class image2gcode:Form {
         gcMultiplierX = 1F;
         gcMultiplierY = 1F;
         
-        bool wrappedOutput = (bool)((ToolStripItem)sender).Tag;
-        if (wrappedOutput) {
+        if ((bool)((ToolStripItem)sender).Tag) {
             if (wrappedOutputDialog1.ShowDialog(this) != DialogResult.OK) {
                 return;
             }
