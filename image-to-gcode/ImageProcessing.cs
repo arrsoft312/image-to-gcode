@@ -92,10 +92,10 @@ partial class image2gcode {
             try {
                 im = (Bitmap)Image.FromFile(fileName, false);
             } catch (OutOfMemoryException) {
-                MessageBox.Show(this, String.Format(culture, resources.GetString("InvalidImageFile", culture), Path.GetFileName(fileName)), AppTitle, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, String.Format(culture, resources.GetString("Error_InvalidImageFile", culture), Path.GetFileName(fileName)), AppTitle, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             } catch (FileNotFoundException) {
-                MessageBox.Show(this, String.Format(culture, resources.GetString("CouldNotFindFile", culture), fileName), AppTitle, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, String.Format(culture, resources.GetString("Error_CouldNotFindFile", culture), fileName), AppTitle, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             } catch (Exception ex) {
                 MessageBox.Show(this, ex.Message, AppTitle, MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -1092,9 +1092,9 @@ partial class image2gcode {
                                 byte* dest = (byte*)(imBackground + y*textureWidth*3);
                                 
                                 int floorY = (int)(y*resizeFactorY);
-                                int ceilY = (floorY + 1);
+                                int ceilY = (floorY+1);
                                 if (ceilY >= H) {
-                                    ceilY = floorY;
+                                    ceilY = (H-1);
                                 }
                                 float fractionY = (y*resizeFactorY - floorY);
                                 float invFractionY = (1F - fractionY);
@@ -1104,25 +1104,25 @@ partial class image2gcode {
                                 
                                 for (int x = 0; x < textureWidth; x++) {
                                     int floorX = (int)(x*resizeFactorX);
-                                    int ceilX = (floorX + 1);
+                                    int ceilX = (floorX+1);
                                     if (ceilX >= W) {
-                                        ceilX = floorX;
+                                        ceilX = (W-1);
                                     }
                                     float fractionX = (x*resizeFactorX - floorX);
                                     float invFractionX = (1F - fractionX);
                                     
-                                    byte b1, b2;
+                                    float b1, b2;
                                     
-                                    b1 = (byte)(invFractionX*srcFloor[floorX*3+2] + fractionX*srcFloor[ceilX*3+2]);
-                                    b2 = (byte)(invFractionX*srcCeil[floorX*3+2] + fractionX*srcCeil[ceilX*3+2]);
+                                    b1 = (invFractionX*srcFloor[floorX*3+2] + fractionX*srcFloor[ceilX*3+2]);
+                                    b2 = (invFractionX*srcCeil[floorX*3+2] + fractionX*srcCeil[ceilX*3+2]);
                                     dest[x*3+2] = (byte)(invFractionY*b1 + fractionY*b2);
                                     
-                                    b1 = (byte)(invFractionX*srcFloor[floorX*3+1] + fractionX*srcFloor[ceilX*3+1]);
-                                    b2 = (byte)(invFractionX*srcCeil[floorX*3+1] + fractionX*srcCeil[ceilX*3+1]);
+                                    b1 = (invFractionX*srcFloor[floorX*3+1] + fractionX*srcFloor[ceilX*3+1]);
+                                    b2 = (invFractionX*srcCeil[floorX*3+1] + fractionX*srcCeil[ceilX*3+1]);
                                     dest[x*3+1] = (byte)(invFractionY*b1 + fractionY*b2);
                                     
-                                    b1 = (byte)(invFractionX*srcFloor[floorX*3+0] + fractionX*srcFloor[ceilX*3+0]);
-                                    b2 = (byte)(invFractionX*srcCeil[floorX*3+0] + fractionX*srcCeil[ceilX*3+0]);
+                                    b1 = (invFractionX*srcFloor[floorX*3+0] + fractionX*srcFloor[ceilX*3+0]);
+                                    b2 = (invFractionX*srcCeil[floorX*3+0] + fractionX*srcCeil[ceilX*3+0]);
                                     dest[x*3+0] = (byte)(invFractionY*b1 + fractionY*b2);
                                 }
                                 if (_bWorkerFlags != 0) {

@@ -243,7 +243,7 @@ partial class image2gcode {
             string fileName = openFileDialog3.FileName;
             using (FileStream inFile = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read)) {
                 if (inFile.Read(buf, 0, (PresetFileSize+1)) != PresetFileSize) {
-                    throw new Exception(String.Format(culture, resources.GetString("InvalidPresetFile", culture), Path.GetFileName(fileName)));
+                    throw new Exception(String.Format(culture, resources.GetString("Error_InvalidPresetFile", culture), Path.GetFileName(fileName)));
                 }
                 
                 UInt16 chksum = 0;
@@ -252,7 +252,7 @@ partial class image2gcode {
                 }
                 
                 if (chksum != 0) {
-                    throw new Exception(String.Format(culture, resources.GetString("InvalidPresetFile", culture), Path.GetFileName(fileName)));
+                    throw new Exception(String.Format(culture, resources.GetString("Error_InvalidPresetFile", culture), Path.GetFileName(fileName)));
                 }
             }
         } catch (Exception ex) {

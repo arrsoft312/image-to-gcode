@@ -144,7 +144,7 @@
   <data name="Grbl_NotResponding" xml:space="preserve">
     <value>Controller is not responding!</value>
   </data>
-  <data name="InvalidPresetFile" xml:space="preserve">
+  <data name="Error_InvalidPresetFile" xml:space="preserve">
     <value>'{0}' is an invalid preset file!</value>
   </data>
   <data name="Menu_File" xml:space="preserve">
@@ -171,7 +171,7 @@
   <data name="Menu_Image" xml:space="preserve">
     <value>I&amp;mage</value>
   </data>
-  <data name="Menu_OpenFromClipboard" xml:space="preserve">
+  <data name="Menu_OpenClipboard" xml:space="preserve">
     <value>Open from cli&amp;pboard</value>
   </data>
   <data name="Menu_SaveImage" xml:space="preserve">
@@ -294,10 +294,10 @@
   <data name="Im_Resolution" xml:space="preserve">
     <value>Image resolution (&amp;DPI):</value>
   </data>
-  <data name="Im_XDpi" xml:space="preserve">
+  <data name="Im_DpiX" xml:space="preserve">
     <value>X:</value>
   </data>
-  <data name="Im_YDpi" xml:space="preserve">
+  <data name="Im_DpiY" xml:space="preserve">
     <value>Y:</value>
   </data>
   <data name="Im_SameAsX" xml:space="preserve">
@@ -429,7 +429,7 @@
   <data name="Im_ResultPreview" xml:space="preserve">
     <value>Result Preview:</value>
   </data>
-  <data name="Im_Background" xml:space="preserve">
+  <data name="Im_PreviewBackground" xml:space="preserve">
     <value>Ba&amp;ckground:</value>
   </data>
   <data name="Im_TextureWrapMode" xml:space="preserve">
@@ -488,11 +488,8 @@
         AAAASUVORK5CYII=
 </value>
   </data>
-  <data name="WO_Ok" xml:space="preserve">
-    <value>OK</value>
-  </data>
-  <data name="WO_Cancel" xml:space="preserve">
-    <value>Cancel</value>
+  <data name="GrblSet_HomingCycle2" xml:space="preserve">
+    <value>Homing Cycle &amp;2:</value>
   </data>
   <data name="WO_MmPerRevolutionX" xml:space="preserve">
     <value>MM per R&amp;evolution X:</value>
@@ -530,14 +527,14 @@
   <data name="WO_Title" xml:space="preserve">
     <value>Wrapped Output</value>
   </data>
-  <data name="CouldNotFindFile" xml:space="preserve">
+  <data name="Error_CouldNotFindFile" xml:space="preserve">
     <value>Couldn't find '{0}'!</value>
   </data>
-  <data name="InvalidImageFile" xml:space="preserve">
+  <data name="Error_InvalidImageFile" xml:space="preserve">
     <value>'{0}' does not have a valid image format!</value>
   </data>
   <data name="GrblSet_Title" xml:space="preserve">
-    <value>Grbl Settings</value>
+    <value>Controller Settings</value>
   </data>
   <data name="GrblSet_XAxis" xml:space="preserve">
     <value>X Axis</value>
@@ -545,10 +542,7 @@
   <data name="GrblSet_YAxis" xml:space="preserve">
     <value>Y Axis</value>
   </data>
-  <data name="GrblSet_ZAxis" xml:space="preserve">
-    <value>Z Axis</value>
-  </data>
-  <data name="GrblSet_StepsPerMm" xml:space="preserve">
+  <data name="GrblSet_StepsPerMM" xml:space="preserve">
     <value>S&amp;teps per MM:</value>
   </data>
   <data name="GrblSet_MaxVelocity" xml:space="preserve">
@@ -566,20 +560,14 @@
   <data name="GrblSet_SlowJog" xml:space="preserve">
     <value>Slo&amp;w Jog:</value>
   </data>
-  <data name="GrblSet_InvertSTEP" xml:space="preserve">
-    <value>Invert STEP</value>
+  <data name="GrblSet_InvertStepPin" xml:space="preserve">
+    <value>Invert STEP Pin</value>
   </data>
-  <data name="GrblSet_InvertDIR" xml:space="preserve">
-    <value>Invert DIR</value>
+  <data name="GrblSet_InvertDirectionPin" xml:space="preserve">
+    <value>Invert DIR Pin</value>
   </data>
-  <data name="GrblSet_HomingDirInv" xml:space="preserve">
-    <value>Homing DIR Invert</value>
-  </data>
-  <data name="GrblSet_StepPulseLen" xml:space="preserve">
-    <value>STEP Pulse Le&amp;ngth:</value>
-  </data>
-  <data name="GrblSet_StepIdleDelay" xml:space="preserve">
-    <value>STEP Idle &amp;Delay:</value>
+  <data name="GrblSet_HomingDirInvert" xml:space="preserve">
+    <value>Invert Homing Direction</value>
   </data>
   <data name="GrblSet_JunctionDeviation" xml:space="preserve">
     <value>&amp;Junction Deviation:</value>
@@ -587,38 +575,17 @@
   <data name="GrblSet_ArcTolerance" xml:space="preserve">
     <value>&amp;Arc Tolerance:</value>
   </data>
-  <data name="GrblSet_StatusReport" xml:space="preserve">
-    <value>Status Report:</value>
-  </data>
-  <data name="GrblSet_PositionType" xml:space="preserve">
-    <value>MP&amp;os</value>
-  </data>
-  <data name="GrblSet_BufferData" xml:space="preserve">
-    <value>B&amp;uffer Data</value>
-  </data>
   <data name="GrblSet_InvertStEnablePin" xml:space="preserve">
-    <value>Invert Stepper Enable/Disable Pin</value>
+    <value>Invert Ste&amp;pper EN Pin</value>
   </data>
-  <data name="GrblSet_InvertLimitPins" xml:space="preserve">
-    <value>Invert Limit Pins</value>
-  </data>
-  <data name="GrblSet_InvertProbePin" xml:space="preserve">
-    <value>Invert Probe Pin</value>
-  </data>
-  <data name="GrblSet_ReportInches" xml:space="preserve">
-    <value>&amp;Report Inches</value>
+  <data name="GrblSet_InvertHomePin" xml:space="preserve">
+    <value>Invert HOME Pin</value>
   </data>
   <data name="GrblSet_CoreXY" xml:space="preserve">
     <value>CoreXY/H-bot &amp;Kinematics</value>
   </data>
-  <data name="GrblSet_EnableHoming" xml:space="preserve">
-    <value>Enable Ho&amp;ming Cycle</value>
-  </data>
-  <data name="GrblSet_SoftLimits" xml:space="preserve">
-    <value>Enable &amp;Soft Limits</value>
-  </data>
-  <data name="GrblSet_HardLimits" xml:space="preserve">
-    <value>Enable &amp;Hard Limits</value>
+  <data name="GrblSet_HomingCycle1" xml:space="preserve">
+    <value>Homing Cycle &amp;1:</value>
   </data>
   <data name="GrblSet_HomingFeedRate" xml:space="preserve">
     <value>Homing &amp;Feed Rate:</value>
@@ -626,20 +593,11 @@
   <data name="GrblSet_HomingSeekRate" xml:space="preserve">
     <value>Homing S&amp;eek Rate:</value>
   </data>
-  <data name="GrblSet_HomingDebounceDelay" xml:space="preserve">
-    <value>Debounce &amp;Delay:</value>
-  </data>
-  <data name="GrblSet_HomingPulloff" xml:space="preserve">
-    <value>Homing Pull-o&amp;ff:</value>
-  </data>
   <data name="GrblSet_LaserMode" xml:space="preserve">
     <value>&amp;Laser Mode</value>
   </data>
-  <data name="GrblSet_MaxRPM" xml:space="preserve">
-    <value>Max Spi&amp;ndle Speed:</value>
-  </data>
-  <data name="GrblSet_MinRPM" xml:space="preserve">
-    <value>Min S&amp;pindle Speed:</value>
+  <data name="GrblSet_MarkerPower" xml:space="preserve">
+    <value>&amp;Marker Power:</value>
   </data>
   <data name="GrblSet_FastGrid" xml:space="preserve">
     <value>&amp;Fast Grid:</value>
@@ -647,22 +605,31 @@
   <data name="GrblSet_SlowGrid" xml:space="preserve">
     <value>Slo&amp;w Grid:</value>
   </data>
-  <data name="GrblSet_OK" xml:space="preserve">
+  <data name="Btn_OK" xml:space="preserve">
     <value>OK</value>
   </data>
-  <data name="GrblSet_Cancel" xml:space="preserve">
+  <data name="Btn_Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
-  <data name="GrblSet_Apply" xml:space="preserve">
+  <data name="Btn_Apply" xml:space="preserve">
     <value>Apply</value>
   </data>
   <data name="PF_RetrievingGrblSettings" xml:space="preserve">
-    <value>Retrieving Grbl Settings...</value>
+    <value>Retrieving controller settings...</value>
   </data>
-  <data name="PF_FeedOverride" xml:space="preserve">
-    <value>Feed Override:</value>
+  <data name="GrblSet_FwVer" xml:space="preserve">
+    <value>FW Version:</value>
   </data>
-  <data name="PF_PowerOverride" xml:space="preserve">
-    <value>Power Override:</value>
+  <data name="Grbl_UnknownParameter" xml:space="preserve">
+    <value>Response from controller contains one or more unknown parameters. Try changing controller settings using the latest version of image2gcode.</value>
+  </data>
+  <data name="Grbl_GCodeError" xml:space="preserve">
+    <value>Something went wrong. Controller responded with error code {0}.</value>
+  </data>
+  <data name="Grbl_GCodeErrorFile" xml:space="preserve">
+    <value>G-code error in '{0}' near line {1}. Controller responded with error code {2}.</value>
+  </data>
+  <data name="Error_FileComment" xml:space="preserve">
+    <value>Only one line starting with a percent symbol is allowed in the G-Code comment block.</value>
   </data>
 </root>

@@ -545,21 +545,11 @@ partial class image2gcode {
         // defaultToolStripMenuItem1
         // 
         this.defaultToolStripMenuItem1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-        this.defaultToolStripMenuItem1.Tag = new float[] {
-                0.35F,
-                0.35F,
-                0.65F,
-                0.65F};
         this.defaultToolStripMenuItem1.Text = "Li&near";
         // 
         // x4axisToolStripMenuItem
         // 
         this.x4axisToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-        this.x4axisToolStripMenuItem.Tag = new float[] {
-                0.206F,
-                0.279F,
-                0.168F,
-                0.912F};
         this.x4axisToolStripMenuItem.Text = "&Default";
         // 
         // resetPowerGraphToolStripMenuItem
@@ -574,11 +564,6 @@ partial class image2gcode {
         // defaultToolStripMenuItem2
         // 
         this.defaultToolStripMenuItem2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-        this.defaultToolStripMenuItem2.Tag = new float[] {
-                0.35F,
-                0.35F,
-                0.65F,
-                0.65F};
         this.defaultToolStripMenuItem2.Text = "Li&near";
         // 
         // machineTypeToolStripMenuItem
@@ -1029,7 +1014,7 @@ partial class image2gcode {
         this.tableLayoutPanel1.ColumnCount = 3;
         this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 199F));
         this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-        this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 219F));
+        this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 229F));
         this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 0);
         this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel3, 1, 0);
         this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel4, 2, 0);

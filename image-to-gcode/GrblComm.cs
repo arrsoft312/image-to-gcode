@@ -6,11 +6,11 @@ partial class image2gcode {
     private delegate bool GrblAbort();
     
     private GrblSettingsForm grblSettings1;
-    private ProgressForm2 progressForm2;
     private ProgressForm2 progressForm3;
     
-    private int new_f_override = 100;
-    private int new_s_override = 100;
+    private enum GrblOptions {
+        None = 0,
+    }
     
     private void SettingsToolStripMenuItemClick(object sender, EventArgs e) {
         try {
@@ -28,6 +28,11 @@ partial class image2gcode {
                 serialPort1.Open();
                 
                 Grbl_GetSync();
+                
+                string fwVersion = null;
+                GrblOptions fwFlags = GrblOptions.None;
+                
+                Grbl_GetBuildInfo(ref fwVersion, ref fwFlags);
                 
                 serialPort1.Write("$$\n");
                 
@@ -48,22 +53,30 @@ partial class image2gcode {
                     
                     int parameter = Byte.Parse(s[1], invariantCulture);
                     foreach (object[] setting in grblSettings1.settingsTable) {
-                        if ((int)setting[0] == parameter) {
-                            if ((int)setting[3] != 0) {
+                        if ((int)setting[0] != parameter) {
+                            continue;
+                        }
+                        
+                        if ((int)setting[3] != 0) {
+                            setting[2] = Byte.Parse(s[2], invariantCulture);
+                        } else {
+                            if ((int)setting[4] != 0) {
                                 setting[2] = Byte.Parse(s[2], invariantCulture);
                             } else {
-                                if ((int)setting[4] != 0) {
-                                    setting[2] = Byte.Parse(s[2], invariantCulture);
-                                } else {
-                                    setting[2] = Single.Parse(s[2], invariantCulture);
-                                }
+                                setting[2] = Single.Parse(s[2], invariantCulture);
                             }
-                            
-                            setting[1] = setting[2];
-                            break;
                         }
+                        
+                        setting[1] = setting[2];
+                        goto NEXT_LINE;
                     }
+                    
+                    throw new Exception(resources.GetString("Grbl_UnknownParameter", culture));
+                    
+                    NEXT_LINE:;
                 }
+                
+                grblSettings1.label23.Text = (resources.GetString("GrblSet_FwVer", culture) + " " + fwVersion);
             } catch (TimeoutException) {
                 MessageBox.Show(this, resources.GetString("Grbl_NotResponding", culture), AppTitle, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -103,15 +116,14 @@ partial class image2gcode {
                 string[] resp = serialPort1.ReadTo("\r\n").Split(new string[] { ":", }, 2, StringSplitOptions.None);
                 if (resp[0] != "ok") {
                     if ((int)setting[3] == 0) {
-                        ((Control)setting[6]).BackColor = Color.DarkSalmon;
+                        ((Control)setting[6]).BackColor = Color.OrangeRed;
                     }
                     
-                    throw new Exception(s);
+                    continue;
                 }
                 
                 setting[2] = setting[1];
             }
-            grblSettings1.button3.Enabled = false;
         } catch (TimeoutException) {
             MessageBox.Show(this, resources.GetString("Grbl_NotResponding", culture), AppTitle, MessageBoxButtons.OK, MessageBoxIcon.Error);
             return;
@@ -120,12 +132,19 @@ partial class image2gcode {
             return;
         }
         
+        foreach (object[] setting in grblSettings1.settingsTable) {
+            if (setting[2] != setting[1]) {
+                return;
+            }
+        }
+        
+        grblSettings1.button3.Enabled = false;
         if ((bool)((Control)sender).Tag) {
             grblSettings1.Close();
         }
     }
     
-    private void Grbl_GetSync(GrblAbort callback = null) {
+    private bool Grbl_GetSync(GrblAbort callback = null) {
         int prevReadTimeout = serialPort1.ReadTimeout;
         try {
             serialPort1.ReadTimeout = 250;
@@ -142,7 +161,7 @@ partial class image2gcode {
                 
                 if (callback != null) {
                     if (callback()) {
-                        return;
+                        return false;
                     }
                 }
                 
@@ -153,7 +172,7 @@ partial class image2gcode {
                     throw new Exception(resources.GetString("Grbl_InvalidResponse", culture));
                 }
                 
-                return;
+                return true;
             }
             
             throw new Exception(resources.GetString("Grbl_NotResponding", culture));
@@ -162,7 +181,7 @@ partial class image2gcode {
         }
     }
     
-    private unsafe void Grbl_GetBuildInfo(bool* isKaskade, int* rxBufferSize = null) {
+    private int Grbl_GetBuildInfo(ref string fwVersion, ref GrblOptions fwFlags) {
         int prevReadTimeout = serialPort1.ReadTimeout;
         try {
             serialPort1.ReadTimeout = 100;
@@ -174,25 +193,26 @@ partial class image2gcode {
             }
             
             string[] ver = resp[0].Split(new string[] { ":", ".", }, 5, StringSplitOptions.None);
-            if (ver.Length != 5) {
+            if (ver.Length != 4) {
                 throw new Exception(resources.GetString("Grbl_InvalidResponse", culture));
             }
             if (ver[0] != "[VER") {
                 throw new Exception(resources.GetString("Grbl_InvalidResponse", culture));
             }
             
-            string[] opt = resp[1].Split(new string[] { ":", ",", }, 5, StringSplitOptions.None);
-            if (opt.Length != 4) {
+            fwVersion = (ver[1] + "." + ver[2] + " (" + ver[3].Insert(6, "-").Insert(4, "-") + ")");
+            
+            string[] opt = resp[1].Split(new string[] { ":", ",", }, 4, StringSplitOptions.None);
+            if (opt.Length != 3) {
                 throw new Exception(resources.GetString("Grbl_InvalidResponse", culture));
             }
             if (opt[0] != "[OPT") {
                 throw new Exception(resources.GetString("Grbl_InvalidResponse", culture));
             }
             
-            *isKaskade = (ver[4] == "KASKADE");
-            if (rxBufferSize != null) {
-                *rxBufferSize = Int32.Parse(opt[3], invariantCulture);
-            }
+            fwFlags = GrblOptions.None;
+            
+            return Int32.Parse(opt[2], invariantCulture);
         } catch (TimeoutException) {
             throw new Exception(resources.GetString("Grbl_NotResponding", culture));
         } finally {

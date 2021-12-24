@@ -33,8 +33,8 @@ using Microsoft.Win32;
 
 partial class image2gcode:Form {
     public const string AppTitle = "image2gcode";
-    public const string AppVersion = "3.1.1";
-    public const string AppVersionBuild = "2021-10-04";
+    public const string AppVersion = "3.1.2";
+    public const string AppVersionBuild = "2021-12-23";
     public const string AppAuthor = "Artur Kurpukov";
     public const string AppCopyright = "Copyright (C) 2017-2021 Artur Kurpukov";
     private const string SettingsVersion = "3.1";
@@ -55,6 +55,8 @@ partial class image2gcode:Form {
     private const int PresetCount = 14;
     
     private readonly object imResizeLock = new object();
+    
+    private readonly float[] linearGraph = new float[] { -1F, -1F, -1F, 0.35F, 0.35F, 0.65F, 0.65F, };
     
     private ResourceManager resources = new ResourceManager(typeof(I2GResources));
     
@@ -149,6 +151,11 @@ partial class image2gcode:Form {
         saveFileDialog2.Title = AppTitle;
         openFileDialog3.Title = AppTitle;
         saveFileDialog3.Title = AppTitle;
+        
+        defaultToolStripMenuItem1.Tag = linearGraph;
+        defaultToolStripMenuItem2.Tag = linearGraph;
+        
+        x4axisToolStripMenuItem.Tag = new float[] { 4000F, 2820F, 350F, 0.206F, 0.279F, 0.168F, 0.912F, };
         
         panel1.Tag = gcSpeedGraph;
         panel2.Tag = gcPowerGraph;
@@ -365,17 +372,20 @@ partial class image2gcode:Form {
                 continue;
             }
             
-            string[] s = line.Split(new string[] { ",", }, 7, StringSplitOptions.None);
-            if (s.Length != 6) {
+            string[] s = line.Split(new string[] { ",", }, 10, StringSplitOptions.None);
+            if (s.Length != 9) {
                 continue;
             }
             
-            float[] tag = new float[4];
+            float[] tag = new float[7];
             try {
-                tag[0] = constrain_0_1(Single.Parse(s[2], invariantCulture));
-                tag[1] = constrain_0_1(Single.Parse(s[3], invariantCulture));
-                tag[2] = constrain_0_1(Single.Parse(s[4], invariantCulture));
+                tag[0] = Single.Parse(s[2], invariantCulture);
+                tag[1] = Single.Parse(s[3], invariantCulture);
+                tag[2] = Single.Parse(s[4], invariantCulture);
                 tag[3] = constrain_0_1(Single.Parse(s[5], invariantCulture));
+                tag[4] = constrain_0_1(Single.Parse(s[6], invariantCulture));
+                tag[5] = constrain_0_1(Single.Parse(s[7], invariantCulture));
+                tag[6] = constrain_0_1(Single.Parse(s[8], invariantCulture));
             } catch {
                 continue;
             }
@@ -506,9 +516,6 @@ partial class image2gcode:Form {
         });
         
         progressForm1 = new ProgressForm();
-        progressForm1.Load += (sender2, e2) => {
-            ((Form)sender2).ClientSize = new Size(418, -1);
-        };
         progressForm1.Shown += (sender2, e2) => {
             backgroundWorker2.RunWorkerAsync(null);
         };
@@ -519,12 +526,8 @@ partial class image2gcode:Form {
             }
         };
         
-        progressForm1.trackBar1.Scroll += Control_ValueChanged;
-        progressForm1.trackBar2.Scroll += Control_ValueChanged;
         progressForm1.button1.Click += (sender2, e2) => serialPort1.Write(new byte[] { (byte)'~', }, 0, 1);
         progressForm1.button2.Click += (sender2, e2) => serialPort1.Write(new byte[] { (byte)'!', }, 0, 1);
-        
-        //progressForm2 = new ProgressForm2(null);
         
         progressForm3 = new ProgressForm2(resources.GetString("PF_RetrievingGrblSettings", culture));
         progressForm3.Load += (sender2, e2) => {
@@ -733,9 +736,9 @@ partial class image2gcode:Form {
                         byte* dest = (byte*)(ibScan0 + y*destScanWidth);
                         
                         int floorY = (int)(y*resizeFactorY);
-                        int ceilY = (floorY + 1);
+                        int ceilY = (floorY+1);
                         if (ceilY >= srcHeight) {
-                            ceilY = floorY;
+                            ceilY = (srcHeight-1);
                         }
                         float fractionY = (y*resizeFactorY - floorY);
                         float invFractionY = (1F - fractionY);
@@ -745,25 +748,25 @@ partial class image2gcode:Form {
                         
                         for (int x = 0; x < destWidth; x++) {
                             int floorX = (int)(x*resizeFactorX);
-                            int ceilX = (floorX + 1);
+                            int ceilX = (floorX+1);
                             if (ceilX >= srcWidth) {
-                                ceilX = floorX;
+                                ceilX = (srcWidth-1);
                             }
                             float fractionX = (x*resizeFactorX - floorX);
                             float invFractionX = (1F - fractionX);
                             
-                            byte b1, b2;
+                            float b1, b2;
                             
-                            b1 = (byte)(invFractionX*srcFloor[floorX*3+2] + fractionX*srcFloor[ceilX*3+2]);
-                            b2 = (byte)(invFractionX*srcCeil[floorX*3+2] + fractionX*srcCeil[ceilX*3+2]);
+                            b1 = (invFractionX*srcFloor[floorX*3+2] + fractionX*srcFloor[ceilX*3+2]);
+                            b2 = (invFractionX*srcCeil[floorX*3+2] + fractionX*srcCeil[ceilX*3+2]);
                             dest[x*3+2] = (byte)(invFractionY*b1 + fractionY*b2);
                             
-                            b1 = (byte)(invFractionX*srcFloor[floorX*3+1] + fractionX*srcFloor[ceilX*3+1]);
-                            b2 = (byte)(invFractionX*srcCeil[floorX*3+1] + fractionX*srcCeil[ceilX*3+1]);
+                            b1 = (invFractionX*srcFloor[floorX*3+1] + fractionX*srcFloor[ceilX*3+1]);
+                            b2 = (invFractionX*srcCeil[floorX*3+1] + fractionX*srcCeil[ceilX*3+1]);
                             dest[x*3+1] = (byte)(invFractionY*b1 + fractionY*b2);
                             
-                            b1 = (byte)(invFractionX*srcFloor[floorX*3+0] + fractionX*srcFloor[ceilX*3+0]);
-                            b2 = (byte)(invFractionX*srcCeil[floorX*3+0] + fractionX*srcCeil[ceilX*3+0]);
+                            b1 = (invFractionX*srcFloor[floorX*3+0] + fractionX*srcFloor[ceilX*3+0]);
+                            b2 = (invFractionX*srcCeil[floorX*3+0] + fractionX*srcCeil[ceilX*3+0]);
                             dest[x*3+0] = (byte)(invFractionY*b1 + fractionY*b2);
                         }
                     });
@@ -781,9 +784,9 @@ partial class image2gcode:Form {
                         byte* dest = (byte*)(ibScan0 + y*destScanWidth);
                         
                         int floorY = (int)(y*resizeFactorY);
-                        int ceilY = (floorY + 1);
+                        int ceilY = (floorY+1);
                         if (ceilY >= srcHeight) {
-                            ceilY = floorY;
+                            ceilY = (srcHeight-1);
                         }
                         float fractionY = (y*resizeFactorY - floorY);
                         float invFractionY = (1F - fractionY);
@@ -793,15 +796,15 @@ partial class image2gcode:Form {
                         
                         for (int x = 0; x < destWidth; x++) {
                             int floorX = (int)(x*resizeFactorX);
-                            int ceilX = (floorX + 1);
+                            int ceilX = (floorX+1);
                             if (ceilX >= srcWidth) {
-                                ceilX = floorX;
+                                ceilX = (srcWidth-1);
                             }
                             float fractionX = (x*resizeFactorX - floorX);
                             float invFractionX = (1F - fractionX);
                             
-                            byte b1 = (byte)(invFractionX*srcFloor[floorX] + fractionX*srcFloor[ceilX]);
-                            byte b2 = (byte)(invFractionX*srcCeil[floorX] + fractionX*srcCeil[ceilX]);
+                            float b1 = (invFractionX*srcFloor[floorX] + fractionX*srcFloor[ceilX]);
+                            float b2 = (invFractionX*srcCeil[floorX] + fractionX*srcCeil[ceilX]);
                             byte gray = (byte)(invFractionY*b1 + fractionY*b2);
                             
                             dest[x*3+2] = gray;
@@ -1053,10 +1056,15 @@ partial class image2gcode:Form {
             return;
         }
         
-        gcSpeedGraph[2] = tag[0];
-        gcSpeedGraph[3] = tag[1];
-        gcSpeedGraph[4] = tag[2];
-        gcSpeedGraph[5] = tag[3];
+        if (tag != linearGraph) {
+            textBox10.Text = tag[0].ToString();
+            textBox11.Text = tag[1].ToString();
+            textBox12.Text = tag[2].ToString();
+        }
+        gcSpeedGraph[2] = tag[3];
+        gcSpeedGraph[3] = tag[4];
+        gcSpeedGraph[4] = tag[5];
+        gcSpeedGraph[5] = tag[6];
         panel1.Invalidate(false);
         
         bWorkerFlags = BWorkerFlagDoWork;
@@ -1068,10 +1076,14 @@ partial class image2gcode:Form {
             return;
         }
         
-        gcPowerGraph[2] = tag[0];
-        gcPowerGraph[3] = tag[1];
-        gcPowerGraph[4] = tag[2];
-        gcPowerGraph[5] = tag[3];
+        if (tag != linearGraph) {
+            textBox13.Text = tag[1].ToString();
+            textBox14.Text = tag[2].ToString();
+        }
+        gcPowerGraph[2] = tag[3];
+        gcPowerGraph[3] = tag[4];
+        gcPowerGraph[4] = tag[5];
+        gcPowerGraph[5] = tag[6];
         panel2.Invalidate(false);
     }
     
@@ -1166,7 +1178,6 @@ partial class image2gcode:Form {
         progressForm1.label1.Text = resources.GetString("PF_GeneratingGCode", culture);
         progressForm1.progressBar1.Value = 0;
         
-        progressForm1.tableLayoutPanel2.Visible = false;
         progressForm1.button1.Visible = false;
         progressForm1.button2.Visible = false;
         
@@ -1202,7 +1213,6 @@ partial class image2gcode:Form {
         progressForm1.label1.Text = resources.GetString("PF_Initializing", culture);
         progressForm1.progressBar1.Value = 0;
         
-        progressForm1.tableLayoutPanel2.Visible = false;
         progressForm1.button1.Visible = true;
         progressForm1.button2.Visible = true;
         
@@ -1224,7 +1234,6 @@ partial class image2gcode:Form {
         progressForm1.label1.Text = resources.GetString("PF_Initializing", culture);
         progressForm1.progressBar1.Value = 0;
         
-        progressForm1.tableLayoutPanel2.Visible = false;
         progressForm1.button1.Visible = true;
         progressForm1.button2.Visible = true;
         
@@ -1266,7 +1275,7 @@ partial class image2gcode:Form {
         languageToolStripMenuItem.Text = resources.GetString("Menu_Language", culture);
         exitToolStripMenuItem.Text = resources.GetString("Menu_Exit", culture);
         imageToolStripMenuItem.Text = resources.GetString("Menu_Image", culture);
-        clipboardToolStripMenuItem.Text = resources.GetString("Menu_OpenFromClipboard", culture);
+        clipboardToolStripMenuItem.Text = resources.GetString("Menu_OpenClipboard", culture);
         saveToolStripMenuItem.Text = resources.GetString("Menu_SaveImage", culture);
         cropToolStripMenuItem.Text = resources.GetString("Menu_CropBorder", culture);
         presetToolStripMenuItem.Text = resources.GetString("Menu_Preset", culture);
@@ -1304,11 +1313,11 @@ partial class image2gcode:Form {
         label14.Text = resources.GetString("Im_SharpenForce", culture);
         label13.Text = resources.GetString("Im_RotateFlip", culture);
         label10.Text = resources.GetString("Im_Resolution", culture);
-        label11.Text = resources.GetString("Im_XDpi", culture);
-        label12.Text = resources.GetString("Im_YDpi", culture);
+        label11.Text = resources.GetString("Im_DpiX", culture);
+        label12.Text = resources.GetString("Im_DpiY", culture);
         checkBox4.Text = resources.GetString("Im_SameAsX", culture);
         label46.Text = resources.GetString("Im_ResultPreview", culture);
-        label47.Text = resources.GetString("Im_Background", culture);
+        label47.Text = resources.GetString("Im_PreviewBackground", culture);
         label50.Text = resources.GetString("Im_TextureWrapMode", culture);
         label51.Text = resources.GetString("Im_TextureSize", culture);
         label48.Text = resources.GetString("Im_PreviewColor", culture);
@@ -1351,8 +1360,6 @@ partial class image2gcode:Form {
         this.ResumeLayout2();
         
         progressForm1.SuspendLayout2();
-        progressForm1.label2.Text = resources.GetString("PF_FeedOverride", culture);
-        progressForm1.label4.Text = resources.GetString("PF_PowerOverride", culture);
         progressForm1.button1.Text = resources.GetString("PF_Run", culture);
         progressForm1.button2.Text = resources.GetString("PF_Pause", culture);
         progressForm1.button3.Text = resources.GetString("PF_Abort", culture);
@@ -1364,57 +1371,43 @@ partial class image2gcode:Form {
         wrappedOutputDialog1.label2.Text = resources.GetString("WO_MmPerRevolutionX", culture);
         wrappedOutputDialog1.label3.Text = resources.GetString("WO_MmPerRevolutionY", culture);
         wrappedOutputDialog1.label4.Text = resources.GetString("WO_CylinderDiameter", culture);
-        wrappedOutputDialog1.button1.Text = resources.GetString("WO_Ok", culture);
-        wrappedOutputDialog1.button2.Text = resources.GetString("WO_Cancel", culture);
+        wrappedOutputDialog1.button1.Text = resources.GetString("Btn_OK", culture);
+        wrappedOutputDialog1.button2.Text = resources.GetString("Btn_Cancel", culture);
         wrappedOutputDialog1.ResumeLayout2();
         
         grblSettings1.SuspendLayout2();
         grblSettings1.Text = resources.GetString("GrblSet_Title", culture);
         grblSettings1.label1.Text = resources.GetString("GrblSet_XAxis", culture);
         grblSettings1.label2.Text = resources.GetString("GrblSet_YAxis", culture);
-        grblSettings1.label3.Text = resources.GetString("GrblSet_ZAxis", culture);
-        grblSettings1.label4.Text = resources.GetString("GrblSet_StepsPerMm", culture);
+        grblSettings1.label4.Text = resources.GetString("GrblSet_StepsPerMM", culture);
         grblSettings1.label5.Text = resources.GetString("GrblSet_MaxVelocity", culture);
         grblSettings1.label6.Text = resources.GetString("GrblSet_MaxAccel", culture);
         grblSettings1.label7.Text = resources.GetString("GrblSet_MaxTravel", culture);
         grblSettings1.label8.Text = resources.GetString("GrblSet_FastJog", culture);
         grblSettings1.label9.Text = resources.GetString("GrblSet_SlowJog", culture);
-        grblSettings1.checkBox1.Text = resources.GetString("GrblSet_InvertSTEP", culture);
-        grblSettings1.checkBox2.Text = resources.GetString("GrblSet_InvertSTEP", culture);
-        grblSettings1.checkBox3.Text = resources.GetString("GrblSet_InvertSTEP", culture);
-        grblSettings1.checkBox4.Text = resources.GetString("GrblSet_InvertDIR", culture);
-        grblSettings1.checkBox5.Text = resources.GetString("GrblSet_InvertDIR", culture);
-        grblSettings1.checkBox6.Text = resources.GetString("GrblSet_InvertDIR", culture);
-        grblSettings1.checkBox7.Text = resources.GetString("GrblSet_HomingDirInv", culture);
-        grblSettings1.checkBox8.Text = resources.GetString("GrblSet_HomingDirInv", culture);
-        grblSettings1.checkBox9.Text = resources.GetString("GrblSet_HomingDirInv", culture);
-        grblSettings1.label10.Text = resources.GetString("GrblSet_StepPulseLen", culture);
-        grblSettings1.label11.Text = resources.GetString("GrblSet_StepIdleDelay", culture);
-        grblSettings1.label12.Text = resources.GetString("GrblSet_JunctionDeviation", culture);
-        grblSettings1.label13.Text = resources.GetString("GrblSet_ArcTolerance", culture);
-        grblSettings1.label14.Text = resources.GetString("GrblSet_StatusReport", culture);
-        grblSettings1.checkBox10.Text = resources.GetString("GrblSet_PositionType", culture);
-        grblSettings1.checkBox11.Text = resources.GetString("GrblSet_BufferData", culture);
-        grblSettings1.checkBox12.Text = resources.GetString("GrblSet_InvertStEnablePin", culture);
-        grblSettings1.checkBox13.Text = resources.GetString("GrblSet_InvertLimitPins", culture);
-        grblSettings1.checkBox14.Text = resources.GetString("GrblSet_InvertProbePin", culture);
-        grblSettings1.checkBox15.Text = resources.GetString("GrblSet_ReportInches", culture);
-        grblSettings1.checkBox16.Text = resources.GetString("GrblSet_CoreXY", culture);
-        grblSettings1.checkBox17.Text = resources.GetString("GrblSet_EnableHoming", culture);
-        grblSettings1.checkBox18.Text = resources.GetString("GrblSet_SoftLimits", culture);
-        grblSettings1.checkBox19.Text = resources.GetString("GrblSet_HardLimits", culture);
+        grblSettings1.checkBox1.Text = resources.GetString("GrblSet_InvertStepPin", culture);
+        grblSettings1.checkBox2.Text = resources.GetString("GrblSet_InvertStepPin", culture);
+        grblSettings1.checkBox4.Text = resources.GetString("GrblSet_InvertDirectionPin", culture);
+        grblSettings1.checkBox5.Text = resources.GetString("GrblSet_InvertDirectionPin", culture);
+        grblSettings1.checkBox3.Text = resources.GetString("GrblSet_InvertHomePin", culture);
+        grblSettings1.checkBox6.Text = resources.GetString("GrblSet_InvertHomePin", culture);
+        grblSettings1.checkBox7.Text = resources.GetString("GrblSet_HomingDirInvert", culture);
+        grblSettings1.checkBox8.Text = resources.GetString("GrblSet_HomingDirInvert", culture);
+        grblSettings1.label3.Text = resources.GetString("GrblSet_HomingCycle1", culture);
+        grblSettings1.label10.Text = resources.GetString("GrblSet_HomingCycle2", culture);
         grblSettings1.label15.Text = resources.GetString("GrblSet_HomingFeedRate", culture);
         grblSettings1.label16.Text = resources.GetString("GrblSet_HomingSeekRate", culture);
-        grblSettings1.label17.Text = resources.GetString("GrblSet_HomingDebounceDelay", culture);
-        grblSettings1.label18.Text = resources.GetString("GrblSet_HomingPulloff", culture);
         grblSettings1.label19.Text = resources.GetString("GrblSet_FastGrid", culture);
         grblSettings1.label20.Text = resources.GetString("GrblSet_SlowGrid", culture);
-        grblSettings1.label21.Text = resources.GetString("GrblSet_MaxRPM", culture);
-        grblSettings1.label22.Text = resources.GetString("GrblSet_MinRPM", culture);
+        grblSettings1.label12.Text = resources.GetString("GrblSet_JunctionDeviation", culture);
+        grblSettings1.label13.Text = resources.GetString("GrblSet_ArcTolerance", culture);
+        grblSettings1.label22.Text = resources.GetString("GrblSet_MarkerPower", culture);
         grblSettings1.checkBox20.Text = resources.GetString("GrblSet_LaserMode", culture);
-        grblSettings1.button1.Text = resources.GetString("GrblSet_OK", culture);
-        grblSettings1.button2.Text = resources.GetString("GrblSet_Cancel", culture);
-        grblSettings1.button3.Text = resources.GetString("GrblSet_Apply", culture);
+        grblSettings1.checkBox16.Text = resources.GetString("GrblSet_CoreXY", culture);
+        grblSettings1.checkBox12.Text = resources.GetString("GrblSet_InvertStEnablePin", culture);
+        grblSettings1.button1.Text = resources.GetString("Btn_OK", culture);
+        grblSettings1.button2.Text = resources.GetString("Btn_Cancel", culture);
+        grblSettings1.button3.Text = resources.GetString("Btn_Apply", culture);
         grblSettings1.ResumeLayout2();
     }
     
@@ -1667,16 +1660,6 @@ partial class image2gcode:Form {
             case 5:
             imSharpenForce = int_value;
             label41.Text = (int_value / 10F).ToString("0.0", culture);
-            break;
-            
-            case 41:
-            new_f_override = int_value;
-            progressForm1.label3.Text = int_value.ToString("0", culture);
-            break;
-            
-            case 42:
-            new_s_override = int_value;
-            progressForm1.label5.Text = int_value.ToString("0", culture);
             break;
             
             case 9:

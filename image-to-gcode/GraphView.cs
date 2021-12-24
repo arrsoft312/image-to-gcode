@@ -256,10 +256,7 @@ partial class image2gcode {
 
 class GraphView:Form {
     public GraphView() {
-        this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
-        this.SetStyle(ControlStyles.UserPaint, true);
-        this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
-        this.SetStyle(ControlStyles.ResizeRedraw, true);
+        this.SetStyle((ControlStyles.OptimizedDoubleBuffer|ControlStyles.AllPaintingInWmPaint|ControlStyles.UserPaint|ControlStyles.ResizeRedraw), true);
         this.SetStyle(ControlStyles.StandardDoubleClick, false);
         
         this.AutoScaleDimensions = new SizeF(6F, 13F);

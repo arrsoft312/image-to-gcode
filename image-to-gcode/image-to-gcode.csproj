@@ -2,7 +2,7 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
   <PropertyGroup>
     <ProjectGuid>{5C14668F-42B8-475B-A7A6-FEC6737EB37D}</ProjectGuid>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <OutputType>WinExe</OutputType>
     <RootNamespace>image_to_gcode</RootNamespace>
@@ -21,7 +21,6 @@
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
     <WarningLevel>4</WarningLevel>
     <RunCodeAnalysis>False</RunCodeAnalysis>
-    <SourceAnalysisOverrideSettingsFile>C:\Documents and Settings\Administrator\Application Data\ICSharpCode/SharpDevelop4\Settings.SourceAnalysis</SourceAnalysisOverrideSettingsFile>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -81,44 +80,49 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BufferedPanel.cs" />
+    <Compile Include="GCode.cs" />
     <Compile Include="GraphView.cs" />
     <Compile Include="GrblComm.cs" />
     <Compile Include="GrblSettingsForm.cs" />
     <Compile Include="GrblSettingsForm.Designer.cs">
       <DependentUpon>GrblSettingsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="I2GResources.cs" />
     <Compile Include="image2gcode.cs" />
     <Compile Include="image2gcode.Designer.cs">
       <DependentUpon>image2gcode.cs</DependentUpon>
     </Compile>
-    <Compile Include="ImageBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="GCode.cs" />
+    <EmbeddedResource Include="image2gcode.resx">
+      <DependentUpon>image2gcode.cs</DependentUpon>
+    </EmbeddedResource>
+    <Compile Include="ImageBox.cs" />
     <Compile Include="ImageProcessing.cs" />
     <Compile Include="MyExtensions.cs" />
     <Compile Include="Preset.cs" />
     <Compile Include="ProgressForm.cs" />
-    <Compile Include="ProgressForm2.cs" />
+    <Compile Include="ProgressForm2.cs">
+      <DependentUpon>ImageProcessing.cs</DependentUpon>
+    </Compile>
     <Compile Include="WrappedOutputDialog.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="I2GResources.cs" />
     <None Include="I2GResources.be.resx">
       <DependentUpon>I2GResources.cs</DependentUpon>
     </None>
-    <None Include="I2GResources.hu.resx">
+    <None Include="I2GResources.uk.resx">
       <DependentUpon>I2GResources.cs</DependentUpon>
     </None>
-    <None Include="I2GResources.ro.resx">
-      <DependentUpon>I2GResources.cs</DependentUpon>
-    </None>
-    <EmbeddedResource Include="I2GResources.ru.resx">
+    <EmbeddedResource Include="I2GResources.es.resx">
       <DependentUpon>I2GResources.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="image2gcode.resx">
-      <DependentUpon>image2gcode.cs</DependentUpon>
-      <LastGenOutput>image2gcode.Designer1.cs</LastGenOutput>
+    <EmbeddedResource Include="I2GResources.hu.resx">
+      <DependentUpon>I2GResources.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="I2GResources.ro.resx">
+      <DependentUpon>I2GResources.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="I2GResources.ru.resx">
+      <DependentUpon>I2GResources.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="I2GResources.resx">
       <DependentUpon>I2GResources.cs</DependentUpon>
@@ -135,65 +139,9 @@
     <None Include="1.ico" />
     <None Include="2.ico" />
     <None Include="app.config" />
-    <None Include="BitmapTextures\1_Wood\BeechLight.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="BitmapTextures\1_Wood\Birch.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="BitmapTextures\1_Wood\CanadianMaple.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="BitmapTextures\1_Wood\MahoganyLight.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="BitmapTextures\1_Wood\Maple.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="BitmapTextures\1_Wood\MDF.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="BitmapTextures\1_Wood\Oak.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="BitmapTextures\1_Wood\OakLight.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="BitmapTextures\1_Wood\OakLimed.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="BitmapTextures\1_Wood\OakMedium.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="BitmapTextures\1_Wood\OakSoft.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="BitmapTextures\1_Wood\Pine.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="BitmapTextures\1_Wood\WalnutLight.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="BitmapTextures\1_Wood\Yew.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="BitmapTextures\2_Stone\Granite.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="BitmapTextures\2_Stone\GraniteBlack.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="BitmapTextures\2_Stone\GraniteTan.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="CustomGraphs.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="BitmapTextures" />
-    <Folder Include="BitmapTextures\1_Wood" />
-    <Folder Include="BitmapTextures\2_Stone" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -118,181 +118,181 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="PF_Initializing" xml:space="preserve">
-    <value>Inițializare...</value>
+    <value>Inicializando...</value>
   </data>
   <data name="PF_GeneratingGCode" xml:space="preserve">
-    <value>Generare cod-G...</value>
+    <value>Generando código G...</value>
   </data>
   <data name="PF_Run" xml:space="preserve">
-    <value>PORNEȘTE</value>
+    <value>EMPEZAR</value>
   </data>
   <data name="PF_Pause" xml:space="preserve">
-    <value>PAUZĂ</value>
+    <value>PAUSA</value>
   </data>
   <data name="PF_Abort" xml:space="preserve">
-    <value>ÎNTRERUPE</value>
+    <value>ABORTAR</value>
   </data>
   <data name="PF_SendingFile" xml:space="preserve">
-    <value>Trimitere fișier NC...</value>
+    <value>Enviando archivo NC...</value>
   </data>
   <data name="PF_SendingData" xml:space="preserve">
-    <value>Trimiterea datelor...</value>
+    <value>Enviando datos...</value>
   </data>
   <data name="Grbl_InvalidResponse" xml:space="preserve">
-    <value>Răspuns nevalid de la controlerului!</value>
+    <value>Respuesta no válida del controlador!</value>
   </data>
   <data name="Grbl_NotResponding" xml:space="preserve">
-    <value>Controlerul nu răspunde!</value>
+    <value>El controlador no responde!</value>
   </data>
   <data name="Error_InvalidPresetFile" xml:space="preserve">
-    <value>&apos;{0}&apos; este un fișier prestabilit nevalid!</value>
+    <value>&apos;{0}&apos; es un archivo predeterminado no válido!</value>
   </data>
   <data name="Menu_File" xml:space="preserve">
-    <value>Fișier</value>
+    <value>Archivo</value>
   </data>
   <data name="Menu_Open" xml:space="preserve">
-    <value>Deschide...</value>
+    <value>Abrir...</value>
   </data>
   <data name="Menu_Reload" xml:space="preserve">
-    <value>Reîncarcă</value>
+    <value>Recargar</value>
   </data>
   <data name="Menu_SaveGCode" xml:space="preserve">
-    <value>Salvare cod-G...</value>
+    <value>Salvar código G...</value>
   </data>
   <data name="Menu_Close" xml:space="preserve">
-    <value>Închide</value>
+    <value>Cerrar</value>
   </data>
   <data name="Menu_Language" xml:space="preserve">
-    <value>Limba</value>
+    <value>Idioma</value>
   </data>
   <data name="Menu_Exit" xml:space="preserve">
-    <value>Ieșire</value>
+    <value>Salir</value>
   </data>
   <data name="Menu_Image" xml:space="preserve">
-    <value>Imagine</value>
+    <value>Imagen</value>
   </data>
   <data name="Menu_OpenClipboard" xml:space="preserve">
-    <value>Deschideți din clipboard</value>
+    <value>Abrir desde el portapapeles</value>
   </data>
   <data name="Menu_SaveImage" xml:space="preserve">
-    <value>Salvare o copie ca...</value>
+    <value>Guardar una copia como...</value>
   </data>
   <data name="Menu_CropBorder" xml:space="preserve">
-    <value>Decupați marginea</value>
+    <value>Cortar borde</value>
   </data>
   <data name="Menu_Preset" xml:space="preserve">
-    <value>Presetate</value>
+    <value>Preestablecido</value>
   </data>
   <data name="Menu_PresetLoad" xml:space="preserve">
-    <value>Încărcați presetarea din</value>
+    <value>Cargar preajuste desde</value>
   </data>
   <data name="Menu_PresetSave" xml:space="preserve">
-    <value>Salvați presetarea în</value>
+    <value>Guardar preajuste en</value>
   </data>
   <data name="Menu_PresetFile" xml:space="preserve">
-    <value>Fișier...</value>
+    <value>Archivo...</value>
   </data>
   <data name="Menu_MachineType" xml:space="preserve">
-    <value>Tipul mașinii ({0})</value>
+    <value>Tipo de máquina ({0})</value>
   </data>
   <data name="Menu_MachineOrigin" xml:space="preserve">
-    <value>Originea Mașinii ({0})</value>
+    <value>Origen de la Máquina ({0})</value>
   </data>
   <data name="Menu_Machine" xml:space="preserve">
-    <value>Mașina</value>
+    <value>Máquina</value>
   </data>
   <data name="Menu_SerialPort" xml:space="preserve">
-    <value>Potrul serial ({0})</value>
+    <value>Puerto serie ({0})</value>
   </data>
   <data name="Menu_BaudRate" xml:space="preserve">
-    <value>Rată Baud ({0})</value>
+    <value>Tasa de transferencia ({0})</value>
   </data>
   <data name="Menu_Send" xml:space="preserve">
-    <value>Trimite...</value>
+    <value>Enviar...</value>
   </data>
   <data name="Menu_SendFile" xml:space="preserve">
-    <value>Trimitere fișier NC...</value>
+    <value>Enviar archivo-NC...</value>
   </data>
   <data name="Menu_Configuration" xml:space="preserve">
-    <value>Configuraţie...</value>
+    <value>Configuración...</value>
   </data>
   <data name="Menu_Help" xml:space="preserve">
-    <value>Ajutor</value>
+    <value>Ayuda</value>
   </data>
   <data name="Menu_Website" xml:space="preserve">
-    <value>Site-ul Image2GCode</value>
+    <value>Sitio web de Image2GCode</value>
   </data>
   <data name="Menu_Donate" xml:space="preserve">
-    <value>Donează</value>
+    <value>Donar</value>
   </data>
   <data name="Menu_About" xml:space="preserve">
-    <value>Despre...</value>
+    <value>Acerca...</value>
   </data>
   <data name="Btn_Open" xml:space="preserve">
-    <value>Deschide...</value>
+    <value>Abrir...</value>
   </data>
   <data name="Btn_SaveGCode" xml:space="preserve">
-    <value>Salveaza cod-G...</value>
+    <value>Salvar Código G...</value>
   </data>
   <data name="Btn_Send" xml:space="preserve">
-    <value>Trimite...</value>
+    <value>Enviar...</value>
   </data>
   <data name="Status_Ready" xml:space="preserve">
-    <value>Gata</value>
+    <value>Listo</value>
   </data>
   <data name="Status_Zoom" xml:space="preserve">
-    <value>Mărire: {0}%</value>
+    <value>Zoom: {0}%</value>
   </data>
   <data name="Status_ImageSize" xml:space="preserve">
-    <value>Marimea imaginii: {0} x {1}</value>
+    <value>Tamaño de imagen: {0} x {1}</value>
   </data>
   <data name="Status_BurningArea" xml:space="preserve">
-    <value>Zona de ardere: {0:0.#} cm^2</value>
+    <value>Área de quemado: {0:0.#} cm^2</value>
   </data>
   <data name="Status_YStepover" xml:space="preserve">
-    <value>Pas Y: {0:0.0##} mm</value>
+    <value>Paso Y: {0:0.0##} mm</value>
   </data>
   <data name="Status_ApproxRunTimeUnknown" xml:space="preserve">
-    <value>Durată aproximativă: necunoscută</value>
+    <value>Tiempo de ejecución aproximado: desconocido</value>
   </data>
   <data name="Status_ApproxRunTimeSeconds" xml:space="preserve">
-    <value>Durată aproximativă: ~{0}s</value>
+    <value>Tiempo de ejecución aproximado: ~{0}s</value>
   </data>
   <data name="Status_ApproxRunTimeMinutes" xml:space="preserve">
-    <value>Durată aproximativă: ~{0}m</value>
+    <value>Tiempo de ejecución aproximado: ~{0}m</value>
   </data>
   <data name="Status_ApproxRunTimeHours" xml:space="preserve">
-    <value>Durată aproximativă: ~{0}h</value>
+    <value>Tiempo de ejecución aproximado: ~{0}h</value>
   </data>
   <data name="Status_ApproxRunTime" xml:space="preserve">
-    <value>Durată aproximativă: ~{0}h {1}m</value>
+    <value>Tiempo de ejecución aproximado: ~{0}h {1}m</value>
   </data>
   <data name="Im_1BitPalette" xml:space="preserve">
-    <value>Utilizați paleta de 1-bit</value>
+    <value>Usar paleta de 1-bit</value>
   </data>
   <data name="Im_Dithering" xml:space="preserve">
-    <value>Dithering:</value>
+    <value>Tramado:</value>
   </data>
   <data name="Im_BlackThreshold" xml:space="preserve">
-    <value>Prag negru:</value>
+    <value>Umbral negro:</value>
   </data>
   <data name="Im_InvertColors" xml:space="preserve">
-    <value>Inversați culorile</value>
+    <value>Invertir colores</value>
   </data>
   <data name="Im_SharpenForce" xml:space="preserve">
-    <value>Intensitatea clarificării:</value>
+    <value>Forzar Afilado:</value>
   </data>
   <data name="Im_Brightness" xml:space="preserve">
-    <value>Luminozitate:</value>
+    <value>Brillo:</value>
   </data>
   <data name="Im_Contrast" xml:space="preserve">
-    <value>Contrast:</value>
+    <value>Contraste:</value>
   </data>
   <data name="Im_Gamma" xml:space="preserve">
-    <value>Gamma:</value>
+    <value>Gama:</value>
   </data>
   <data name="Im_Resolution" xml:space="preserve">
-    <value>Rezoluția imaginii (DPI):</value>
+    <value>Resolucion de imagen (DPI):</value>
   </data>
   <data name="Im_DpiX" xml:space="preserve">
     <value>X:</value>
@@ -301,10 +301,10 @@
     <value>Y:</value>
   </data>
   <data name="Im_SameAsX" xml:space="preserve">
-    <value>Identic cu X</value>
+    <value>Igual que X</value>
   </data>
   <data name="Im_RotateFlip" xml:space="preserve">
-    <value>Rotiți/Întoarceți imaginea:</value>
+    <value>Girar/Voltear imagen:</value>
   </data>
   <data name="Im_Left" xml:space="preserve">
     <value>X:</value>
@@ -313,49 +313,49 @@
     <value>Y:</value>
   </data>
   <data name="Im_Width" xml:space="preserve">
-    <value>Lăţime:</value>
+    <value>Ancho:</value>
   </data>
   <data name="Im_Height" xml:space="preserve">
-    <value>Înălțime:</value>
+    <value>Altura:</value>
   </data>
   <data name="Im_Interpolation" xml:space="preserve">
-    <value>Interpolare:</value>
+    <value>Interpolación:</value>
   </data>
   <data name="Im_AspectRatio" xml:space="preserve">
-    <value>Raportul de aspect:</value>
+    <value>Relación de aspecto:</value>
   </data>
   <data name="Im_KeepAspectRatio" xml:space="preserve">
-    <value>Păstrați raportul de aspect</value>
+    <value>Mantener la relación de aspecto</value>
   </data>
   <data name="Gc_Speed" xml:space="preserve">
-    <value>Viteză:</value>
+    <value>Velocidad:</value>
   </data>
   <data name="Gc_Power" xml:space="preserve">
-    <value>Intensitate:</value>
+    <value>Poder:</value>
   </data>
   <data name="Gc_Accel" xml:space="preserve">
-    <value>Accelerație:</value>
+    <value>Aceleración:</value>
   </data>
   <data name="Menu_G0Spd" xml:space="preserve">
-    <value>Viteză rapidă ({0:0.#})</value>
+    <value>Velocidad rápida ({0:0.#})</value>
   </data>
   <data name="Gc_Shift" xml:space="preserve">
-    <value>Schimb:</value>
+    <value>Cambio:</value>
   </data>
   <data name="Gc_HeatDelay" xml:space="preserve">
-    <value>Întârziere de căldură:</value>
+    <value>Retraso de calor:</value>
   </data>
   <data name="Gc_AirAssist" xml:space="preserve">
-    <value>Asistență cu Aer</value>
+    <value>Asistencia de aire</value>
   </data>
   <data name="Gc_ChangeSpeedOnWhite" xml:space="preserve">
-    <value>Schimbați viteza pe alb</value>
+    <value>Cambiar velocidad en blanco</value>
   </data>
   <data name="Gc_WhiteSpeed" xml:space="preserve">
-    <value>Viteza pe alb:</value>
+    <value>Velocidad en blanco:</value>
   </data>
   <data name="Gc_WhiteDistance" xml:space="preserve">
-    <value>Distanța Minimă:</value>
+    <value>Distancia mínima:</value>
   </data>
   <data name="Gc_MaxMinSpeed" xml:space="preserve">
     <value>Max/Min Speed:</value>
@@ -364,211 +364,211 @@
     <value>Min/Max Power:</value>
   </data>
   <data name="Gc_Bidirectional" xml:space="preserve">
-    <value>Bidirecțional</value>
+    <value>Bidireccional</value>
   </data>
   <data name="Gc_BurnToTheCleaningStrip" xml:space="preserve">
-    <value>Ardeți pe banda de curățare</value>
+    <value>Quemar hasta la tira de limpieza</value>
   </data>
   <data name="Gc_CleaningStrategy" xml:space="preserve">
-    <value>Strategia de curățare:</value>
+    <value>Estrategia de limpieza:</value>
   </data>
   <data name="Gc_StripSide" xml:space="preserve">
-    <value>Poziția Benzii:</value>
+    <value>Posición de la tira:</value>
   </data>
   <data name="Gc_StripWidth" xml:space="preserve">
-    <value>Lățime:</value>
+    <value>Ancho:</value>
   </data>
   <data name="Gc_StripSpeed" xml:space="preserve">
-    <value>Viteza pe bandă:</value>
+    <value>Velocidad en la tira:</value>
   </data>
   <data name="Gc_CleaningField" xml:space="preserve">
-    <value>Câmp de curățare:</value>
+    <value>Campo de limpieza:</value>
   </data>
   <data name="Gc_CleaningSpd" xml:space="preserve">
-    <value>Viteza de curățare:</value>
+    <value>Velocidad de limpieza:</value>
   </data>
   <data name="Gc_CleaningCycles" xml:space="preserve">
-    <value>Cicluri:</value>
+    <value>Ciclos:</value>
   </data>
   <data name="Gc_NumberOfPasses" xml:space="preserve">
-    <value>Numărul de repetare:</value>
+    <value>Número de pases:</value>
   </data>
   <data name="Menu_GoToNextLine" xml:space="preserve">
-    <value>Accesați Linia următoare ({0})</value>
+    <value>Ir a la siguiente línea ({0})</value>
   </data>
   <data name="Menu_ReturnToOrigin" xml:space="preserve">
-    <value>Reveniți la origine ({0})</value>
+    <value>Volver al origen ({0})</value>
   </data>
   <data name="Menu_DoNotReturnY" xml:space="preserve">
-    <value>Nu întoarceți Y la Origine</value>
+    <value>No retornar Y al origen</value>
   </data>
   <data name="Gc_PrependImageFrame" xml:space="preserve">
-    <value>Prependere cadru imagine la codul G</value>
+    <value>Marco antes del código G</value>
   </data>
   <data name="Gc_FrameSpeed" xml:space="preserve">
-    <value>Viteza Cadrului:</value>
+    <value>Velocidad del marco:</value>
   </data>
   <data name="Gc_FramePower" xml:space="preserve">
-    <value>Intensitatea Cadrului:</value>
+    <value>Poder del marco:</value>
   </data>
   <data name="Gc_FrameWorkArea" xml:space="preserve">
-    <value>Zona de lucru a imaginii</value>
+    <value>Área de trabajo de imágenes</value>
   </data>
   <data name="Gc_EditGraph" xml:space="preserve">
-    <value>EDITEAZĂ GRAFICUL</value>
+    <value>EDITAR GRÁFICO</value>
   </data>
   <data name="DefaultPresetName" xml:space="preserve">
-    <value>Presetate Standard</value>
+    <value>Preajuste estándar</value>
   </data>
   <data name="Gc_CleaningRowsCount" xml:space="preserve">
-    <value>Număr linii:</value>
+    <value>Recuento de filas:</value>
   </data>
   <data name="Gc_CleaningDistance" xml:space="preserve">
-    <value>Distanță:</value>
+    <value>Distancia:</value>
   </data>
   <data name="Im_ResultPreview" xml:space="preserve">
-    <value>Previzualizare rezultat:</value>
+    <value>Vista previa de resultados:</value>
   </data>
   <data name="Im_PreviewBackground" xml:space="preserve">
-    <value>Fufndal:</value>
+    <value>Fondo:</value>
   </data>
   <data name="Im_TextureWrapMode" xml:space="preserve">
-    <value>Mod Wrap:</value>
+    <value>Modo de envoltura:</value>
   </data>
   <data name="Im_TextureSize" xml:space="preserve">
-    <value>Mărime:</value>
+    <value>Tamaño:</value>
   </data>
   <data name="Im_PreviewColor" xml:space="preserve">
     <value>Color:</value>
   </data>
   <data name="Menu_DownloadCH340Driver" xml:space="preserve">
-    <value>Descărcați driverul portului COM</value>
+    <value>Descargar controlador de puerto COM</value>
   </data>
   <data name="Menu_CheckForUpdates" xml:space="preserve">
-    <value>Verifică pentru actualizări</value>
+    <value>Buscar actualizaciones</value>
   </data>
   <data name="About_Title" xml:space="preserve">
-    <value>Despre</value>
+    <value>Acerca</value>
   </data>
   <data name="About_MakeASmallDonation" xml:space="preserve">
-    <value>Dacă vi s-a părut util acest software, faceți o mică donație.</value>
+    <value>Si encuentra útil este software, haga una pequeña donación.</value>
   </data>
   <data name="Status_LoadingImage" xml:space="preserve">
-    <value>Se încarcă imaginea...</value>
+    <value>Cargando imagen...</value>
   </data>
   <data name="Status_AppIsLoading" xml:space="preserve">
-    <value>Aplicația se încarcă...</value>
+    <value>La aplicación se está cargando...</value>
   </data>
   <data name="Status_AppIsClosing" xml:space="preserve">
-    <value>Aplicația se închide...</value>
+    <value>La aplicación se está cerrando...</value>
   </data>
   <data name="Status_ApplyingFilters" xml:space="preserve">
-    <value>Se aplică filtre...</value>
+    <value>Aplicando filtros...</value>
   </data>
   <data name="Status_ApplyingDithering" xml:space="preserve">
-    <value>Se aplică dithering...</value>
+    <value>Aplicando tramado...</value>
   </data>
   <data name="Status_PreparingTexture" xml:space="preserve">
-    <value>Se pregătește textura...</value>
+    <value>Preparando textura...</value>
   </data>
   <data name="Status_GeneratingPreview" xml:space="preserve">
-    <value>Se generează previzualizarea...</value>
+    <value>Generando vista previa...</value>
   </data>
   <data name="Status_CalculatingWorkTime" xml:space="preserve">
-    <value>Calcularea timpului de lucru...</value>
+    <value>Calculando el tiempo de trabajo...</value>
   </data>
   <data name="Status_ResizingImage" xml:space="preserve">
-    <value>Redimensionarea imaginii...</value>
+    <value>Cambiando el tamaño de la imagen...</value>
   </data>
   <data name="WO_MmPerRevolutionX" xml:space="preserve">
-    <value>MM pe Revoluție X:</value>
+    <value>MM por revolución X:</value>
   </data>
   <data name="WO_MmPerRevolutionY" xml:space="preserve">
-    <value>MM pe Revoluție Y:</value>
+    <value>MM por revolución Y:</value>
   </data>
   <data name="WO_CylinderDiameter" xml:space="preserve">
-    <value>Diametrul cilindrului:</value>
+    <value>Diámetro del cilindro:</value>
   </data>
   <data name="WO_AxisBeingWrapped" xml:space="preserve">
-    <value>Axa în curs de înfășurare:</value>
+    <value>Eje envuelto:</value>
   </data>
   <data name="WO_label5" xml:space="preserve">
-    <value>Imaginea este înfășurată cu {0:0.#} grade în jurul cilindrului.</value>
+    <value>La imagen se envuelve {0:0.#} grados alrededor del cilindro.</value>
   </data>
   <data name="Menu_SpeedGraphReset" xml:space="preserve">
-    <value>Resetați Graficul de Viteză la</value>
+    <value>Restablecer el gráfico de velocidad a</value>
   </data>
   <data name="Menu_PowerGraphReset" xml:space="preserve">
-    <value>Resetează Graficul de Putere la</value>
+    <value>Restablecer el gráfico de poder a</value>
   </data>
   <data name="Menu_GraphLinear" xml:space="preserve">
-    <value>Liniar</value>
+    <value>Lineal</value>
   </data>
   <data name="Menu_GraphDefault" xml:space="preserve">
-    <value>Mod implicit</value>
+    <value>Defecto</value>
   </data>
   <data name="Menu_SaveGCodeWO" xml:space="preserve">
-    <value>Salvează cod-G (Ieșire înfășurată)...</value>
+    <value>Guardar código G (Salida envuelta)...</value>
   </data>
   <data name="Menu_SendWO" xml:space="preserve">
-    <value>Trimite (Ieșire înfășurată)...</value>
+    <value>Enviar (Salida envuelta)...</value>
   </data>
   <data name="WO_Title" xml:space="preserve">
-    <value>Ieșire Înfășurată</value>
+    <value>Salida envuelta</value>
   </data>
   <data name="Error_CouldNotFindFile" xml:space="preserve">
-    <value>Nu găsesc &apos;{0}&apos;!</value>
+    <value>No se pudo encontrar &apos;{0}&apos;!</value>
   </data>
   <data name="Error_InvalidImageFile" xml:space="preserve">
-    <value>&apos;{0}&apos; nu are un format de imagine valid!</value>
+    <value>&apos;{0}&apos; no tiene un formato de imagen válido!</value>
   </data>
   <data name="GrblSet_Title" xml:space="preserve">
-    <value>Setări Controler</value>
+    <value>Configuración del controlador</value>
   </data>
   <data name="GrblSet_XAxis" xml:space="preserve">
-    <value>Axa X</value>
+    <value>Eje X</value>
   </data>
   <data name="GrblSet_YAxis" xml:space="preserve">
-    <value>Axa Y</value>
+    <value>Eje Y</value>
   </data>
   <data name="GrblSet_StepsPerMM" xml:space="preserve">
-    <value>Pași pe MM:</value>
+    <value>Pasos por MM:</value>
   </data>
   <data name="GrblSet_MaxVelocity" xml:space="preserve">
-    <value>Viteza maxima:</value>
+    <value>Velocidad máxima:</value>
   </data>
   <data name="GrblSet_MaxAccel" xml:space="preserve">
-    <value>Acceleratie:</value>
+    <value>Aceleración:</value>
   </data>
   <data name="GrblSet_MaxTravel" xml:space="preserve">
-    <value>Dimensiunea mesei:</value>
+    <value>Tamaño de la mesa:</value>
   </data>
   <data name="GrblSet_FastJog" xml:space="preserve">
-    <value>Jog rapid:</value>
+    <value>Movimiento rápido:</value>
   </data>
   <data name="GrblSet_SlowJog" xml:space="preserve">
-    <value>Jog lent:</value>
+    <value>Movimiento lento:</value>
   </data>
   <data name="GrblSet_InvertStepPin" xml:space="preserve">
-    <value>Invertare Pin STEP</value>
+    <value>Invertir Pin STEP</value>
   </data>
   <data name="GrblSet_InvertDirectionPin" xml:space="preserve">
-    <value>Invertare Pin DIR</value>
+    <value>Invertir Pin DIR</value>
   </data>
   <data name="GrblSet_HomingDirInvert" xml:space="preserve">
-    <value>Inversare DIR Homing</value>
+    <value>Invertir dirección de inicio</value>
   </data>
   <data name="GrblSet_JunctionDeviation" xml:space="preserve">
-    <value>Abaterea joncțiunii:</value>
+    <value>Desviación de la unión:</value>
   </data>
   <data name="GrblSet_ArcTolerance" xml:space="preserve">
-    <value>Toleranță la arc:</value>
+    <value>Tolerancia al arco:</value>
   </data>
   <data name="GrblSet_InvertStEnablePin" xml:space="preserve">
     <value>Invert Stepper EN Pin</value>
   </data>
   <data name="GrblSet_CoreXY" xml:space="preserve">
-    <value>Cinematică CoreXY/H-bot</value>
+    <value>CoreXY/H-bot Kinematics</value>
   </data>
   <data name="GrblSet_HomingFeedRate" xml:space="preserve">
     <value>Homing Feed Rate:</value>
@@ -577,55 +577,54 @@
     <value>Homing Seek Rate:</value>
   </data>
   <data name="GrblSet_LaserMode" xml:space="preserve">
-    <value>Mod Laser</value>
+    <value>Modo láser</value>
   </data>
   <data name="GrblSet_FastGrid" xml:space="preserve">
-    <value>Grilă rapidă:</value>
+    <value>Cuadrícula rápida:</value>
   </data>
   <data name="GrblSet_SlowGrid" xml:space="preserve">
-    <value>Grilă lentă:</value>
+    <value>Cuadrícula lenta:</value>
   </data>
   <data name="Btn_OK" xml:space="preserve">
     <value>OK</value>
   </data>
   <data name="Btn_Cancel" xml:space="preserve">
-    <value>Anulare</value>
+    <value>Cancelar</value>
   </data>
   <data name="Btn_Apply" xml:space="preserve">
-    <value>Aplică</value>
+    <value>Aplicar</value>
   </data>
   <data name="PF_RetrievingGrblSettings" xml:space="preserve">
-    <value>Se preiau setările controlerului...</value>
+    <value>Recuperando la configuración del controlador...</value>
   </data>
   <data name="TranslationAuthor" xml:space="preserve">
-    <value>Levente Foldes</value>
-    <comment>This term should always be in English!</comment>
+    <value>Oslay Viera</value>
   </data>
   <data name="GrblSet_HomingCycle2" xml:space="preserve">
-    <value>Revenire Acasă 2:</value>
+    <value>Ciclo de inicio 2:</value>
   </data>
   <data name="GrblSet_InvertHomePin" xml:space="preserve">
-    <value>Invertare Pin HOME</value>
+    <value>Invertir Pin HOME</value>
   </data>
   <data name="GrblSet_HomingCycle1" xml:space="preserve">
-    <value>Revenire Acasă 1:</value>
+    <value>Ciclo de inicio 1:</value>
   </data>
   <data name="GrblSet_MarkerPower" xml:space="preserve">
-    <value>Putere Marcare:</value>
+    <value>Poder del marcador:</value>
   </data>
   <data name="GrblSet_FwVer" xml:space="preserve">
-    <value>Versune FW:</value>
+    <value>Versión de FW:</value>
   </data>
   <data name="Grbl_UnknownParameter" xml:space="preserve">
-    <value>Răspunsul de la controler conține unul sau mai mulți parametri necunoscuți. Încercați să schimbați setările controlerului folosind cea mai recentă versiune a image2gcode.</value>
+    <value>La respuesta del controlador contiene uno o más parámetros desconocidos. Intente cambiar la configuración del controlador con la última versión de image2gcode.</value>
   </data>
   <data name="Grbl_GCodeError" xml:space="preserve">
-    <value>Ceva n-a mers bine. Controlerul a răspuns cu codul de eroare {0}.</value>
+    <value>Algo salió mal. El controlador respondió con el código de error {0}.</value>
   </data>
   <data name="Grbl_GCodeErrorFile" xml:space="preserve">
-    <value>Eroare de cod G în &apos;{0}&apos; lângă linia {1}. Controlerul a răspuns cu codul de eroare {2}.</value>
+    <value>Error de código G en &apos;{0}&apos; cerca de la línea {1}. El controlador respondió con el código de error {2}.</value>
   </data>
   <data name="Error_FileComment" xml:space="preserve">
-    <value>În blocul de comentarii G-Code este permisă doar o singură linie care începe cu un simbol procentual.</value>
+    <value>Solo se permite una línea que comience con un símbolo de porcentaje en el bloque de comentarios del Código G.</value>
   </data>
 </root>

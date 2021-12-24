@@ -117,6 +117,90 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Menu_File" xml:space="preserve">
+    <value>Файл</value>
+  </data>
+  <data name="Menu_Open" xml:space="preserve">
+    <value>Відкрити...</value>
+  </data>
+  <data name="Menu_Reload" xml:space="preserve">
+    <value>Оновити</value>
+  </data>
+  <data name="Menu_Close" xml:space="preserve">
+    <value>Закрити</value>
+  </data>
+  <data name="Menu_Language" xml:space="preserve">
+    <value>Мова</value>
+  </data>
+  <data name="Menu_Exit" xml:space="preserve">
+    <value>Вихід</value>
+  </data>
+  <data name="Menu_OpenClipboard" xml:space="preserve">
+    <value>Відкрити з буферу обміну</value>
+  </data>
+  <data name="Menu_SaveImage" xml:space="preserve">
+    <value>Зберегти копію як...</value>
+  </data>
+  <data name="Menu_Machine" xml:space="preserve">
+    <value>Станок</value>
+  </data>
+  <data name="Menu_SerialPort" xml:space="preserve">
+    <value>COM-порт ({0})</value>
+  </data>
+  <data name="Menu_Send" xml:space="preserve">
+    <value>Відправити...</value>
+  </data>
+  <data name="Menu_Help" xml:space="preserve">
+    <value>Довідка</value>
+  </data>
+  <data name="Menu_About" xml:space="preserve">
+    <value>Про програму...</value>
+  </data>
+  <data name="Btn_Open" xml:space="preserve">
+    <value>Відкрити...</value>
+  </data>
+  <data name="Btn_Send" xml:space="preserve">
+    <value>Відправити...</value>
+  </data>
+  <data name="Status_Ready" xml:space="preserve">
+    <value>Готово</value>
+  </data>
+  <data name="Status_Zoom" xml:space="preserve">
+    <value>Масштаб: {0}%</value>
+  </data>
+  <data name="Status_ImageSize" xml:space="preserve">
+    <value>Розмір зображення: {0} x {1}</value>
+  </data>
+  <data name="Status_YStepover" xml:space="preserve">
+    <value>Крок по Y: {0:0.0##} мм</value>
+  </data>
+  <data name="Status_ApproxRunTimeUnknown" xml:space="preserve">
+    <value>Час виконання: невідомо</value>
+  </data>
+  <data name="Status_ApproxRunTimeSeconds" xml:space="preserve">
+    <value>Час виконання: &lt;1хв</value>
+  </data>
+  <data name="Status_ApproxRunTimeMinutes" xml:space="preserve">
+    <value>Час виконання: ~{0}хв</value>
+  </data>
+  <data name="Status_ApproxRunTimeHours" xml:space="preserve">
+    <value>Час виконання: ~{0}год</value>
+  </data>
+  <data name="Status_ApproxRunTime" xml:space="preserve">
+    <value>Час виконання: ~{0}год {1}хв</value>
+  </data>
+  <data name="Im_Dithering" xml:space="preserve">
+    <value>Дизеринг:</value>
+  </data>
+  <data name="Im_InvertColors" xml:space="preserve">
+    <value>Інвертувати кольори</value>
+  </data>
+  <data name="Im_Brightness" xml:space="preserve">
+    <value>Яскравість:</value>
+  </data>
+  <data name="Im_Contrast" xml:space="preserve">
+    <value>Контрастність:</value>
+  </data>
   <data name="Im_DpiX" xml:space="preserve">
     <value>X:</value>
   </data>
@@ -129,11 +213,50 @@
   <data name="Im_Top" xml:space="preserve">
     <value>Y:</value>
   </data>
+  <data name="Im_Width" xml:space="preserve">
+    <value>Ширина:</value>
+  </data>
+  <data name="Im_Height" xml:space="preserve">
+    <value>Висота:</value>
+  </data>
+  <data name="Im_Interpolation" xml:space="preserve">
+    <value>Інтерполяція:</value>
+  </data>
+  <data name="Im_KeepAspectRatio" xml:space="preserve">
+    <value>Зберегти пропорції</value>
+  </data>
+  <data name="Gc_Speed" xml:space="preserve">
+    <value>Швидкість:</value>
+  </data>
+  <data name="Gc_Power" xml:space="preserve">
+    <value>Потужність:</value>
+  </data>
+  <data name="Gc_Accel" xml:space="preserve">
+    <value>Пришвидшення:</value>
+  </data>
+  <data name="Gc_ChangeSpeedOnWhite" xml:space="preserve">
+    <value>Змінювати швидкість на білому</value>
+  </data>
+  <data name="Gc_WhiteSpeed" xml:space="preserve">
+    <value>Швидкість на білому:</value>
+  </data>
+  <data name="Gc_WhiteDistance" xml:space="preserve">
+    <value>Мін. відстань:</value>
+  </data>
   <data name="Gc_MaxMinSpeed" xml:space="preserve">
     <value>Max/Min Speed:</value>
   </data>
   <data name="Gc_MinMaxPower" xml:space="preserve">
     <value>Min/Max Power:</value>
+  </data>
+  <data name="Gc_Bidirectional" xml:space="preserve">
+    <value>В дві сторони</value>
+  </data>
+  <data name="About_Title" xml:space="preserve">
+    <value>Про програму</value>
+  </data>
+  <data name="About_MakeASmallDonation" xml:space="preserve">
+    <value>Якщо Вам сподобалась ця програма, зробіть невелике пожертвування.</value>
   </data>
   <data name="Btn_OK" xml:space="preserve">
     <value>OK</value>

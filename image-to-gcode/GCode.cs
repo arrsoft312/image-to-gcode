@@ -133,78 +133,178 @@ partial class image2gcode {
         }
         
         try {
-            bool isKaskade = false;
-            int rxBufferSize = 0;
-            
-            int f_override = 100;
-            int s_override = 100;
+            string fwVersion = null;
+            GrblOptions fwFlags = GrblOptions.None;
+            int rxBufferSize;
             
             int sum_c_line = 0;
             List<int> c_line = new List<int>();
             
+            int comment_counter = 0;
             int line_counter = 0;
             
             string[] s_list = new string[MaxImageSize*2+4];
-            int i = 0x7FFFFFFF;
+            int i = 0;
             
-            Action SendToGrblController;
+            Func<bool> SendToGrblController;
             
-            //serialPort1.ReadTo("\r\n");
-            //serialPort1.Write("");
             if (sendToDevice) {
                 serialPort1.BaudRate = baudRate;
                 serialPort1.PortName = comPort;
                 
-                serialPort1.ReadTimeout = 50;
+                serialPort1.ReadTimeout = 30;
                 serialPort1.Open();
                 
-                Grbl_GetSync(() => ((BackgroundWorker)sender).CancellationPending);
-                if (((BackgroundWorker)sender).CancellationPending) {
+                if (!Grbl_GetSync(() => ((BackgroundWorker)sender).CancellationPending)) {
                     return;
                 }
                 
-                Grbl_GetBuildInfo(&isKaskade, &rxBufferSize);
-                
-                if (!isKaskade) {
-                    
-                    
-                    progressForm1.trackBar1.Value = f_override;
-                    progressForm1.trackBar2.Value = s_override;
-                    
-                    Control_ValueChanged(progressForm1.trackBar1, EventArgs.Empty);
-                    Control_ValueChanged(progressForm1.trackBar2, EventArgs.Empty);
-                    
-                    progressForm1.Invoke((MethodInvoker)(() => progressForm1.tableLayoutPanel2.Visible = true), null);
-                }
-                
-                progressForm1.button1.Enabled = true;
-                progressForm1.button2.Enabled = true;
+                rxBufferSize = Grbl_GetBuildInfo(ref fwVersion, ref fwFlags);
                 
                 SendToGrblController = () => {
-                    for (int j = 0; j < i; j++) {
+                    for (int j = 0;; j++) {
+                        if (i != -1) {
+                            if (j == i) {
+                                return true;
+                            }
+                            
+                            int len = (s_list[j].Length + 1);
+                            
+                            sum_c_line += len;
+                            c_line.Add(len);
+                        } else {
+                            if (sum_c_line == 0) {
+                                return true;
+                            }
+                            
+                            sum_c_line += rxBufferSize;
+                            c_line[c_line.Count-1] += rxBufferSize;
+                        }
                         
+                        while (sum_c_line > rxBufferSize || serialPort1.BytesToRead != 0) {
+                            try {
+                                string[] resp = serialPort1.ReadTo("\r\n").Split(new string[] { ":", }, 2, StringSplitOptions.None);
+                                if (resp[0] != "ok") {
+                                    int error_code = Byte.Parse(resp[1], invariantCulture);
+                                    if (resp[0] == "error") {
+                                        if (line_counter == 0) {
+                                            if (error_code == 1) {
+                                                goto RESP_OK;
+                                            }
+                                            //throw new Exception(
+                                        }
+                                        
+                                        if (readFromFile) {
+                                            throw new Exception(String.Format(culture, resources.GetString("Grbl_GCodeErrorFile", culture), Path.GetFileName(openFileDialog2.FileName), (comment_counter + line_counter), resp[1]));
+                                        }
+                                        throw new Exception(String.Format(culture, resources.GetString("Grbl_GCodeError", culture), resp[1]));
+                                    }
+                                    
+                                    return false;
+                                }
+                                
+                                RESP_OK:
+                                ++line_counter;
+                                
+                                sum_c_line -= c_line[0];
+                                c_line.RemoveAt(0);
+                            } catch (TimeoutException) {
+                            }
+                            
+                            if (((BackgroundWorker)sender).CancellationPending) {
+                                if (rxBufferSize != -1) {
+                                    serialPort1.Write(new byte[] { 0x18, }, 0, 1);
+                                    
+                                    rxBufferSize = -1;
+                                }
+                            }
+                        }
+                        
+                        if (i == -1) {
+                            return true;
+                        }
+                        
+                        serialPort1.Write(s_list[j] + "\n");
                     }
                 };
                 
                 if (readFromFile) {
-                    ((BackgroundWorker)sender).ReportProgress(0, resources.GetString("PF_SendingFile", culture));
-                    
                     StreamReader inFile = new StreamReader(openFileDialog2.FileName, Encoding.ASCII, false);
+                    Stream baseStream = inFile.BaseStream;
+                    
                     try {
+                        i = 1;
                         
+                        for (;; ++comment_counter) {
+                            string line = inFile.ReadLine();
+                            if (line == null) {
+                                return;
+                            }
+                            
+                            string s = line.Replace(" ", "");
+                            if (s.Length == 0 || s[0] != ';') {
+                                break;
+                            }
+                            if (s.Length == 1 || s[1] != '%') {
+                                continue;
+                            }
+                            
+                            if (s_list[0] != null) {
+                                throw new Exception(resources.GetString("Error_FileComment", culture));
+                            }
+                            
+                            int num = line.IndexOf('%', 1, (line.Length-1));
+                            s_list[0] = line.Remove(0, num);
+                        }
+                        
+                        if (s_list[0] == null) {
+                            s_list[0] = "%";
+                        }
+                        
+                        baseStream.Seek(0, SeekOrigin.Begin);
+                        inFile.DiscardBufferedData();
+                        
+                        for (int j = 0; j < comment_counter; j++) {
+                            inFile.ReadLine();
+                        }
+                        
+                        ((BackgroundWorker)sender).ReportProgress(0, resources.GetString("PF_SendingFile", culture));
+                        
+                        progressForm1.button1.Enabled = true;
+                        progressForm1.button2.Enabled = true;
+                        
+                        long fileSize = baseStream.Length;
+                        for (;;) {
+                            if (!SendToGrblController()) {
+                                return;
+                            }
+                            
+                            ((BackgroundWorker)sender).ReportProgress((int)(1000 * baseStream.Position / fileSize), null);
+                            
+                            s_list[0] = inFile.ReadLine();
+                            if (s_list[0] == null) {
+                                break;
+                            }
+                        }
                     } finally {
                         inFile.Close();
                     }
                     
+                    i = -1;
+                    SendToGrblController();
+                    
                     return;
                 }
-                
-                ((BackgroundWorker)sender).ReportProgress(0, resources.GetString("PF_SendingData", culture));
             } else {
                 SendToGrblController = () => {
                     for (int j = 0; j < i; j++) {
                         outFile.Write(s_list[j] + "\n");
                     }
+                    
+                    if (((BackgroundWorker)sender).CancellationPending) {
+                        return false;
+                    }
+                    return true;
                 };
             }
             
@@ -524,7 +624,25 @@ partial class image2gcode {
             
             int numberOfPasses = gcNumberOfPasses;
             
+            //
+            
             i = 0;
+            
+            if (sendToDevice) {
+                
+                s_list[i++] = "%";
+                
+                ((BackgroundWorker)sender).ReportProgress(0, resources.GetString("PF_SendingData", culture));
+                
+                progressForm1.button1.Enabled = true;
+                progressForm1.button2.Enabled = true;
+                
+            } else {
+                
+                s_list[i++] = (";Generated with " + AppTitle + " v" + AppVersion + " - https://www.image2gcode.ru");
+                s_list[i++] = ";%";
+                
+            }
             
             InitializeParser();
             if (isNichromeBurner) {
@@ -652,8 +770,7 @@ partial class image2gcode {
                 
             }
             
-            SendToGrblController();
-            if (((BackgroundWorker)sender).CancellationPending) {
+            if (!SendToGrblController()) {
                 return;
             }
             
@@ -680,7 +797,7 @@ partial class image2gcode {
                     break;
             }
             
-            int m = (1+cleaningRowsCount);
+            int cleaningCounter = (1+cleaningRowsCount);
             
             bool forward = stripOnTheRightSide;
             if (!bidirectional) {
@@ -700,7 +817,7 @@ partial class image2gcode {
                     
                     if (isNichromeBurner) {
                         
-                        if (--m == 0) {
+                        if (--cleaningCounter == 0) {
                             i = 0;
                             
                             if (stripOnTheRightSide) {
@@ -721,8 +838,7 @@ partial class image2gcode {
                                 MoveRelX(width/dpiX, stripSpeed, power);
                             }
                             
-                            SendToGrblController();
-                            if (((BackgroundWorker)sender).CancellationPending) {
+                            if (!SendToGrblController()) {
                                 return;
                             }
                             
@@ -730,7 +846,7 @@ partial class image2gcode {
                                 forward = stripOnTheRightSide;
                             }
                             
-                            m = cleaningRowsCount;
+                            cleaningCounter = cleaningRowsCount;
                         }
                         
                     } else {
@@ -879,8 +995,7 @@ partial class image2gcode {
                         
                     }
                     
-                    SendToGrblController();
-                    if (((BackgroundWorker)sender).CancellationPending) {
+                    if (!SendToGrblController()) {
                         return;
                     }
                     
@@ -948,12 +1063,16 @@ partial class image2gcode {
             }
             ProgramEnd();
             
-            SendToGrblController();
-            if (((BackgroundWorker)sender).CancellationPending) {
+            if (!SendToGrblController()) {
                 return;
             }
             
             ((BackgroundWorker)sender).ReportProgress(1000, null);
+            
+            i = -1;
+            SendToGrblController();
+            
+            return;
         } finally {
             outFile.Close();
             serialPort1.Close();
