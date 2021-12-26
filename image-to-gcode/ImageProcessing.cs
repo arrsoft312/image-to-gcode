@@ -133,15 +133,19 @@ partial class image2gcode {
         
         Size ibSize = imageBox1.ClientSize;
         
-        int zoom = (int)((float)ibSize.Width / imWidth * 100F);
-        if ((imHeight * zoom / 100) > ibSize.Height) {
-            zoom = (int)((float)ibSize.Height / imHeight * 100F);
+        float zoom = ((float)ibSize.Width / imWidth * 100F);
+        if ((imHeight * zoom / 100F) > ibSize.Height) {
+            zoom = ((float)ibSize.Height / imHeight * 100F);
         }
         
-        if (zoom > 100) {
-            imageBox1.Zoom = 100;
+        if (zoom >= 100F) {
+            imageBox1.Zoom = 1;
+        } else if (zoom < 25F) {
+            imageBox1.Zoom = -8;
+        } else if (zoom < 50F) {
+            imageBox1.Zoom = -4;
         } else {
-            imageBox1.Zoom = zoom;
+            imageBox1.Zoom = -2;
         }
         
         imageBox1.ImWidth = imWidth;
@@ -447,7 +451,12 @@ partial class image2gcode {
     }
     
     private void ImageBox1ZoomChanged(object sender, EventArgs e) {
-        toolStripStatusLabel2.Text = String.Format(culture, resources.GetString("Status_Zoom", culture), ((ImageBox)sender).Zoom);
+        int zoom = ((ImageBox)sender).Zoom;
+        if (zoom > 0) {
+            toolStripStatusLabel2.Text = String.Format(culture, resources.GetString("Status_Zoom", culture), (100*zoom));
+        } else {
+            toolStripStatusLabel2.Text = String.Format(culture, resources.GetString("Status_Zoom", culture), (-100F/zoom));
+        }
     }
     
     private void BackgroundWorker1ProgressChanged(object sender, ProgressChangedEventArgs e) {
@@ -747,33 +756,22 @@ partial class image2gcode {
                         continue;
                     }
                     
-                    Parallel.Invoke(new Action[] { () => {
-                        byte* src = (byte*)imResized;
-                        byte* dest = (byte*)imDest;
-                        for (int x = 0; x < width; x++) {
-                            dest[x] = lookupTable[src[x]];
-                        }
-                    }, () => {
-                        byte* src = (byte*)(imResized + height*scanWidth - scanWidth);
-                        byte* dest = (byte*)(imDest + height*scanWidth - scanWidth);
-                        for (int x = 0; x < width; x++) {
-                            dest[x] = lookupTable[src[x]];
-                        }
-                    }, });
-                    if (_bWorkerFlags != 0) {
-                        continue;
-                    }
-                    
                     int width2 = (width-1);
-                    Parallel.For(1, (height-1), (y, loop) => {
+                    Parallel.For(0, height, (y, loop) => {
                         byte* src = (byte*)(imResized + y*scanWidth);
                         byte* dest = (byte*)(imDest + y*scanWidth);
                         
                         dest[0] = lookupTable[src[0]];
                         dest[width2] = lookupTable[src[width2]];
                         
-                        for (int x = 1; x < width2; x++) {
-                            dest[x] = sharpenTable[src[x]*1024 + src[x-scanWidth]+src[x-1]+src[x+1]+src[x+scanWidth]];
+                        if (y == 0 || y == (height-1)) {
+                            for (int x = 1; x < width2; x++) {
+                                dest[x] = lookupTable[src[x]];
+                            }
+                        } else {
+                            for (int x = 1; x < width2; x++) {
+                                dest[x] = sharpenTable[src[x]*1024 + src[x-scanWidth]+src[x-1]+src[x+1]+src[x+scanWidth]];
+                            }
                         }
                         if (_bWorkerFlags != 0) {
                             loop.Stop();
@@ -1069,13 +1067,13 @@ partial class image2gcode {
                             continue;
                         }
                     } else {
-                        int textureScale = previewSize[previewIdx];
+                        float textureScale = (100F / previewSize[previewIdx]);
                         using (Bitmap im = (Bitmap)Image.FromStream(bitmapTextures[background], false, true)) {
                             int W = im.Width;
                             int H = im.Height;
                             
-                            textureWidth = (W * textureScale / 100);
-                            textureHeight = (H * textureScale / 100);
+                            textureWidth = (int)(W / textureScale);
+                            textureHeight = (int)(H / textureScale);
                             
                             Marshal.FreeHGlobal(imBackground);
                             imBackground = Marshal.AllocHGlobal((IntPtr)(textureHeight*textureWidth*3));
@@ -1085,30 +1083,27 @@ partial class image2gcode {
                             imScan0 = bDataSrc.Scan0;
                             imScanWidth = bDataSrc.Stride;
                             
-                            float resizeFactorX = ((float)W / textureWidth);
-                            float resizeFactorY = ((float)H / textureHeight);
-                            
                             Parallel.For(0, textureHeight, (y, loop) => {
                                 byte* dest = (byte*)(imBackground + y*textureWidth*3);
                                 
-                                int floorY = (int)(y*resizeFactorY);
+                                int floorY = (int)(y*textureScale);
                                 int ceilY = (floorY+1);
                                 if (ceilY >= H) {
                                     ceilY = (H-1);
                                 }
-                                float fractionY = (y*resizeFactorY - floorY);
+                                float fractionY = (y*textureScale - floorY);
                                 float invFractionY = (1F - fractionY);
                                 
                                 byte* srcFloor = (byte*)(imScan0 + floorY*imScanWidth);
                                 byte* srcCeil = (byte*)(imScan0 + ceilY*imScanWidth);
                                 
                                 for (int x = 0; x < textureWidth; x++) {
-                                    int floorX = (int)(x*resizeFactorX);
+                                    int floorX = (int)(x*textureScale);
                                     int ceilX = (floorX+1);
                                     if (ceilX >= W) {
                                         ceilX = (W-1);
                                     }
-                                    float fractionX = (x*resizeFactorX - floorX);
+                                    float fractionX = (x*textureScale - floorX);
                                     float invFractionX = (1F - fractionX);
                                     
                                     float b1, b2;

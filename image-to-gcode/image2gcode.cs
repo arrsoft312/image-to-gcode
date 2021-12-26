@@ -33,8 +33,8 @@ using Microsoft.Win32;
 
 partial class image2gcode:Form {
     public const string AppTitle = "image2gcode";
-    public const string AppVersion = "3.1.2";
-    public const string AppVersionBuild = "2021-12-23";
+    public const string AppVersion = "3.1.3";
+    public const string AppVersionBuild = "2021-12-26";
     public const string AppAuthor = "Artur Kurpukov";
     public const string AppCopyright = "Copyright (C) 2017-2021 Artur Kurpukov";
     private const string SettingsVersion = "3.1";
@@ -690,10 +690,16 @@ partial class image2gcode:Form {
             float startPtY = ((ImageBox)sender).StartPointY;
             int imWidth = ((ImageBox)sender).ImWidth;
             int imHeight = ((ImageBox)sender).ImHeight;
-            
             int zoom = ((ImageBox)sender).Zoom;
-            int scaledImWidth = (imWidth * zoom / 100);
-            int scaledImHeight = (imHeight * zoom / 100);
+            
+            int scaledImHeight, scaledImWidth;
+            if (zoom > 0) {
+                scaledImWidth = (imWidth * zoom);
+                scaledImHeight = (imHeight * zoom);
+            } else {
+                scaledImWidth = (imWidth / -zoom);
+                scaledImHeight = (imHeight / -zoom);
+            }
             
             int hSpace = (ibWidth-scaledImWidth);
             if (hSpace < 0) {
@@ -708,66 +714,34 @@ partial class image2gcode:Form {
             int destWidth = (ibWidth-hSpace);
             int destHeight = (ibHeight-vSpace);
             
-            int srcLeft = (-scrollPosition.X * 100 / zoom);
-            int srcTop = (-scrollPosition.Y * 100 / zoom);
-            int srcWidth = (destWidth * 100 / zoom);
-            int srcHeight = (destHeight * 100 / zoom);
+            int destScanWidth = ((destWidth*3+3) / 4 * 4);
             
-            if (false) {
-                int destScanWidth = ((destWidth*3+3) / 4 * 4);
+            if (destWidth != ibImageWidth || destHeight != ibImageHeight) {
+                Marshal.FreeHGlobal(ibScan0);
+                ibScan0 = Marshal.AllocHGlobal((IntPtr)(destHeight*destScanWidth));
+                ibImage = new Bitmap(destWidth, destHeight, destScanWidth, PixelFormat.Format24bppRgb, ibScan0);
                 
-                if (destWidth != ibImageWidth || destHeight != ibImageHeight) {
-                    Marshal.FreeHGlobal(ibScan0);
-                    ibScan0 = Marshal.AllocHGlobal((IntPtr)(destHeight*destScanWidth));
-                    ibImage = new Bitmap(destWidth, destHeight, destScanWidth, PixelFormat.Format24bppRgb, ibScan0);
-                    
-                    ibImageWidth = destWidth;
-                    ibImageHeight = destHeight;
-                }
+                ibImageWidth = destWidth;
+                ibImageHeight = destHeight;
+            }
+            
+            if (zoom > 0) {
                 
-                float resizeFactorX = ((float)imWidth / scaledImWidth);
-                float resizeFactorY = ((float)imHeight / scaledImHeight);
+                int srcLeft = (-scrollPosition.X / zoom);
+                int srcTop = (-scrollPosition.Y / zoom);
                 
                 if (imIdx == 1) {
                     int scanWidth = ((imWidth*3+3) / 4 * 4);
                     IntPtr imScan0 = (imPreview + srcTop*scanWidth + srcLeft*3);
                     
                     Parallel.For(0, destHeight, (y) => {
+                        byte* src = (byte*)(imScan0 + y/zoom * scanWidth);
                         byte* dest = (byte*)(ibScan0 + y*destScanWidth);
                         
-                        int floorY = (int)(y*resizeFactorY);
-                        int ceilY = (floorY+1);
-                        if (ceilY >= srcHeight) {
-                            ceilY = (srcHeight-1);
-                        }
-                        float fractionY = (y*resizeFactorY - floorY);
-                        float invFractionY = (1F - fractionY);
-                        
-                        byte* srcFloor = (byte*)(imScan0 + floorY*scanWidth);
-                        byte* srcCeil = (byte*)(imScan0 + ceilY*scanWidth);
-                        
                         for (int x = 0; x < destWidth; x++) {
-                            int floorX = (int)(x*resizeFactorX);
-                            int ceilX = (floorX+1);
-                            if (ceilX >= srcWidth) {
-                                ceilX = (srcWidth-1);
-                            }
-                            float fractionX = (x*resizeFactorX - floorX);
-                            float invFractionX = (1F - fractionX);
-                            
-                            float b1, b2;
-                            
-                            b1 = (invFractionX*srcFloor[floorX*3+2] + fractionX*srcFloor[ceilX*3+2]);
-                            b2 = (invFractionX*srcCeil[floorX*3+2] + fractionX*srcCeil[ceilX*3+2]);
-                            dest[x*3+2] = (byte)(invFractionY*b1 + fractionY*b2);
-                            
-                            b1 = (invFractionX*srcFloor[floorX*3+1] + fractionX*srcFloor[ceilX*3+1]);
-                            b2 = (invFractionX*srcCeil[floorX*3+1] + fractionX*srcCeil[ceilX*3+1]);
-                            dest[x*3+1] = (byte)(invFractionY*b1 + fractionY*b2);
-                            
-                            b1 = (invFractionX*srcFloor[floorX*3+0] + fractionX*srcFloor[ceilX*3+0]);
-                            b2 = (invFractionX*srcCeil[floorX*3+0] + fractionX*srcCeil[ceilX*3+0]);
-                            dest[x*3+0] = (byte)(invFractionY*b1 + fractionY*b2);
+                            dest[x*3+2] = src[x/zoom*3+2];
+                            dest[x*3+1] = src[x/zoom*3+1];
+                            dest[x*3+0] = src[x/zoom*3+0];
                         }
                     });
                 } else {
@@ -781,32 +755,72 @@ partial class image2gcode:Form {
                     }
                     
                     Parallel.For(0, destHeight, (y) => {
+                        byte* src = (byte*)(imScan0 + y/zoom * scanWidth);
                         byte* dest = (byte*)(ibScan0 + y*destScanWidth);
                         
-                        int floorY = (int)(y*resizeFactorY);
-                        int ceilY = (floorY+1);
-                        if (ceilY >= srcHeight) {
-                            ceilY = (srcHeight-1);
+                        for (int x = 0; x < destWidth; x++) {
+                            dest[x*3+2] = src[x/zoom];
+                            dest[x*3+1] = src[x/zoom];
+                            dest[x*3+0] = src[x/zoom];
                         }
-                        float fractionY = (y*resizeFactorY - floorY);
-                        float invFractionY = (1F - fractionY);
-                        
-                        byte* srcFloor = (byte*)(imScan0 + floorY*scanWidth);
-                        byte* srcCeil = (byte*)(imScan0 + ceilY*scanWidth);
+                    });
+                }
+                
+                scrollPosition.X = (-srcLeft*zoom);
+                scrollPosition.Y = (-srcTop*zoom);
+                
+            } else {
+                
+                int srcLeft = (scrollPosition.X * zoom);
+                int srcTop = (scrollPosition.Y * zoom);
+                
+                zoom = -zoom;
+                if (imIdx == 1) {
+                    int scanWidth = ((imWidth*3+3) / 4 * 4);
+                    IntPtr imScan0 = (imPreview + srcTop*scanWidth + srcLeft*3);
+                    
+                    Parallel.For(0, destHeight, (y) => {
+                        byte* src = (byte*)(imScan0 + y*zoom * scanWidth);
+                        byte* dest = (byte*)(ibScan0 + y*destScanWidth);
                         
                         for (int x = 0; x < destWidth; x++) {
-                            int floorX = (int)(x*resizeFactorX);
-                            int ceilX = (floorX+1);
-                            if (ceilX >= srcWidth) {
-                                ceilX = (srcWidth-1);
+                            int b = 0, g = 0, r = 0;
+                            for (int i = 0; i < zoom; i++) {
+                                for (int j = 0; j < zoom; j++) {
+                                    r += src[i*scanWidth + x*zoom*3+2 + j*3];
+                                    g += src[i*scanWidth + x*zoom*3+1 + j*3];
+                                    b += src[i*scanWidth + x*zoom*3+0 + j*3];
+                                }
                             }
-                            float fractionX = (x*resizeFactorX - floorX);
-                            float invFractionX = (1F - fractionX);
                             
-                            float b1 = (invFractionX*srcFloor[floorX] + fractionX*srcFloor[ceilX]);
-                            float b2 = (invFractionX*srcCeil[floorX] + fractionX*srcCeil[ceilX]);
-                            byte gray = (byte)(invFractionY*b1 + fractionY*b2);
+                            dest[x*3+2] = (byte)(r/zoom/zoom);
+                            dest[x*3+1] = (byte)(g/zoom/zoom);
+                            dest[x*3+0] = (byte)(b/zoom/zoom);
+                        }
+                    });
+                } else {
+                    int scanWidth = ((imWidth+3) / 4 * 4);
+                    
+                    IntPtr imScan0;
+                    if (imIdx == 2) {
+                        imScan0 = (imResized + srcTop*scanWidth + srcLeft);
+                    } else {
+                        imScan0 = (imDest + srcTop*scanWidth + srcLeft);
+                    }
+                    
+                    Parallel.For(0, destHeight, (y) => {
+                        byte* src = (byte*)(imScan0 + y*zoom * scanWidth);
+                        byte* dest = (byte*)(ibScan0 + y*destScanWidth);
+                        
+                        for (int x = 0; x < destWidth; x++) {
+                            int num = 0;
+                            for (int i = 0; i < zoom; i++) {
+                                for (int j = 0; j < zoom; j++) {
+                                    num += src[i*scanWidth + x*zoom + j];
+                                }
+                            }
                             
+                            byte gray = (byte)(num/zoom/zoom);
                             dest[x*3+2] = gray;
                             dest[x*3+1] = gray;
                             dest[x*3+0] = gray;
@@ -814,37 +828,15 @@ partial class image2gcode:Form {
                     });
                 }
                 
-                e.Graphics.DrawImage(ibImage, hSpace/2, vSpace/2);
-            } else {
-                Image ibImage;
-                if (imIdx == 1) {
-                    int scanWidth = ((imWidth*3+3) / 4 * 4);
-                    ibImage = new Bitmap(srcWidth, srcHeight, scanWidth, PixelFormat.Format24bppRgb, (imPreview + srcTop*scanWidth + srcLeft*3));
-                } else {
-                    int scanWidth = ((imWidth+3) / 4 * 4);
-                    if (imIdx == 2) {
-                        ibImage = new Bitmap(srcWidth, srcHeight, scanWidth, PixelFormat.Format8bppIndexed, (imResized + srcTop*scanWidth + srcLeft));
-                    } else {
-                        ibImage = new Bitmap(srcWidth, srcHeight, scanWidth, PixelFormat.Format8bppIndexed, (imDest + srcTop*scanWidth + srcLeft));
-                    }
-                    
-                    ColorPalette palette = ibImage.Palette;
-                    for (int i = 0; i <= ImColorWhite; i += ImColorStep) {
-                        palette.Entries[i] = Color.FromArgb(-16777216 + i*65536 + i*256 + i);
-                    }
-                    palette.Entries[255] = Color.White;
-                    
-                    ibImage.Palette = palette;
-                }
-                
-                e.Graphics.DrawImage(ibImage, hSpace/2, vSpace/2, destWidth, destHeight);
             }
             
-            int a = (hSpace/2 + (int)((scaledImWidth-1)*(1F-startPtX)) + scrollPosition.X);
-            int b = (vSpace/2 + (int)((scaledImHeight-1)*startPtY) + scrollPosition.Y);
+            e.Graphics.DrawImage(ibImage, hSpace/2, vSpace/2);
             
-            e.Graphics.DrawLine(Pens.Red, ibWidth-1, b, 0, b);
-            e.Graphics.DrawLine(Pens.Red, a, 0, a, ibHeight-1);
+            int u = (hSpace/2 + (int)((scaledImWidth-1)*(1F-startPtX)) + scrollPosition.X);
+            int v = (vSpace/2 + (int)((scaledImHeight-1)*startPtY) + scrollPosition.Y);
+            
+            e.Graphics.DrawLine(Pens.Red, ibWidth-1, v, 0, v);
+            e.Graphics.DrawLine(Pens.Red, u, 0, u, ibHeight-1);
         }
     }
     
