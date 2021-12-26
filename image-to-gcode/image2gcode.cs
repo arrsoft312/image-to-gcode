@@ -730,15 +730,20 @@ partial class image2gcode:Form {
                 int srcLeft = (-scrollPosition.X / zoom);
                 int srcTop = (-scrollPosition.Y / zoom);
                 
+                int j = (-scrollPosition.X - srcLeft*zoom);
+                int i = (-scrollPosition.Y - srcTop*zoom);
+                destWidth += j;
+                destHeight += i;
+                
                 if (imIdx == 1) {
                     int scanWidth = ((imWidth*3+3) / 4 * 4);
                     IntPtr imScan0 = (imPreview + srcTop*scanWidth + srcLeft*3);
                     
-                    Parallel.For(0, destHeight, (y) => {
+                    Parallel.For(i, destHeight, (y) => {
                         byte* src = (byte*)(imScan0 + y/zoom * scanWidth);
-                        byte* dest = (byte*)(ibScan0 + y*destScanWidth);
+                        byte* dest = (byte*)(ibScan0 + y*destScanWidth - i*destScanWidth - j*3);
                         
-                        for (int x = 0; x < destWidth; x++) {
+                        for (int x = j; x < destWidth; x++) {
                             dest[x*3+2] = src[x/zoom*3+2];
                             dest[x*3+1] = src[x/zoom*3+1];
                             dest[x*3+0] = src[x/zoom*3+0];
@@ -754,20 +759,17 @@ partial class image2gcode:Form {
                         imScan0 = (imDest + srcTop*scanWidth + srcLeft);
                     }
                     
-                    Parallel.For(0, destHeight, (y) => {
+                    Parallel.For(i, destHeight, (y) => {
                         byte* src = (byte*)(imScan0 + y/zoom * scanWidth);
-                        byte* dest = (byte*)(ibScan0 + y*destScanWidth);
+                        byte* dest = (byte*)(ibScan0 + y*destScanWidth - i*destScanWidth - j*3);
                         
-                        for (int x = 0; x < destWidth; x++) {
+                        for (int x = j; x < destWidth; x++) {
                             dest[x*3+2] = src[x/zoom];
                             dest[x*3+1] = src[x/zoom];
                             dest[x*3+0] = src[x/zoom];
                         }
                     });
                 }
-                
-                scrollPosition.X = (-srcLeft*zoom);
-                scrollPosition.Y = (-srcTop*zoom);
                 
             } else {
                 

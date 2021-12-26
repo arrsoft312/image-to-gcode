@@ -49,13 +49,6 @@ class ImageBox:ScrollableControl {
         
         int x = (-startScrollPosition.X + (startMousePosition.X - e.X));
         int y = (-startScrollPosition.Y + (startMousePosition.Y - e.Y));
-        
-        int zoom = this.Zoom;
-        if (zoom > 0) {
-            x = (x/zoom*zoom);
-            y = (y/zoom*zoom);
-        }
-        
         this.AutoScrollPosition = new Point(x, y);
         
         this.Invalidate(false);
