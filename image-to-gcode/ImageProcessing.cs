@@ -12,7 +12,7 @@ using System.Windows.Forms;
 
 partial class image2gcode {
     private const int MaxImageSize = 16383;
-    private const int MinImageSize = 4;
+    private const int MinImageSize = 8;
     
     private const float MaxImageDpi = 600F;
     private const float MinImageDpi = 72F;
@@ -186,7 +186,7 @@ partial class image2gcode {
             byte* src = (byte*)(imScan0 + y*imScanWidth);
             byte* dest = (byte*)(destScan0 + y*destScanWidth);
             
-            for (int x = 0; x < imWidth; x++) {
+            for (int x = (imWidth-1); x >= 0; x--) {
                 byte alpha = src[x*4+3];
                 if (alpha == 0) {
                     dest[x] = ImColorUltraWhite;
@@ -384,7 +384,7 @@ partial class image2gcode {
                 prevCanvas.X = imCanvas.X = (srcWidth - imCanvas.Right);
                 Parallel.For(0, height, (i) => {
                     byte* dest = (byte*)(imResized + i*scanWidth);
-                    for (int j = 0; j < (width/2); j++) {
+                    for (int j = (width/2-1); j >= 0; j--) {
                         byte dest_j = dest[j];
                         dest[j] = dest[width-j-1];
                         dest[width-j-1] = dest_j;
@@ -394,10 +394,10 @@ partial class image2gcode {
             case RotateFlipType.RotateNoneFlipY:
                 prevCanvas.Y = imCanvas.Y = (srcHeight - imCanvas.Bottom);
                 Parallel.For(0, (height/2), (i) => {
-                    byte* dest = (byte*)(imResized + i*scanWidth);
-                    byte* dest2 = (dest + ((height-i*2-1) * scanWidth));
-                    for (int j = 0; j < width; j++) {
-                        byte dest_j = dest[j];
+                    int* dest = (int*)(imResized + i*scanWidth);
+                    int* dest2 = (dest + ((height-i*2-1) * scanWidth/4));
+                    for (int j = (scanWidth/4-1); j >= 0; j--) {
+                        int dest_j = dest[j];
                         dest[j] = dest2[j];
                         dest2[j] = dest_j;
                     }
@@ -409,7 +409,7 @@ partial class image2gcode {
                 Parallel.For(0, (height/2), (i) => {
                     byte* dest = (byte*)(imResized + i*scanWidth);
                     byte* dest2 = (dest + ((height-i*2-1) * scanWidth));
-                    for (int j = 0; j < width; j++) {
+                    for (int j = (width-1); j >= 0; j--) {
                         byte dest_j = dest[j];
                         dest[j] = dest2[width-j-1];
                         dest2[width-j-1] = dest_j;
@@ -417,7 +417,7 @@ partial class image2gcode {
                 });
                 if ((height % 2) == 1) {
                     byte* dest = (byte*)(imResized + height/2*scanWidth);
-                    for (int j = 0; j < (width/2); j++) {
+                    for (int j = (width/2-1); j >= 0; j--) {
                         byte dest_j = dest[j];
                         dest[j] = dest[width-j-1];
                         dest[width-j-1] = dest_j;
@@ -502,10 +502,10 @@ partial class image2gcode {
         int imScanWidth = bDataSrc.Stride;
         
         Parallel.For(0, height, (y) => {
-            byte* src = (byte*)(imScan0 + y*imScanWidth);
-            byte* dest = (byte*)(imResized + y*scanWidth);
-            for (int x = 0; x < width; x++) {
-                dest[x] = src[x];
+            int* src = (int*)(imScan0 + y*imScanWidth);
+            int* dest = (int*)(imResized + y*scanWidth);
+            for (int i = (scanWidth/4-1); i >= 0; i--) {
+                dest[i] = src[i];
             }
         });
         
@@ -1571,6 +1571,9 @@ partial class image2gcode {
     }
     
     private void BackgroundWorker1RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
-        
+        Exception error = e.Error;
+        if (error != null) {
+            throw error;
+        }
     }
 }

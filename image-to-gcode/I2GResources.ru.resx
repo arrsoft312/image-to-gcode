@@ -624,4 +624,22 @@
   <data name="Error_FileComment" xml:space="preserve">
     <value>В блоке комментариев G-кода должна быть только одна строка начинающаяся с символа процента.</value>
   </data>
+  <data name="GrblSet_InvertJogKeys" xml:space="preserve">
+    <value>Invert Jog Keys</value>
+  </data>
+  <data name="GrblSet_PWMFrequency" xml:space="preserve">
+    <value>Частота ШИМ:</value>
+  </data>
+  <data name="GrblSet_InvertLaserENPin" xml:space="preserve">
+    <value>Invert Laser EN Pin</value>
+  </data>
+  <data name="GrblSet_InvertLaserPWM" xml:space="preserve">
+    <value>Invert Laser PWM Pin</value>
+  </data>
+  <data name="GrblSet_PWMAlwaysOn" xml:space="preserve">
+    <value>PWM Always On</value>
+  </data>
+  <data name="GrblSet_DisableBuzzer" xml:space="preserve">
+    <value>Отключить зуммер</value>
+  </data>
 </root>

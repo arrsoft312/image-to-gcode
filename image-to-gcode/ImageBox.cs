@@ -1,6 +1,187 @@
 using System;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+
+partial class image2gcode {
+    private int ibImageWidth = -1;
+    private int ibImageHeight = -1;
+    
+    private IntPtr ibScan0;
+    private Image ibImage;
+    
+    private unsafe void ImageBoxPaint(object sender, PaintEventArgs e) {
+        lock (imResizeLock) {
+            int imIdx = ((ImageBox)sender).ImIdx;
+            if (imIdx == -1) {
+                return;
+            }
+            
+            Size ibSize = ((Control)sender).ClientSize;
+            int ibWidth = ibSize.Width;
+            int ibHeight = ibSize.Height;
+            
+            Point scrollPosition = ((ScrollableControl)sender).AutoScrollPosition;
+            
+            float startPtX = ((ImageBox)sender).StartPointX;
+            float startPtY = ((ImageBox)sender).StartPointY;
+            int imWidth = ((ImageBox)sender).ImWidth;
+            int imHeight = ((ImageBox)sender).ImHeight;
+            int zoom = ((ImageBox)sender).Zoom;
+            
+            int scaledImHeight, scaledImWidth;
+            if (zoom > 0) {
+                scaledImWidth = (imWidth * zoom);
+                scaledImHeight = (imHeight * zoom);
+            } else {
+                scaledImWidth = (imWidth / -zoom);
+                scaledImHeight = (imHeight / -zoom);
+            }
+            
+            int hSpace = (ibWidth-scaledImWidth);
+            if (hSpace < 0) {
+                hSpace = 0;
+            }
+            
+            int vSpace = (ibHeight-scaledImHeight);
+            if (vSpace < 0) {
+                vSpace = 0;
+            }
+            
+            int destWidth = (ibWidth-hSpace);
+            int destHeight = (ibHeight-vSpace);
+            
+            int destScanWidth = ((destWidth*3+3) / 4 * 4);
+            
+            if (destWidth != ibImageWidth || destHeight != ibImageHeight) {
+                Marshal.FreeHGlobal(ibScan0);
+                ibScan0 = Marshal.AllocHGlobal((IntPtr)(destHeight*destScanWidth));
+                ibImage = new Bitmap(destWidth, destHeight, destScanWidth, PixelFormat.Format24bppRgb, ibScan0);
+                
+                ibImageWidth = destWidth;
+                ibImageHeight = destHeight;
+            }
+            
+            if (zoom > 0) {
+                
+                int srcLeft = (-scrollPosition.X / zoom);
+                int srcTop = (-scrollPosition.Y / zoom);
+                
+                int j = (-scrollPosition.X - srcLeft*zoom);
+                int i = (-scrollPosition.Y - srcTop*zoom);
+                destWidth += j;
+                destHeight += i;
+                
+                if (imIdx == 1) {
+                    int scanWidth = ((imWidth*3+3) / 4 * 4);
+                    IntPtr imScan0 = (imPreview + srcTop*scanWidth + srcLeft*3);
+                    
+                    Parallel.For(i, destHeight, (y) => {
+                        byte* src = (byte*)(imScan0 + y/zoom * scanWidth);
+                        byte* dest = (byte*)(ibScan0 + y*destScanWidth - i*destScanWidth - j*3);
+                        
+                        for (int x = j; x < destWidth; x++) {
+                            dest[x*3+2] = src[x/zoom*3+2];
+                            dest[x*3+1] = src[x/zoom*3+1];
+                            dest[x*3+0] = src[x/zoom*3+0];
+                        }
+                    });
+                } else {
+                    int scanWidth = ((imWidth+3) / 4 * 4);
+                    
+                    IntPtr imScan0;
+                    if (imIdx == 2) {
+                        imScan0 = (imResized + srcTop*scanWidth + srcLeft);
+                    } else {
+                        imScan0 = (imDest + srcTop*scanWidth + srcLeft);
+                    }
+                    
+                    Parallel.For(i, destHeight, (y) => {
+                        byte* src = (byte*)(imScan0 + y/zoom * scanWidth);
+                        byte* dest = (byte*)(ibScan0 + y*destScanWidth - i*destScanWidth - j*3);
+                        
+                        for (int x = j; x < destWidth; x++) {
+                            dest[x*3+2] = src[x/zoom];
+                            dest[x*3+1] = src[x/zoom];
+                            dest[x*3+0] = src[x/zoom];
+                        }
+                    });
+                }
+                
+            } else {
+                
+                int srcLeft = (scrollPosition.X * zoom);
+                int srcTop = (scrollPosition.Y * zoom);
+                
+                zoom = -zoom;
+                if (imIdx == 1) {
+                    int scanWidth = ((imWidth*3+3) / 4 * 4);
+                    IntPtr imScan0 = (imPreview + srcTop*scanWidth + srcLeft*3);
+                    
+                    Parallel.For(0, destHeight, (y) => {
+                        byte* src = (byte*)(imScan0 + y*zoom * scanWidth);
+                        byte* dest = (byte*)(ibScan0 + y*destScanWidth);
+                        
+                        for (int x = 0; x < destWidth; x++) {
+                            int b = 0, g = 0, r = 0;
+                            for (int i = 0; i < zoom; i++) {
+                                for (int j = 0; j < zoom; j++) {
+                                    r += src[i*scanWidth + x*zoom*3+2 + j*3];
+                                    g += src[i*scanWidth + x*zoom*3+1 + j*3];
+                                    b += src[i*scanWidth + x*zoom*3+0 + j*3];
+                                }
+                            }
+                            
+                            dest[x*3+2] = (byte)(r/zoom/zoom);
+                            dest[x*3+1] = (byte)(g/zoom/zoom);
+                            dest[x*3+0] = (byte)(b/zoom/zoom);
+                        }
+                    });
+                } else {
+                    int scanWidth = ((imWidth+3) / 4 * 4);
+                    
+                    IntPtr imScan0;
+                    if (imIdx == 2) {
+                        imScan0 = (imResized + srcTop*scanWidth + srcLeft);
+                    } else {
+                        imScan0 = (imDest + srcTop*scanWidth + srcLeft);
+                    }
+                    
+                    Parallel.For(0, destHeight, (y) => {
+                        byte* src = (byte*)(imScan0 + y*zoom * scanWidth);
+                        byte* dest = (byte*)(ibScan0 + y*destScanWidth);
+                        
+                        for (int x = 0; x < destWidth; x++) {
+                            int num = 0;
+                            for (int i = 0; i < zoom; i++) {
+                                for (int j = 0; j < zoom; j++) {
+                                    num += src[i*scanWidth + x*zoom + j];
+                                }
+                            }
+                            
+                            byte gray = (byte)(num/zoom/zoom);
+                            dest[x*3+2] = gray;
+                            dest[x*3+1] = gray;
+                            dest[x*3+0] = gray;
+                        }
+                    });
+                }
+                
+            }
+            
+            e.Graphics.DrawImage(ibImage, hSpace/2, vSpace/2);
+            
+            int u = (hSpace/2 + (int)((scaledImWidth-1)*(1F-startPtX)) + scrollPosition.X);
+            int v = (vSpace/2 + (int)((scaledImHeight-1)*startPtY) + scrollPosition.Y);
+            
+            e.Graphics.DrawLine(Pens.Red, ibWidth-1, v, 0, v);
+            e.Graphics.DrawLine(Pens.Red, u, 0, u, ibHeight-1);
+        }
+    }
+}
 
 class ImageBox:ScrollableControl {
     private bool isPanning;

@@ -43,6 +43,8 @@ partial class GrblSettingsForm {
         this.checkBox6 = new System.Windows.Forms.CheckBox();
         this.checkBox7 = new System.Windows.Forms.CheckBox();
         this.checkBox8 = new System.Windows.Forms.CheckBox();
+        this.checkBox14 = new System.Windows.Forms.CheckBox();
+        this.checkBox15 = new System.Windows.Forms.CheckBox();
         this.tableLayoutPanel11 = new System.Windows.Forms.TableLayoutPanel();
         this.label3 = new System.Windows.Forms.Label();
         this.checkBox9 = new System.Windows.Forms.CheckBox();
@@ -65,12 +67,20 @@ partial class GrblSettingsForm {
         this.textBox21 = new System.Windows.Forms.TextBox();
         this.label13 = new System.Windows.Forms.Label();
         this.textBox22 = new System.Windows.Forms.TextBox();
+        this.label11 = new System.Windows.Forms.Label();
+        this.textBox3 = new System.Windows.Forms.TextBox();
         this.label22 = new System.Windows.Forms.Label();
         this.textBox30 = new System.Windows.Forms.TextBox();
         this.tableLayoutPanel16 = new System.Windows.Forms.TableLayoutPanel();
         this.checkBox20 = new System.Windows.Forms.CheckBox();
         this.checkBox16 = new System.Windows.Forms.CheckBox();
         this.checkBox12 = new System.Windows.Forms.CheckBox();
+        this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
+        this.checkBox17 = new System.Windows.Forms.CheckBox();
+        this.checkBox18 = new System.Windows.Forms.CheckBox();
+        this.checkBox19 = new System.Windows.Forms.CheckBox();
+        this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
+        this.checkBox21 = new System.Windows.Forms.CheckBox();
         this.tableLayoutPanel15 = new System.Windows.Forms.TableLayoutPanel();
         this.label23 = new System.Windows.Forms.Label();
         this.button1 = new System.Windows.Forms.Button();
@@ -85,6 +95,8 @@ partial class GrblSettingsForm {
         this.tableLayoutPanel13.SuspendLayout();
         this.tableLayoutPanel14.SuspendLayout();
         this.tableLayoutPanel16.SuspendLayout();
+        this.tableLayoutPanel5.SuspendLayout();
+        this.tableLayoutPanel6.SuspendLayout();
         this.tableLayoutPanel15.SuspendLayout();
         this.SuspendLayout();
         // 
@@ -99,10 +111,14 @@ partial class GrblSettingsForm {
         this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel11, 0, 3);
         this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel12, 0, 4);
         this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel16, 0, 5);
-        this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel15, 0, 7);
+        this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel5, 0, 6);
+        this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel6, 0, 7);
+        this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel15, 0, 9);
         this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
         this.tableLayoutPanel1.Padding = new System.Windows.Forms.Padding(3);
-        this.tableLayoutPanel1.RowCount = 8;
+        this.tableLayoutPanel1.RowCount = 10;
+        this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+        this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
         this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
         this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
         this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -349,9 +365,12 @@ partial class GrblSettingsForm {
         this.tableLayoutPanel4.Controls.Add(this.checkBox6, 2, 2);
         this.tableLayoutPanel4.Controls.Add(this.checkBox7, 1, 3);
         this.tableLayoutPanel4.Controls.Add(this.checkBox8, 2, 3);
+        this.tableLayoutPanel4.Controls.Add(this.checkBox14, 1, 4);
+        this.tableLayoutPanel4.Controls.Add(this.checkBox15, 2, 4);
         this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
         this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
-        this.tableLayoutPanel4.RowCount = 4;
+        this.tableLayoutPanel4.RowCount = 5;
+        this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
         this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
         this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
         this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -422,7 +441,7 @@ partial class GrblSettingsForm {
         // 
         this.checkBox7.AutoSize = true;
         this.checkBox7.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.checkBox7.Margin = new System.Windows.Forms.Padding(3, 1, 3, 3);
+        this.checkBox7.Margin = new System.Windows.Forms.Padding(3, 1, 3, 2);
         this.checkBox7.TabIndex = 6;
         this.checkBox7.Tag = 23;
         this.checkBox7.Text = "Invert Homing Direction";
@@ -432,11 +451,31 @@ partial class GrblSettingsForm {
         // 
         this.checkBox8.AutoSize = true;
         this.checkBox8.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.checkBox8.Margin = new System.Windows.Forms.Padding(3, 1, 3, 3);
+        this.checkBox8.Margin = new System.Windows.Forms.Padding(3, 1, 3, 2);
         this.checkBox8.TabIndex = 7;
         this.checkBox8.Tag = 23;
         this.checkBox8.Text = "Invert Homing Direction";
         this.checkBox8.UseVisualStyleBackColor = true;
+        // 
+        // checkBox14
+        // 
+        this.checkBox14.AutoSize = true;
+        this.checkBox14.Dock = System.Windows.Forms.DockStyle.Fill;
+        this.checkBox14.Margin = new System.Windows.Forms.Padding(3, 1, 3, 3);
+        this.checkBox14.TabIndex = 8;
+        this.checkBox14.Tag = 18;
+        this.checkBox14.Text = "Invert Jog Keys";
+        this.checkBox14.UseVisualStyleBackColor = true;
+        // 
+        // checkBox15
+        // 
+        this.checkBox15.AutoSize = true;
+        this.checkBox15.Dock = System.Windows.Forms.DockStyle.Fill;
+        this.checkBox15.Margin = new System.Windows.Forms.Padding(3, 1, 3, 3);
+        this.checkBox15.TabIndex = 9;
+        this.checkBox15.Tag = 18;
+        this.checkBox15.Text = "Invert Jog Keys";
+        this.checkBox15.UseVisualStyleBackColor = true;
         // 
         // tableLayoutPanel11
         // 
@@ -632,15 +671,17 @@ partial class GrblSettingsForm {
         this.tableLayoutPanel14.Controls.Add(this.textBox21, 1, 0);
         this.tableLayoutPanel14.Controls.Add(this.label13, 0, 1);
         this.tableLayoutPanel14.Controls.Add(this.textBox22, 1, 1);
-        this.tableLayoutPanel14.Controls.Add(this.label22, 0, 2);
-        this.tableLayoutPanel14.Controls.Add(this.textBox30, 1, 2);
+        this.tableLayoutPanel14.Controls.Add(this.label11, 0, 2);
+        this.tableLayoutPanel14.Controls.Add(this.textBox3, 1, 2);
+        this.tableLayoutPanel14.Controls.Add(this.label22, 0, 3);
+        this.tableLayoutPanel14.Controls.Add(this.textBox30, 1, 3);
         this.tableLayoutPanel14.Dock = System.Windows.Forms.DockStyle.Fill;
         this.tableLayoutPanel14.Margin = new System.Windows.Forms.Padding(0);
         this.tableLayoutPanel14.RowCount = 4;
         this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle());
         this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle());
         this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle());
-        this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+        this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle());
         this.tableLayoutPanel14.TabIndex = 1;
         // 
         // label12
@@ -677,12 +718,29 @@ partial class GrblSettingsForm {
         this.textBox22.TabIndex = 3;
         this.textBox22.Tag = 12;
         // 
+        // label11
+        // 
+        this.label11.AutoSize = true;
+        this.label11.Dock = System.Windows.Forms.DockStyle.Fill;
+        this.label11.Margin = new System.Windows.Forms.Padding(3, 1, 3, 2);
+        this.label11.TabIndex = 4;
+        this.label11.Text = "PWM &Frequency:";
+        this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+        // 
+        // textBox3
+        // 
+        this.textBox3.Dock = System.Windows.Forms.DockStyle.Fill;
+        this.textBox3.Margin = new System.Windows.Forms.Padding(3, 1, 3, 2);
+        this.textBox3.Size = new System.Drawing.Size();
+        this.textBox3.TabIndex = 5;
+        this.textBox3.Tag = 30;
+        // 
         // label22
         // 
         this.label22.AutoSize = true;
         this.label22.Dock = System.Windows.Forms.DockStyle.Fill;
         this.label22.Margin = new System.Windows.Forms.Padding(3, 1, 3, 3);
-        this.label22.TabIndex = 4;
+        this.label22.TabIndex = 6;
         this.label22.Text = "&Marker Power:";
         this.label22.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
         // 
@@ -691,7 +749,7 @@ partial class GrblSettingsForm {
         this.textBox30.Dock = System.Windows.Forms.DockStyle.Fill;
         this.textBox30.Margin = new System.Windows.Forms.Padding(3, 1, 3, 3);
         this.textBox30.Size = new System.Drawing.Size();
-        this.textBox30.TabIndex = 5;
+        this.textBox30.TabIndex = 7;
         this.textBox30.Tag = 31;
         // 
         // tableLayoutPanel16
@@ -716,6 +774,7 @@ partial class GrblSettingsForm {
         // 
         this.checkBox20.AutoSize = true;
         this.checkBox20.Dock = System.Windows.Forms.DockStyle.Fill;
+        this.checkBox20.Margin = new System.Windows.Forms.Padding(3, 3, 3, 2);
         this.checkBox20.TabIndex = 0;
         this.checkBox20.Tag = 32;
         this.checkBox20.Text = "&Laser Mode";
@@ -725,6 +784,7 @@ partial class GrblSettingsForm {
         // 
         this.checkBox16.AutoSize = true;
         this.checkBox16.Dock = System.Windows.Forms.DockStyle.Fill;
+        this.checkBox16.Margin = new System.Windows.Forms.Padding(3, 3, 3, 2);
         this.checkBox16.TabIndex = 1;
         this.checkBox16.Tag = 14;
         this.checkBox16.Text = "CoreXY/H-bot &Kinematics";
@@ -734,10 +794,83 @@ partial class GrblSettingsForm {
         // 
         this.checkBox12.AutoSize = true;
         this.checkBox12.Dock = System.Windows.Forms.DockStyle.Fill;
+        this.checkBox12.Margin = new System.Windows.Forms.Padding(3, 3, 3, 2);
         this.checkBox12.TabIndex = 2;
         this.checkBox12.Tag = 4;
         this.checkBox12.Text = "Invert Ste&pper EN Pin";
         this.checkBox12.UseVisualStyleBackColor = true;
+        // 
+        // tableLayoutPanel5
+        // 
+        this.tableLayoutPanel5.AutoSize = true;
+        this.tableLayoutPanel5.ColumnCount = 4;
+        this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+        this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+        this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+        this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+        this.tableLayoutPanel5.Controls.Add(this.checkBox17, 0, 0);
+        this.tableLayoutPanel5.Controls.Add(this.checkBox18, 1, 0);
+        this.tableLayoutPanel5.Controls.Add(this.checkBox19, 2, 0);
+        this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
+        this.tableLayoutPanel5.Margin = new System.Windows.Forms.Padding(0);
+        this.tableLayoutPanel5.Padding = new System.Windows.Forms.Padding(3, 0, 3, 0);
+        this.tableLayoutPanel5.RowCount = 1;
+        this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
+        this.tableLayoutPanel5.TabIndex = 6;
+        // 
+        // checkBox17
+        // 
+        this.checkBox17.AutoSize = true;
+        this.checkBox17.Dock = System.Windows.Forms.DockStyle.Fill;
+        this.checkBox17.Margin = new System.Windows.Forms.Padding(3, 1, 3, 2);
+        this.checkBox17.TabIndex = 0;
+        this.checkBox17.Tag = 7;
+        this.checkBox17.Text = "I&nvert Laser EN Pin";
+        this.checkBox17.UseVisualStyleBackColor = true;
+        // 
+        // checkBox18
+        // 
+        this.checkBox18.AutoSize = true;
+        this.checkBox18.Dock = System.Windows.Forms.DockStyle.Fill;
+        this.checkBox18.Margin = new System.Windows.Forms.Padding(3, 1, 3, 2);
+        this.checkBox18.TabIndex = 1;
+        this.checkBox18.Tag = 8;
+        this.checkBox18.Text = "Inve&rt Laser PWM Pin";
+        this.checkBox18.UseVisualStyleBackColor = true;
+        // 
+        // checkBox19
+        // 
+        this.checkBox19.AutoSize = true;
+        this.checkBox19.Dock = System.Windows.Forms.DockStyle.Fill;
+        this.checkBox19.Margin = new System.Windows.Forms.Padding(3, 1, 3, 2);
+        this.checkBox19.TabIndex = 2;
+        this.checkBox19.Tag = 33;
+        this.checkBox19.Text = "PWM Always &On";
+        this.checkBox19.UseVisualStyleBackColor = true;
+        // 
+        // tableLayoutPanel6
+        // 
+        this.tableLayoutPanel6.AutoSize = true;
+        this.tableLayoutPanel6.ColumnCount = 2;
+        this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+        this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+        this.tableLayoutPanel6.Controls.Add(this.checkBox21, 0, 0);
+        this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
+        this.tableLayoutPanel6.Margin = new System.Windows.Forms.Padding(0);
+        this.tableLayoutPanel6.Padding = new System.Windows.Forms.Padding(3, 0, 3, 0);
+        this.tableLayoutPanel6.RowCount = 1;
+        this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
+        this.tableLayoutPanel6.TabIndex = 7;
+        // 
+        // checkBox21
+        // 
+        this.checkBox21.AutoSize = true;
+        this.checkBox21.Dock = System.Windows.Forms.DockStyle.Fill;
+        this.checkBox21.Margin = new System.Windows.Forms.Padding(3, 1, 3, 3);
+        this.checkBox21.TabIndex = 0;
+        this.checkBox21.Tag = 10;
+        this.checkBox21.Text = "Disable Bu&zzer";
+        this.checkBox21.UseVisualStyleBackColor = true;
         // 
         // tableLayoutPanel15
         // 
@@ -755,7 +888,7 @@ partial class GrblSettingsForm {
         this.tableLayoutPanel15.Margin = new System.Windows.Forms.Padding(0);
         this.tableLayoutPanel15.RowCount = 1;
         this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle());
-        this.tableLayoutPanel15.TabIndex = 6;
+        this.tableLayoutPanel15.TabIndex = 8;
         // 
         // label23
         // 
@@ -799,7 +932,7 @@ partial class GrblSettingsForm {
         this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
         this.AutoSize = true;
         this.CancelButton = this.button2;
-        this.ClientSize = new System.Drawing.Size(442, 429);
+        this.ClientSize = new System.Drawing.Size(446, -1);
         this.Controls.Add(this.tableLayoutPanel1);
         this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
         this.MaximizeBox = false;
@@ -827,11 +960,25 @@ partial class GrblSettingsForm {
         this.tableLayoutPanel14.PerformLayout();
         this.tableLayoutPanel16.ResumeLayout(false);
         this.tableLayoutPanel16.PerformLayout();
+        this.tableLayoutPanel5.ResumeLayout(false);
+        this.tableLayoutPanel5.PerformLayout();
+        this.tableLayoutPanel6.ResumeLayout(false);
+        this.tableLayoutPanel6.PerformLayout();
         this.tableLayoutPanel15.ResumeLayout(false);
         this.tableLayoutPanel15.PerformLayout();
         this.ResumeLayout(false);
         this.PerformLayout();
     }
+    public System.Windows.Forms.CheckBox checkBox19;
+    public System.Windows.Forms.CheckBox checkBox18;
+    public System.Windows.Forms.CheckBox checkBox17;
+    private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
+    public System.Windows.Forms.CheckBox checkBox21;
+    private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
+    public System.Windows.Forms.Label label11;
+    private System.Windows.Forms.TextBox textBox3;
+    public System.Windows.Forms.CheckBox checkBox15;
+    public System.Windows.Forms.CheckBox checkBox14;
     private System.Windows.Forms.CheckBox checkBox13;
     private System.Windows.Forms.CheckBox checkBox11;
     private System.Windows.Forms.CheckBox checkBox10;

@@ -33,10 +33,10 @@ using Microsoft.Win32;
 
 partial class image2gcode:Form {
     public const string AppTitle = "image2gcode";
-    public const string AppVersion = "3.1.3";
-    public const string AppVersionBuild = "2021-12-26";
+    public const string AppVersion = "3.1.4";
+    public const string AppVersionBuild = "2022-03-12";
     public const string AppAuthor = "Artur Kurpukov";
-    public const string AppCopyright = "Copyright (C) 2017-2021 Artur Kurpukov";
+    public const string AppCopyright = "Copyright (C) 2017-2022 Artur Kurpukov";
     private const string SettingsVersion = "3.1";
     
     private const float PI = 3.1415926535897931F;
@@ -58,7 +58,11 @@ partial class image2gcode:Form {
     
     private readonly float[] linearGraph = new float[] { -1F, -1F, -1F, 0.35F, 0.35F, 0.65F, 0.65F, };
     
-    private ResourceManager resources = new ResourceManager(typeof(I2GResources));
+    private readonly ResourceManager resources = new ResourceManager(typeof(I2GResources));
+    private readonly EventWaitHandle bWorkerWaitHandle = new EventWaitHandle(true, EventResetMode.AutoReset, null);
+    
+    private readonly Dictionary<string, Image> bitmapThumbnails = new Dictionary<string, Image>(0, null);
+    private readonly Dictionary<string, Stream> bitmapTextures = new Dictionary<string, Stream>(0, null);
     
     private RegistryKey settings;
     
@@ -89,27 +93,15 @@ partial class image2gcode:Form {
     
     private StreamReader customGraphs;
     
-    private Dictionary<string, Image> bitmapThumbnails = new Dictionary<string, Image>(0, null);
-    private Dictionary<string, Stream> bitmapTextures = new Dictionary<string, Stream>(0, null);
-    
     private int prevPreview = -2;
     private int activePreview;
     
     private int prevPreset = -1;
     private int activePreset;
     
-    private int ibImageWidth = -1;
-    private int ibImageHeight = -1;
-    
-    private IntPtr ibScan0;
-    private Image ibImage;
-    
-    private string[] argv;
-    
     private bool bWorker2SendToDevice;
     private bool bWorker2ReadFromFile;
     
-    private EventWaitHandle bWorkerWaitHandle = new EventWaitHandle(true, EventResetMode.AutoReset, null);
     private bool bWorkerIsBusy = true;
     
     private const int BWorkerFlagDoWork = 0x4000;
@@ -136,13 +128,13 @@ partial class image2gcode:Form {
     }
     
     [STAThread]
-    internal static void Main(string[] argv) {
+    internal static void Main() {
         Application.EnableVisualStyles();
         Application.SetCompatibleTextRenderingDefault(false);
-        Application.Run(new image2gcode(argv));
+        Application.Run(new image2gcode());
     }
     
-    public image2gcode(string[] argv) {
+    public image2gcode() {
         InitializeComponent();
         
         openFileDialog1.Title = AppTitle;
@@ -157,11 +149,19 @@ partial class image2gcode:Form {
         
         x4axisToolStripMenuItem.Tag = new float[] { 4000F, 2820F, 350F, 0.206F, 0.279F, 0.168F, 0.912F, };
         
+        button1.Tag = RotateFlipType.Rotate270FlipNone;
+        button2.Tag = RotateFlipType.RotateNoneFlipXY;
+        button3.Tag = RotateFlipType.Rotate90FlipNone;
+        button4.Tag = RotateFlipType.RotateNoneFlipX;
+        button5.Tag = RotateFlipType.RotateNoneFlipY;
+        
+        comboBox12.SelectedIndex = 0;
+        comboBox13.SelectedItem = WrapMode.Tile;
+        
         panel1.Tag = gcSpeedGraph;
         panel2.Tag = gcPowerGraph;
         
         this.Text = (AppTitle + " v" + AppVersion);
-        this.argv = argv;
     }
     
     private void Image2gcodeLoad(object sender, EventArgs e) {
@@ -255,6 +255,10 @@ partial class image2gcode:Form {
                 try {
                     Image thumbnail;
                     using (Image image = Image.FromStream(inFile, false, true)) {
+                        if (image.Height < (2*MinImageSize) || image.Width < (2*MinImageSize)) {
+                            throw new ArgumentException();
+                        }
+                        
                         thumbnail = new Bitmap(32, 32, PixelFormat.Format24bppRgb);
                         using (Graphics g = Graphics.FromImage(thumbnail)) {
                             g.DrawImage(image, 0, 0, 32, 32);
@@ -561,13 +565,14 @@ partial class image2gcode:Form {
         
         toolStripStatusLabel1.Text = resources.GetString("Status_Ready", culture);
         
-        if (argv.Length != 1) {
+        string[] argv = Environment.GetCommandLineArgs();
+        if (argv.Length != 2) {
             return;
         }
         
-        if (LoadImage(argv[0])) {
-            openFileDialog1.FileName = argv[0];
-            string fileName = Path.GetFileNameWithoutExtension(argv[0]);
+        if (LoadImage(argv[1])) {
+            openFileDialog1.FileName = argv[1];
+            string fileName = Path.GetFileNameWithoutExtension(argv[1]);
             saveFileDialog1.FileName = (fileName + ".nc");
             saveFileDialog2.FileName = (fileName + ".bmp");
         }
@@ -618,6 +623,8 @@ partial class image2gcode:Form {
         
         Marshal.FreeHGlobal((IntPtr)ditherTable_5_32);
         Marshal.FreeHGlobal((IntPtr)ditherTable_3_32);
+        
+        Marshal.FreeHGlobal(ibScan0);
         
         FormWindowState windowState = this.WindowState;
         settings.SetInt32("WindowMaximized", (windowState == FormWindowState.Maximized));
@@ -673,176 +680,7 @@ partial class image2gcode:Form {
         settings.Flush();
     }
     
-    private unsafe void ImageBox1Paint(object sender, PaintEventArgs e) {
-        lock (imResizeLock) {
-            int imIdx = ((ImageBox)sender).ImIdx;
-            if (imIdx == -1) {
-                return;
-            }
-            
-            Size ibSize = ((Control)sender).ClientSize;
-            int ibWidth = ibSize.Width;
-            int ibHeight = ibSize.Height;
-            
-            Point scrollPosition = ((ScrollableControl)sender).AutoScrollPosition;
-            
-            float startPtX = ((ImageBox)sender).StartPointX;
-            float startPtY = ((ImageBox)sender).StartPointY;
-            int imWidth = ((ImageBox)sender).ImWidth;
-            int imHeight = ((ImageBox)sender).ImHeight;
-            int zoom = ((ImageBox)sender).Zoom;
-            
-            int scaledImHeight, scaledImWidth;
-            if (zoom > 0) {
-                scaledImWidth = (imWidth * zoom);
-                scaledImHeight = (imHeight * zoom);
-            } else {
-                scaledImWidth = (imWidth / -zoom);
-                scaledImHeight = (imHeight / -zoom);
-            }
-            
-            int hSpace = (ibWidth-scaledImWidth);
-            if (hSpace < 0) {
-                hSpace = 0;
-            }
-            
-            int vSpace = (ibHeight-scaledImHeight);
-            if (vSpace < 0) {
-                vSpace = 0;
-            }
-            
-            int destWidth = (ibWidth-hSpace);
-            int destHeight = (ibHeight-vSpace);
-            
-            int destScanWidth = ((destWidth*3+3) / 4 * 4);
-            
-            if (destWidth != ibImageWidth || destHeight != ibImageHeight) {
-                Marshal.FreeHGlobal(ibScan0);
-                ibScan0 = Marshal.AllocHGlobal((IntPtr)(destHeight*destScanWidth));
-                ibImage = new Bitmap(destWidth, destHeight, destScanWidth, PixelFormat.Format24bppRgb, ibScan0);
-                
-                ibImageWidth = destWidth;
-                ibImageHeight = destHeight;
-            }
-            
-            if (zoom > 0) {
-                
-                int srcLeft = (-scrollPosition.X / zoom);
-                int srcTop = (-scrollPosition.Y / zoom);
-                
-                int j = (-scrollPosition.X - srcLeft*zoom);
-                int i = (-scrollPosition.Y - srcTop*zoom);
-                destWidth += j;
-                destHeight += i;
-                
-                if (imIdx == 1) {
-                    int scanWidth = ((imWidth*3+3) / 4 * 4);
-                    IntPtr imScan0 = (imPreview + srcTop*scanWidth + srcLeft*3);
-                    
-                    Parallel.For(i, destHeight, (y) => {
-                        byte* src = (byte*)(imScan0 + y/zoom * scanWidth);
-                        byte* dest = (byte*)(ibScan0 + y*destScanWidth - i*destScanWidth - j*3);
-                        
-                        for (int x = j; x < destWidth; x++) {
-                            dest[x*3+2] = src[x/zoom*3+2];
-                            dest[x*3+1] = src[x/zoom*3+1];
-                            dest[x*3+0] = src[x/zoom*3+0];
-                        }
-                    });
-                } else {
-                    int scanWidth = ((imWidth+3) / 4 * 4);
-                    
-                    IntPtr imScan0;
-                    if (imIdx == 2) {
-                        imScan0 = (imResized + srcTop*scanWidth + srcLeft);
-                    } else {
-                        imScan0 = (imDest + srcTop*scanWidth + srcLeft);
-                    }
-                    
-                    Parallel.For(i, destHeight, (y) => {
-                        byte* src = (byte*)(imScan0 + y/zoom * scanWidth);
-                        byte* dest = (byte*)(ibScan0 + y*destScanWidth - i*destScanWidth - j*3);
-                        
-                        for (int x = j; x < destWidth; x++) {
-                            dest[x*3+2] = src[x/zoom];
-                            dest[x*3+1] = src[x/zoom];
-                            dest[x*3+0] = src[x/zoom];
-                        }
-                    });
-                }
-                
-            } else {
-                
-                int srcLeft = (scrollPosition.X * zoom);
-                int srcTop = (scrollPosition.Y * zoom);
-                
-                zoom = -zoom;
-                if (imIdx == 1) {
-                    int scanWidth = ((imWidth*3+3) / 4 * 4);
-                    IntPtr imScan0 = (imPreview + srcTop*scanWidth + srcLeft*3);
-                    
-                    Parallel.For(0, destHeight, (y) => {
-                        byte* src = (byte*)(imScan0 + y*zoom * scanWidth);
-                        byte* dest = (byte*)(ibScan0 + y*destScanWidth);
-                        
-                        for (int x = 0; x < destWidth; x++) {
-                            int b = 0, g = 0, r = 0;
-                            for (int i = 0; i < zoom; i++) {
-                                for (int j = 0; j < zoom; j++) {
-                                    r += src[i*scanWidth + x*zoom*3+2 + j*3];
-                                    g += src[i*scanWidth + x*zoom*3+1 + j*3];
-                                    b += src[i*scanWidth + x*zoom*3+0 + j*3];
-                                }
-                            }
-                            
-                            dest[x*3+2] = (byte)(r/zoom/zoom);
-                            dest[x*3+1] = (byte)(g/zoom/zoom);
-                            dest[x*3+0] = (byte)(b/zoom/zoom);
-                        }
-                    });
-                } else {
-                    int scanWidth = ((imWidth+3) / 4 * 4);
-                    
-                    IntPtr imScan0;
-                    if (imIdx == 2) {
-                        imScan0 = (imResized + srcTop*scanWidth + srcLeft);
-                    } else {
-                        imScan0 = (imDest + srcTop*scanWidth + srcLeft);
-                    }
-                    
-                    Parallel.For(0, destHeight, (y) => {
-                        byte* src = (byte*)(imScan0 + y*zoom * scanWidth);
-                        byte* dest = (byte*)(ibScan0 + y*destScanWidth);
-                        
-                        for (int x = 0; x < destWidth; x++) {
-                            int num = 0;
-                            for (int i = 0; i < zoom; i++) {
-                                for (int j = 0; j < zoom; j++) {
-                                    num += src[i*scanWidth + x*zoom + j];
-                                }
-                            }
-                            
-                            byte gray = (byte)(num/zoom/zoom);
-                            dest[x*3+2] = gray;
-                            dest[x*3+1] = gray;
-                            dest[x*3+0] = gray;
-                        }
-                    });
-                }
-                
-            }
-            
-            e.Graphics.DrawImage(ibImage, hSpace/2, vSpace/2);
-            
-            int u = (hSpace/2 + (int)((scaledImWidth-1)*(1F-startPtX)) + scrollPosition.X);
-            int v = (vSpace/2 + (int)((scaledImHeight-1)*startPtY) + scrollPosition.Y);
-            
-            e.Graphics.DrawLine(Pens.Red, ibWidth-1, v, 0, v);
-            e.Graphics.DrawLine(Pens.Red, u, 0, u, ibHeight-1);
-        }
-    }
-    
-    private void ImageBox1DragEnter(object sender, DragEventArgs e) {
+    private void ImageBoxDragEnter(object sender, DragEventArgs e) {
         string[] fileNames = (string[])e.Data.GetData(DataFormats.FileDrop, false);
         if (fileNames.Length == 1) {
             e.Effect = DragDropEffects.All;
@@ -851,7 +689,7 @@ partial class image2gcode:Form {
         }
     }
     
-    private void ImageBox1DragDrop(object sender, DragEventArgs e) {
+    private void ImageBoxDragDrop(object sender, DragEventArgs e) {
         string[] fileNames = (string[])e.Data.GetData(DataFormats.FileDrop, false);
         if (fileNames.Length != 1) {
             return;
@@ -1152,7 +990,8 @@ partial class image2gcode:Form {
         gcMultiplierX = 1F;
         gcMultiplierY = 1F;
         
-        if ((bool)((ToolStripItem)sender).Tag) {
+        GcOutputMode outputMode = (GcOutputMode)((ToolStripItem)sender).Tag;
+        if (outputMode == GcOutputMode.WrappedOutput) {
             if (wrappedOutputDialog1.ShowDialog(this) != DialogResult.OK) {
                 return;
             }
@@ -1191,7 +1030,8 @@ partial class image2gcode:Form {
         gcMultiplierX = 1F;
         gcMultiplierY = 1F;
         
-        if ((bool)((ToolStripItem)sender).Tag) {
+        GcOutputMode outputMode = (GcOutputMode)((ToolStripItem)sender).Tag;
+        if (outputMode == GcOutputMode.WrappedOutput) {
             if (wrappedOutputDialog1.ShowDialog(this) != DialogResult.OK) {
                 return;
             }
@@ -1387,6 +1227,8 @@ partial class image2gcode:Form {
         grblSettings1.checkBox6.Text = resources.GetString("GrblSet_InvertHomePin", culture);
         grblSettings1.checkBox7.Text = resources.GetString("GrblSet_HomingDirInvert", culture);
         grblSettings1.checkBox8.Text = resources.GetString("GrblSet_HomingDirInvert", culture);
+        grblSettings1.checkBox14.Text = resources.GetString("GrblSet_InvertJogKeys", culture);
+        grblSettings1.checkBox15.Text = resources.GetString("GrblSet_InvertJogKeys", culture);
         grblSettings1.label3.Text = resources.GetString("GrblSet_HomingCycle1", culture);
         grblSettings1.label10.Text = resources.GetString("GrblSet_HomingCycle2", culture);
         grblSettings1.label15.Text = resources.GetString("GrblSet_HomingFeedRate", culture);
@@ -1395,10 +1237,15 @@ partial class image2gcode:Form {
         grblSettings1.label20.Text = resources.GetString("GrblSet_SlowGrid", culture);
         grblSettings1.label12.Text = resources.GetString("GrblSet_JunctionDeviation", culture);
         grblSettings1.label13.Text = resources.GetString("GrblSet_ArcTolerance", culture);
+        grblSettings1.label11.Text = resources.GetString("GrblSet_PWMFrequency", culture);
         grblSettings1.label22.Text = resources.GetString("GrblSet_MarkerPower", culture);
         grblSettings1.checkBox20.Text = resources.GetString("GrblSet_LaserMode", culture);
         grblSettings1.checkBox16.Text = resources.GetString("GrblSet_CoreXY", culture);
         grblSettings1.checkBox12.Text = resources.GetString("GrblSet_InvertStEnablePin", culture);
+        grblSettings1.checkBox17.Text = resources.GetString("GrblSet_InvertLaserENPin", culture);
+        grblSettings1.checkBox18.Text = resources.GetString("GrblSet_InvertLaserPWM", culture);
+        grblSettings1.checkBox19.Text = resources.GetString("GrblSet_PWMAlwaysOn", culture);
+        grblSettings1.checkBox21.Text = resources.GetString("GrblSet_DisableBuzzer", culture);
         grblSettings1.button1.Text = resources.GetString("Btn_OK", culture);
         grblSettings1.button2.Text = resources.GetString("Btn_Cancel", culture);
         grblSettings1.button3.Text = resources.GetString("Btn_Apply", culture);

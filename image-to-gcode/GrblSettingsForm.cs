@@ -5,7 +5,7 @@ using System.Windows.Forms;
 partial class GrblSettingsForm:Form {
     private readonly CheckBox NullCheckBox = new CheckBox();
     
-    public object[][] settingsTable;
+    public readonly object[][] settingsTable;
     
     private void GrblSettingsLoad(object sender, EventArgs e) {
         foreach (object[] setting in settingsTable) {
@@ -130,6 +130,7 @@ partial class GrblSettingsForm:Form {
             new object[] { 3,   null, null, 1, 2, null,    checkBox4, checkBox5, },
             new object[] { 5,   null, null, 1, 2, null,    checkBox3, checkBox6, },
             new object[] { 23,  null, null, 1, 2, null,    checkBox7, checkBox8, },
+            new object[] { 18,  null, null, 1, 2, null,    checkBox14, checkBox15, },
             new object[] { 22,  null, null, 1, 8, tableLayoutPanel11, checkBox9, checkBox10, NullCheckBox, NullCheckBox, checkBox11, checkBox13, NullCheckBox, NullCheckBox, },
             new object[] { 24,  null, null, 0, 0, label15, textBox23, },
             new object[] { 25,  null, null, 0, 0, label16, textBox24, },
@@ -137,10 +138,15 @@ partial class GrblSettingsForm:Form {
             new object[] { 29,  null, null, 0, 0, label20, textBox28, },
             new object[] { 11,  null, null, 0, 0, label12, textBox21, },
             new object[] { 12,  null, null, 0, 0, label13, textBox22, },
+            new object[] { 30,  null, null, 0, 0, label11, textBox3, },
             new object[] { 31,  null, null, 0, 0, label22, textBox30, },
             new object[] { 32,  null, null, 1, 1, null,    checkBox20, },
             new object[] { 14,  null, null, 1, 1, null,    checkBox16, },
             new object[] { 4,   null, null, 1, 1, null,    checkBox12, },
+            new object[] { 7,   null, null, 1, 1, null,    checkBox17, },
+            new object[] { 8,   null, null, 1, 1, null,    checkBox18, },
+            new object[] { 33,  null, null, 1, 1, null,    checkBox19, },
+            new object[] { 10,  null, null, 1, 1, null,    checkBox21, },
         };
     }
 }

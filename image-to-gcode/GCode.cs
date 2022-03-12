@@ -23,6 +23,11 @@ partial class image2gcode {
         Y,
     }
     
+    private enum GcOutputMode {
+        NormalOutput,
+        WrappedOutput,
+    }
+    
     private enum MotionMode {
         Invalid = -1,
         Seek,

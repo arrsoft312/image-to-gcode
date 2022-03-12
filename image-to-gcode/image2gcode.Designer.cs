@@ -396,7 +396,7 @@ partial class image2gcode {
         this.exportToolStripMenuItem.Enabled = false;
         this.exportToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("exportToolStripMenuItem.Image")));
         this.exportToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
-        this.exportToolStripMenuItem.Tag = false;
+        this.exportToolStripMenuItem.Tag = image2gcode.GcOutputMode.NormalOutput;
         this.exportToolStripMenuItem.Text = "&Save G-code...";
         this.exportToolStripMenuItem.Click += new System.EventHandler(this.ExportToolStripMenuItemClick);
         // 
@@ -405,7 +405,7 @@ partial class image2gcode {
         this.export2ToolStripMenuItem.Enabled = false;
         this.export2ToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("export2ToolStripMenuItem.Image")));
         this.export2ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.E)));
-        this.export2ToolStripMenuItem.Tag = true;
+        this.export2ToolStripMenuItem.Tag = image2gcode.GcOutputMode.WrappedOutput;
         this.export2ToolStripMenuItem.Text = "Save G-code (&Wrapped Output)...";
         this.export2ToolStripMenuItem.Click += new System.EventHandler(this.ExportToolStripMenuItemClick);
         // 
@@ -822,7 +822,7 @@ partial class image2gcode {
         this.sendToolStripMenuItem.Enabled = false;
         this.sendToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("sendToolStripMenuItem.Image")));
         this.sendToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
-        this.sendToolStripMenuItem.Tag = false;
+        this.sendToolStripMenuItem.Tag = image2gcode.GcOutputMode.NormalOutput;
         this.sendToolStripMenuItem.Text = "S&end...";
         this.sendToolStripMenuItem.Click += new System.EventHandler(this.SendToolStripMenuItemClick);
         // 
@@ -831,7 +831,7 @@ partial class image2gcode {
         this.send2ToolStripMenuItem.Enabled = false;
         this.send2ToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("send2ToolStripMenuItem.Image")));
         this.send2ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.P)));
-        this.send2ToolStripMenuItem.Tag = true;
+        this.send2ToolStripMenuItem.Tag = image2gcode.GcOutputMode.WrappedOutput;
         this.send2ToolStripMenuItem.Text = "Send (&Wrapped Output)...";
         this.send2ToolStripMenuItem.Click += new System.EventHandler(this.SendToolStripMenuItemClick);
         // 
@@ -925,7 +925,7 @@ partial class image2gcode {
         this.exportToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("exportToolStripButton.Image")));
         this.exportToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
         this.exportToolStripButton.Padding = new System.Windows.Forms.Padding(2, 0, 2, 0);
-        this.exportToolStripButton.Tag = false;
+        this.exportToolStripButton.Tag = image2gcode.GcOutputMode.NormalOutput;
         this.exportToolStripButton.Text = "Save G-code...";
         this.exportToolStripButton.Click += new System.EventHandler(this.ExportToolStripMenuItemClick);
         // 
@@ -936,7 +936,7 @@ partial class image2gcode {
         this.sendToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("sendToolStripButton.Image")));
         this.sendToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
         this.sendToolStripButton.Padding = new System.Windows.Forms.Padding(2, 0, 2, 0);
-        this.sendToolStripButton.Tag = false;
+        this.sendToolStripButton.Tag = image2gcode.GcOutputMode.NormalOutput;
         this.sendToolStripButton.Text = "Send...";
         this.sendToolStripButton.Click += new System.EventHandler(this.SendToolStripMenuItemClick);
         // 
@@ -1417,7 +1417,6 @@ partial class image2gcode {
         this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
         this.button1.Image = ((System.Drawing.Image)(resources.GetObject("button1.Image")));
         this.button1.TabIndex = 0;
-        this.button1.Tag = System.Drawing.RotateFlipType.Rotate270FlipNone;
         this.button1.UseVisualStyleBackColor = true;
         this.button1.Click += new System.EventHandler(this.RotateFlipButtonClick);
         // 
@@ -1429,7 +1428,6 @@ partial class image2gcode {
         this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
         this.button2.Image = ((System.Drawing.Image)(resources.GetObject("button2.Image")));
         this.button2.TabIndex = 1;
-        this.button2.Tag = System.Drawing.RotateFlipType.RotateNoneFlipXY;
         this.button2.UseVisualStyleBackColor = true;
         this.button2.Click += new System.EventHandler(this.RotateFlipButtonClick);
         // 
@@ -1441,7 +1439,6 @@ partial class image2gcode {
         this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
         this.button3.Image = ((System.Drawing.Image)(resources.GetObject("button3.Image")));
         this.button3.TabIndex = 2;
-        this.button3.Tag = System.Drawing.RotateFlipType.Rotate90FlipNone;
         this.button3.UseVisualStyleBackColor = true;
         this.button3.Click += new System.EventHandler(this.RotateFlipButtonClick);
         // 
@@ -1453,7 +1450,6 @@ partial class image2gcode {
         this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
         this.button4.Image = ((System.Drawing.Image)(resources.GetObject("button4.Image")));
         this.button4.TabIndex = 3;
-        this.button4.Tag = System.Drawing.RotateFlipType.RotateNoneFlipX;
         this.button4.UseVisualStyleBackColor = true;
         this.button4.Click += new System.EventHandler(this.RotateFlipButtonClick);
         // 
@@ -1465,7 +1461,6 @@ partial class image2gcode {
         this.button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
         this.button5.Image = ((System.Drawing.Image)(resources.GetObject("button5.Image")));
         this.button5.TabIndex = 4;
-        this.button5.Tag = System.Drawing.RotateFlipType.RotateNoneFlipY;
         this.button5.UseVisualStyleBackColor = true;
         this.button5.Click += new System.EventHandler(this.RotateFlipButtonClick);
         // 
@@ -1724,7 +1719,6 @@ partial class image2gcode {
         this.comboBox12.Items.AddRange(new object[] {
                         "SolidColor"});
         this.comboBox12.Margin = new System.Windows.Forms.Padding(3, 1, 3, 2);
-        this.comboBox12.SelectedIndex = 0;
         this.comboBox12.Size = new System.Drawing.Size();
         this.comboBox12.TabIndex = 1;
         this.comboBox12.Tag = 6291636;
@@ -1764,7 +1758,6 @@ partial class image2gcode {
                         System.Drawing.Drawing2D.WrapMode.TileFlipX,
                         System.Drawing.Drawing2D.WrapMode.TileFlipY});
         this.comboBox13.Margin = new System.Windows.Forms.Padding(3, 1, 3, 2);
-        this.comboBox13.SelectedItem = System.Drawing.Drawing2D.WrapMode.Tile;
         this.comboBox13.Size = new System.Drawing.Size();
         this.comboBox13.TabIndex = 1;
         this.comboBox13.Tag = 2097333;
@@ -1881,9 +1874,9 @@ partial class image2gcode {
         this.imageBox1.TabIndex = 0;
         this.imageBox1.TabStop = false;
         this.imageBox1.ZoomChanged += new System.EventHandler(this.ImageBox1ZoomChanged);
-        this.imageBox1.DragDrop += new System.Windows.Forms.DragEventHandler(this.ImageBox1DragDrop);
-        this.imageBox1.DragEnter += new System.Windows.Forms.DragEventHandler(this.ImageBox1DragEnter);
-        this.imageBox1.Paint += new System.Windows.Forms.PaintEventHandler(this.ImageBox1Paint);
+        this.imageBox1.DragDrop += new System.Windows.Forms.DragEventHandler(this.ImageBoxDragDrop);
+        this.imageBox1.DragEnter += new System.Windows.Forms.DragEventHandler(this.ImageBoxDragEnter);
+        this.imageBox1.Paint += new System.Windows.Forms.PaintEventHandler(this.ImageBoxPaint);
         // 
         // tableLayoutPanel13
         // 

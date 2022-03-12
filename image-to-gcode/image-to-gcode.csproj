@@ -99,9 +99,7 @@
     <Compile Include="MyExtensions.cs" />
     <Compile Include="Preset.cs" />
     <Compile Include="ProgressForm.cs" />
-    <Compile Include="ProgressForm2.cs">
-      <DependentUpon>ImageProcessing.cs</DependentUpon>
-    </Compile>
+    <Compile Include="ProgressForm2.cs" />
     <Compile Include="WrappedOutputDialog.cs" />
   </ItemGroup>
   <ItemGroup>

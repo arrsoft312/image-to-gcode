@@ -632,4 +632,22 @@
   <data name="Error_FileComment" xml:space="preserve">
     <value>Only one line starting with a percent symbol is allowed in the G-Code comment block.</value>
   </data>
+  <data name="GrblSet_InvertJogKeys" xml:space="preserve">
+    <value>Invert Jog Keys</value>
+  </data>
+  <data name="GrblSet_PWMFrequency" xml:space="preserve">
+    <value>PWM &amp;Frequency:</value>
+  </data>
+  <data name="GrblSet_InvertLaserENPin" xml:space="preserve">
+    <value>I&amp;nvert Laser EN Pin</value>
+  </data>
+  <data name="GrblSet_InvertLaserPWM" xml:space="preserve">
+    <value>Inve&amp;rt Laser PWM Pin</value>
+  </data>
+  <data name="GrblSet_PWMAlwaysOn" xml:space="preserve">
+    <value>PWM Always &amp;On</value>
+  </data>
+  <data name="GrblSet_DisableBuzzer" xml:space="preserve">
+    <value>Disable Bu&amp;zzer</value>
+  </data>
 </root>
