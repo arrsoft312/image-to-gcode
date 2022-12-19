@@ -95,9 +95,6 @@
       <DependentUpon>GrblSettingsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="I2GResources.cs" />
-    <EmbeddedResource Include="GrblSettingsForm.resx">
-      <DependentUpon>GrblSettingsForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="I2GResources.resx">
       <DependentUpon>I2GResources.cs</DependentUpon>
     </EmbeddedResource>
@@ -116,9 +113,9 @@
     <EmbeddedResource Include="I2GResources.uk.resx">
       <DependentUpon>I2GResources.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="I2GResources.be.resx">
+    <None Include="I2GResources.be.resx">
       <DependentUpon>I2GResources.cs</DependentUpon>
-    </EmbeddedResource>
+    </None>
     <Compile Include="image2gcode.cs" />
     <Compile Include="image2gcode.Designer.cs">
       <DependentUpon>image2gcode.cs</DependentUpon>
