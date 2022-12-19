@@ -12,28 +12,15 @@ partial class image2gcode {
     
     private const float MaxStripWidth = 30F;
     
-    private const float AccelDistMultiplier = 1.5F;
-    private const float DecelDistMultiplier = 1.5F;
+    private const float AccelDistMultiplier = 2F;
+    private const float DecelDistMultiplier = 1F;
     
-    private WrappedOutputDialog wrappedOutputDialog1;
     private ProgressForm progressForm1;
-    
-    public enum GcAxis {
-        X,
-        Y,
-    }
-    
-    private enum GcOutputMode {
-        NormalOutput,
-        WrappedOutput,
-    }
     
     private enum MotionMode {
         Invalid = -1,
         Seek,
         Linear,
-        CwArc,
-        CcwArc,
         None = 80,
     }
     
@@ -43,81 +30,57 @@ partial class image2gcode {
         Incremental,
     }
     
+    private enum FeedRateMode {
+        Invalid = -1,
+        InverseTime = 93,
+        UnitsPerMin,
+    }
+    
+    private enum NichromeControl {
+        Default_M3_M5 = 0,
+        OUT2_M8_M9 = 8,
+    }
+    
     private enum CleaningStrategy {
         None,
         Always,
         AfterNRows,
-        Distance,
     }
-    
-    private enum StripPositionType {
-        Right,
-        Left,
-    }
-    
-    private enum GoToNextLineType {
-        XYatTheSameTime,
-        FirstXThenY,
-        FirstYThenX,
-    }
-    
-    private enum ReturnToOriginType {
-        None,
-        XYatTheSameTime,
-        FirstXThenY,
-        FirstYThenX,
-        XAxis,
-        YAxis,
-    }
-    
-    private bool gcInverseTime;
-    
-    private float gcMultiplierX;
-    private float gcMultiplierY;
-    
-    private GcAxis wrappingAxis = GcAxis.Y;
-    private float mmPerRevolutionX = 360F;
-    private float mmPerRevolutionY = 360F;
-    private float cylinderDiameter = 80F;
     
     private float gcSpeed = 1200F;
-    private float gcPower = 100F;
+    private float gcPower = 255F;
     private float gcAccel = 3000F;
-    private float gcShift = 0F;
     
+    private int gcNumberOfPasses = 1;
     private float gcHeatDelay = 7F;
-    
     private bool gcAirAssist = false;
+    
     private bool gcSkipWhite = true;
     private float gcWhiteSpeed = 4000F;
     private float gcWhiteDistance = 5F;
     
     private float[] gcSpeedGraph = new float[] { 350F, 2820F, 0.35F, 0.35F, 0.65F, 0.65F, };
-    private float[] gcPowerGraph = new float[] { 100F, 100F, 0.35F, 0.35F, 0.65F, 0.65F, };
+    private float[] gcPowerGraph = new float[] { 255F, 255F, 0.35F, 0.35F, 0.65F, 0.65F, };
     
+    private bool gcBurnFromBottomToTop = false;
     private bool gcBidirectional = false;
-    private bool gcBurnToTheStrip = true;
     
     private CleaningStrategy gcCleaningStrategy = CleaningStrategy.None;
     private int gcCleaningRowsCount = 2;
-    private float gcCleaningDistance = 500F;
-    private StripPositionType gcStripPosition = StripPositionType.Right;
     private float gcStripWidth = 20F;
     private float gcStripSpeed = 1000F;
     private float gcCleaningFieldWidth = 5F;
     private float gcCleaningFieldSpeed = 5000F;
     private int gcNumberOfCleaningCycles = 2;
     
-    private int gcNumberOfPasses = 1;
+    private NichromeControl gcNichromeOnOffCommand = NichromeControl.Default_M3_M5;
     
-    private GoToNextLineType gcGoToNextLine = GoToNextLineType.XYatTheSameTime;
-    private ReturnToOriginType gcReturnToOrigin = ReturnToOriginType.XYatTheSameTime;
-    private bool gcDontReturnY = false;
+    private float gcRotarySpeed = 1500F;
+    private bool gcDontReturnY = true;
     
-    private bool gcPrependFrame = true;
-    private float gcFrameSpeed = 1000F;
-    private float gcFramePower = 0F;
-    private bool gcFrameWorkArea = false;
+    private bool gcWrappedOutput = false;
+    private float mmPerRevolution = 360F;
+    private float cylinderDiameter = 50F;
     
     private void BackgroundWorker2ProgressChanged(object sender, ProgressChangedEventArgs e) {
         if (e.UserState != null) {
@@ -130,6 +93,54 @@ partial class image2gcode {
         bool sendToDevice = bWorker2SendToDevice;
         bool readFromFile = bWorker2ReadFromFile;
         
+        int width = imWidth;
+        int height = imHeight;
+        
+        int scanWidth = ((width+3) / 4 * 4);
+        
+        int left2 = width;
+        int top2 = -1;
+        int width2 = 0;
+        int height2 = 0;
+        
+        if (!sendToDevice || !readFromFile) {
+            for (int y = 0; y < height; y++) {
+                byte* dest = (byte*)(imDest + y*scanWidth);
+                for (int x = 0; x < width; x++) {
+                    if (dest[x] == ImColorUltraWhite) {
+                        continue;
+                    }
+                    
+                    if (top2 == -1) {
+                        top2 = y;
+                    }
+                    if (left2 > x) {
+                        left2 = x;
+                    }
+                    
+                    for (x = width; x > 0; x--) {
+                        if (dest[x-1] == ImColorUltraWhite) {
+                            continue;
+                        }
+                        if (width2 < x) {
+                            width2 = x;
+                        }
+                        break;
+                    }
+                    height2 = y;
+                    
+                    break;
+                }
+            }
+            
+            if (top2 == -1) {
+                throw new WarningException(resources.GetString("Error_BlankImage", culture));
+            }
+            
+            width2 -= left2;
+            height2 -= (top2-1);
+        }
+        
         StreamWriter outFile;
         if (sendToDevice) {
             outFile = StreamWriter.Null;
@@ -138,18 +149,15 @@ partial class image2gcode {
         }
         
         try {
-            string fwVersion = null;
-            GrblOptions fwFlags = GrblOptions.None;
             int rxBufferSize;
             
             int sum_c_line = 0;
             List<int> c_line = new List<int>();
             
-            int comment_counter = 0;
-            int line_counter = 0;
+            int line_counter = 1;
             
-            string[] s_list = new string[MaxImageSize*2+4];
-            int i = 0;
+            string[] s_list = new string[MaxImageSize*2+6];
+            int i = 1;
             
             Func<bool> SendToGrblController;
             
@@ -157,23 +165,67 @@ partial class image2gcode {
                 serialPort1.BaudRate = baudRate;
                 serialPort1.PortName = comPort;
                 
-                serialPort1.ReadTimeout = 30;
+                serialPort1.ReadTimeout = 150;
                 serialPort1.Open();
                 
                 if (!Grbl_GetSync(() => ((BackgroundWorker)sender).CancellationPending)) {
                     return;
                 }
                 
-                rxBufferSize = Grbl_GetBuildInfo(ref fwVersion, ref fwFlags);
+                serialPort1.Write("$I\n");
+                try {
+                    string[] resp = serialPort1.ReadTo("ok\r\n").Split(new string[] { "]\r\n", }, 4, StringSplitOptions.None);
+                    if (resp.Length != 3 || resp[2] != "") {
+                        throw new Exception(resources.GetString("Grbl_InvalidResponse", culture));
+                    }
+                    
+                    string[] ver = resp[0].Split(new string[] { ":", ".", }, 5, StringSplitOptions.None);
+                    if (ver.Length != 5 || ver[0] != "[VER") {
+                        throw new Exception(resources.GetString("Grbl_InvalidResponse", culture));
+                    }
+                    
+                    string[] opt = resp[1].Split(new string[] { ":", ",", }, 5, StringSplitOptions.None);
+                    if (opt.Length != 4 || opt[0] != "[OPT") {
+                        throw new Exception(resources.GetString("Grbl_InvalidResponse", culture));
+                    }
+                    
+                    rxBufferSize = Int32.Parse(opt[3], invariantCulture);
+                } catch (TimeoutException) {
+                    throw new Exception(resources.GetString("Grbl_NotResponding", culture));
+                }
+                if (((BackgroundWorker)sender).CancellationPending) {
+                    return;
+                }
+                
+                serialPort1.Write("%\n");
+                try {
+                    string[] resp = serialPort1.ReadTo("\r\n").Split(new string[] { ":", }, 2, StringSplitOptions.None);
+                    if (resp[0] != "ok") {
+                        if (resp[0] == "error") {
+                            if (resp[1] == "13") {
+                                throw new Exception(resources.GetString("Grbl_GCodeLock", culture));
+                            }
+                            throw new WarningException("Sending a G-code to GRBL firmware is not supported at this time. Maybe someday I'll add this feature.");
+                        }
+                        throw new Exception(resources.GetString("Grbl_InvalidResponse", culture));
+                    }
+                } catch (TimeoutException) {
+                    throw new Exception(resources.GetString("Grbl_NotResponding", culture));
+                }
+                if (((BackgroundWorker)sender).CancellationPending) {
+                    return;
+                }
+                
+                serialPort1.ReadTimeout = 30;
                 
                 SendToGrblController = () => {
-                    for (int j = 0;; j++) {
-                        if (i != -1) {
-                            if (j == i) {
+                    for (int j = i;; i--) {
+                        if (j != 0) {
+                            if (i == 0) {
                                 return true;
                             }
                             
-                            int len = (s_list[j].Length + 1);
+                            int len = (s_list[j-i].Length + 1);
                             
                             sum_c_line += len;
                             c_line.Add(len);
@@ -190,25 +242,21 @@ partial class image2gcode {
                             try {
                                 string[] resp = serialPort1.ReadTo("\r\n").Split(new string[] { ":", }, 2, StringSplitOptions.None);
                                 if (resp[0] != "ok") {
-                                    int error_code = Byte.Parse(resp[1], invariantCulture);
                                     if (resp[0] == "error") {
-                                        if (line_counter == 0) {
-                                            if (error_code == 1) {
-                                                goto RESP_OK;
-                                            }
-                                            //throw new Exception(
-                                        }
-                                        
                                         if (readFromFile) {
-                                            throw new Exception(String.Format(culture, resources.GetString("Grbl_GCodeErrorFile", culture), Path.GetFileName(openFileDialog2.FileName), (comment_counter + line_counter), resp[1]));
+                                            throw new Exception(String.Format(culture, resources.GetString("Grbl_GCodeErrorFile", culture), Path.GetFileName(openFileDialog2.FileName), line_counter, resp[1]));
                                         }
                                         throw new Exception(String.Format(culture, resources.GetString("Grbl_GCodeError", culture), resp[1]));
                                     }
+                                    if (resp[0] == "ALARM") {
+                                        if (resp[1] == "3") {
+                                            return false;
+                                        }
+                                    }
                                     
-                                    return false;
+                                    throw new Exception(resources.GetString("Grbl_GCodeUnknownResponse", culture));
                                 }
                                 
-                                RESP_OK:
                                 ++line_counter;
                                 
                                 sum_c_line -= c_line[0];
@@ -225,11 +273,10 @@ partial class image2gcode {
                             }
                         }
                         
-                        if (i == -1) {
+                        if (j == 0) {
                             return true;
                         }
-                        
-                        serialPort1.Write(s_list[j] + "\n");
+                        serialPort1.Write(s_list[j-i] + "\n");
                     }
                 };
                 
@@ -237,73 +284,41 @@ partial class image2gcode {
                     StreamReader inFile = new StreamReader(openFileDialog2.FileName, Encoding.ASCII, false);
                     Stream baseStream = inFile.BaseStream;
                     
+                    ((BackgroundWorker)sender).ReportProgress(0, resources.GetString("PF_SendingFile", culture));
                     try {
-                        i = 1;
-                        
-                        for (;; ++comment_counter) {
-                            string line = inFile.ReadLine();
-                            if (line == null) {
-                                return;
-                            }
-                            
-                            string s = line.Replace(" ", "");
-                            if (s.Length == 0 || s[0] != ';') {
-                                break;
-                            }
-                            if (s.Length == 1 || s[1] != '%') {
-                                continue;
-                            }
-                            
-                            if (s_list[0] != null) {
-                                throw new Exception(resources.GetString("Error_FileComment", culture));
-                            }
-                            
-                            int num = line.IndexOf('%', 1, (line.Length-1));
-                            s_list[0] = line.Remove(0, num);
-                        }
-                        
-                        if (s_list[0] == null) {
-                            s_list[0] = "%";
-                        }
-                        
-                        baseStream.Seek(0, SeekOrigin.Begin);
-                        inFile.DiscardBufferedData();
-                        
-                        for (int j = 0; j < comment_counter; j++) {
-                            inFile.ReadLine();
-                        }
-                        
-                        ((BackgroundWorker)sender).ReportProgress(0, resources.GetString("PF_SendingFile", culture));
-                        
-                        progressForm1.button1.Enabled = true;
-                        progressForm1.button2.Enabled = true;
-                        
-                        long fileSize = baseStream.Length;
-                        for (;;) {
-                            if (!SendToGrblController()) {
-                                return;
-                            }
-                            
-                            ((BackgroundWorker)sender).ReportProgress((int)(1000 * baseStream.Position / fileSize), null);
-                            
-                            s_list[0] = inFile.ReadLine();
-                            if (s_list[0] == null) {
-                                break;
+                        long streamLength = baseStream.Length;
+                        if (streamLength != 0) {
+                            for (;; i = 1) {
+                                ((BackgroundWorker)sender).ReportProgress((int)(1000 * baseStream.Position / streamLength), null);
+                                
+                                s_list[0] = inFile.ReadLine();
+                                if (s_list[0] == null) {
+                                    break;
+                                }
+                                
+                                if (!SendToGrblController()) {
+                                    return;
+                                }
                             }
                         }
                     } finally {
                         inFile.Close();
                     }
                     
-                    i = -1;
-                    SendToGrblController();
+                    s_list[0] = "M2";
+                    if (!SendToGrblController()) {
+                        return;
+                    }
                     
+                    SendToGrblController();
                     return;
                 }
+                
+                ((BackgroundWorker)sender).ReportProgress(0, resources.GetString("PF_SendingData", culture));
             } else {
                 SendToGrblController = () => {
-                    for (int j = 0; j < i; j++) {
-                        outFile.Write(s_list[j] + "\n");
+                    for (int j = i; i > 0; i--) {
+                        outFile.Write(s_list[j-i] + "\n");
                     }
                     
                     if (((BackgroundWorker)sender).CancellationPending) {
@@ -313,65 +328,47 @@ partial class image2gcode {
                 };
             }
             
-            bool _1bitPalette = im1bitPalette;
-            
             float dpiX = (imDpiX / MmPerInch);
             float dpiY = (imDpiY / MmPerInch);
             
-            int width = imWidth;
-            int height = imHeight;
+            bool _1bitPalette = im1bitPalette;
             
-            int scanWidth = ((width+3) / 4 * 4);
+            bool isNichromeBurner = (machineType == MachineType.NichromeBurner);
+            bool isImpactGraver = (machineType == MachineType.ImpactGraver);
+            bool isLaserEngraver = !(isNichromeBurner || isImpactGraver);
             
-            bool inverseTime = gcInverseTime;
-            
-            float multiplierX;
-            float multiplierY;
-            
-            Origin origin = machineOrigin;
-            switch (origin) {
-                case Origin.TopLeft:
-                    multiplierX = -gcMultiplierX;
-                    multiplierY = gcMultiplierY;
-                    break;
-                case Origin.BottomRight:
-                    multiplierX = gcMultiplierX;
-                    multiplierY = -gcMultiplierY;
-                    break;
-                case Origin.BottomLeft:
-                    multiplierX = -gcMultiplierX;
-                    multiplierY = -gcMultiplierY;
-                    break;
-                default:
-                    multiplierX = gcMultiplierX;
-                    multiplierY = gcMultiplierY;
-                    break;
+            bool wrappedOutput = false;
+            if (isLaserEngraver) {
+                wrappedOutput = gcWrappedOutput;
             }
             
-            float left = (imLeft * multiplierX);
-            float top = (imTop * multiplierY);
+            float multiplierY = 1F;
+            if (wrappedOutput) {
+                multiplierY = (mmPerRevolution / (cylinderDiameter*PI));
+            }
             
+            bool burnFromBottomToTop = gcBurnFromBottomToTop;
+            if (burnFromBottomToTop) {
+                multiplierY = -multiplierY;
+            }
+            
+            FeedRateMode prevFeedRateMode = FeedRateMode.UnitsPerMin;
             DistanceMode prevDistanceMode = DistanceMode.Invalid;
             MotionMode prevMotionMode = MotionMode.Invalid;
             
-            float prevX = (multiplierX / 0F);
-            float prevY = (multiplierY / 0F);
+            float prevX = Single.NegativeInfinity;
+            float prevY = Single.NegativeInfinity;
             
             float prevF = -1F;
             float prevS = -1F;
             
-            Action InitializeParser = () => {
-                if (inverseTime) {
-                    s_list[i++] = "G17G93G21G40G49";
-                } else {
-                    s_list[i++] = "G17G94G21G40G49";
-                }
-            };
+            float rotarySpeed = gcRotarySpeed;
             
-            Action ProgramPause = () => s_list[i++] = "M0";
-            Action ProgramEnd = () => s_list[i++] = "M2";
+            float left = imLeft;
+            float top = (imTop*multiplierY);
             
-            Action SpindleOff = () => s_list[i++] = "M5";
+            Action InitializeParser = () => s_list[i++] = "G17G94G21G40G49";
+            Action MagicComment = () => s_list[i++] = ";M0";
             
             Action<float> SpindleOn = (s) => {
                 string Sx = "";
@@ -382,26 +379,30 @@ partial class image2gcode {
                 
                 s_list[i++] = (Sx + "M3");
             };
+            Action SpindleOff = () => {
+                s_list[i++] = "M5";
+            };
             
             Action CoolantOn = () => s_list[i++] = "M8";
             Action CoolantOff = () => s_list[i++] = "M9";
+            
+            Action ProgramEnd = () => s_list[i++] = "M2";
             
             Action<float> Dwell = (p) => {
                 if (p == 0F) {
                     return;
                 }
-                
                 s_list[i++] = ("G4P" + p.ToString(invariantCulture));
             };
             
-            Action<float, float, float, float, MotionMode, DistanceMode> GrblMove = (X, Y, f, s, motionMode, distanceMode) => {
-                if (*(int*)&X != NaN) {
-                    X = (float)Math.Round((left + X*multiplierX), 3);
+            Action<float, float, float, float, MotionMode, DistanceMode, FeedRateMode> GrblMove = (X, Y, f, s, motionMode, distanceMode, feedRateMode) => {
+                if (X == X) {
+                    X = (float)Math.Round((left + X), 3);
                 } else {
                     X = prevX;
                 }
-                if (*(int*)&Y != NaN) {
-                    Y = (float)Math.Round((top + Y*multiplierY), 3);
+                if (Y == Y) {
+                    Y = -(float)Math.Round((top + Y*multiplierY), 3);
                 } else {
                     Y = prevY;
                 }
@@ -410,6 +411,10 @@ partial class image2gcode {
                 }
                 
                 string line = "";
+                if (feedRateMode != prevFeedRateMode) {
+                    line += ("G" + ((int)feedRateMode).ToString(invariantCulture));
+                    prevFeedRateMode = feedRateMode;
+                }
                 if (distanceMode != prevDistanceMode) {
                     line += ("G" + ((int)distanceMode).ToString(invariantCulture));
                     prevDistanceMode = distanceMode;
@@ -422,10 +427,10 @@ partial class image2gcode {
                     line += ("S" + s.ToString(invariantCulture));
                     prevS = s;
                 }
-                if (inverseTime) {
+                if (feedRateMode == FeedRateMode.InverseTime) {
                     if (motionMode != MotionMode.Seek) {
-                        line += ("F" + (f / Math.Sqrt((X-prevX)*(X-prevX)/(multiplierX*multiplierX) + (Y-prevY)*(Y-prevY)/(multiplierY*multiplierY))).ToString("#.#", invariantCulture));
-                        prevF = f;
+                        line += ("F" + (f / Math.Sqrt((X-prevX)*(X-prevX) + (Y-prevY)*(Y-prevY)/(multiplierY*multiplierY))).ToString("#.#", invariantCulture));
+                        prevF = -1F;
                     }
                 } else {
                     if (f != prevF) {
@@ -434,20 +439,18 @@ partial class image2gcode {
                     }
                 }
                 if (X != prevX) {
-                    line += "X";
                     if (distanceMode == DistanceMode.Incremental) {
-                        line += (X-prevX).ToString("#.####", invariantCulture);
+                        line += ("X" + (X-prevX).ToString("#.####", invariantCulture));
                     } else {
-                        line += X.ToString(invariantCulture);
+                        line += ("X" + X.ToString(invariantCulture));
                     }
                     prevX = X;
                 }
                 if (Y != prevY) {
-                    line += "Y";
                     if (distanceMode == DistanceMode.Incremental) {
-                        line += (Y-prevY).ToString("#.####", invariantCulture);
+                        line += ("Y" + (Y-prevY).ToString("#.####", invariantCulture));
                     } else {
-                        line += Y.ToString(invariantCulture);
+                        line += ("Y" + Y.ToString(invariantCulture));
                     }
                     prevY = Y;
                 }
@@ -455,48 +458,29 @@ partial class image2gcode {
                 s_list[i++] = line;
             };
             
-            Action<float, float> MoveAbs = (X, Y) => GrblMove(X, Y, prevF, prevS, MotionMode.Seek, DistanceMode.Absolute);
-            Action<float> MoveAbsX = (X) => GrblMove(X, Single.NaN, prevF, prevS, MotionMode.Seek, DistanceMode.Absolute);
-            Action<float> MoveAbsY = (Y) => GrblMove(Single.NaN, Y, prevF, prevS, MotionMode.Seek, DistanceMode.Absolute);
-            Action<float, float, float> MoveRelX = (X, f, s) => GrblMove(X, Single.NaN, f, s, MotionMode.Linear, DistanceMode.Incremental);
-            Action<float, float, float> MoveRelY = (Y, f, s) => GrblMove(Single.NaN, Y, f, s, MotionMode.Linear, DistanceMode.Incremental);
+            Action<float, float> MoveAbs = (X, Y) => GrblMove(X, Y, prevF, prevS, MotionMode.Seek, DistanceMode.Absolute, FeedRateMode.UnitsPerMin);
+            Action<float> MoveAbsX = (X) => GrblMove(X, Single.NaN, prevF, prevS, MotionMode.Seek, DistanceMode.Absolute, FeedRateMode.UnitsPerMin);
+            Action<float> MoveAbsY = (Y) => GrblMove(Single.NaN, Y, prevF, prevS, MotionMode.Seek, DistanceMode.Absolute, FeedRateMode.UnitsPerMin);
+            Action<float> MoveAbsRotary = (Y) => GrblMove(Single.NaN, Y, rotarySpeed, 0F, MotionMode.Linear, DistanceMode.Absolute, FeedRateMode.InverseTime);
+            Action<float, float, float> MoveRelX = (X, f, s) => GrblMove(X, Single.NaN, f, s, MotionMode.Linear, DistanceMode.Incremental, FeedRateMode.UnitsPerMin);
+            //Action<float, float, float> MoveRelY = (Y, f, s) => GrblMove(Single.NaN, Y, f, s, MotionMode.Linear, DistanceMode.Incremental, FeedRateMode.UnitsPerMin);
             
-            MachineType machine = machineType;
+            const float scanOffset = 0F;
             
-            bool isNichromeBurner = (machine == MachineType.NichromeBurner);
-            bool isNotNichromeBurner = (machine != MachineType.NichromeBurner);
-            bool isImpactGraver = (machine == MachineType.ImpactGraver);
-            //bool isNotImpactGraver = (machine != MachineType.ImpactGraver);
-            bool isLaserEngraver = (!(isNichromeBurner || isImpactGraver));
-            //bool isNotLaserEngraver = (isNichromeBurner || isImpactGraver);
+            NichromeControl nichromeOnOffCommand = gcNichromeOnOffCommand;
             
-            bool prependFrame = gcPrependFrame;
-            bool frameWorkArea = gcFrameWorkArea;
-            float frameSpeed = (float)Math.Round(gcFrameSpeed, 0);
-            
-            float framePower = 0F;
-            bool airAssist = false;
-            
-            if (isLaserEngraver) {
-                framePower = (float)Math.Round(gcFramePower, 1);
-                airAssist = gcAirAssist;
-            }
-            
-            float speed = (float)Math.Round(gcSpeed, 0);
             float power = (float)Math.Round(gcPower, 1);
+            float heatDelay = (float)Math.Round(gcHeatDelay, 1);
             
             float[] F = new float[256];
             float[] S = new float[256];
             
             if (_1bitPalette) {
-                F[0] = speed;
+                F[0] = (float)Math.Round(gcSpeed, 0);
                 S[0] = power;
             } else {
                 float[] speedGraph = gcSpeedGraph;
-                float[] powerGraph = gcPowerGraph;
-                if (isNichromeBurner) {
-                    powerGraph = new float[] { gcPower, gcPower, 0.35F, 0.35F, 0.65F, 0.65F, };
-                } else if (isImpactGraver) {
+                if (isImpactGraver) {
                     speedGraph = new float[] { gcSpeed, gcSpeed, 0.35F, 0.35F, 0.65F, 0.65F, };
                 }
                 
@@ -508,19 +492,20 @@ partial class image2gcode {
                 float p4 = (3*ImColorWhite*(1F-speedGraph[4]));
                 float p5 = (3F*(p1 - (p1-p7)*speedGraph[5]));
                 
-                float q1 = powerGraph[1];
-                float q7 = powerGraph[0];
-                
-                float q2 = (3*ImColorWhite*(1F-powerGraph[2]));
-                float q3 = (3F*(q1 - (q1-q7)*powerGraph[3]));
-                float q4 = (3*ImColorWhite*(1F-powerGraph[4]));
-                float q5 = (3F*(q1 - (q1-q7)*powerGraph[5]));
-                
                 int color1 = (ImColorWhite-ImColorStep);
-                int color2 = (ImColorWhite-ImColorStep);
                 
                 float x0 = ImColorWhite;
                 float y0 = p1;
+                
+                float q1 = gcPowerGraph[1];
+                float q7 = gcPowerGraph[0];
+                
+                float q2 = (3*ImColorWhite*(1F-gcPowerGraph[2]));
+                float q3 = (3F*(q1 - (q1-q7)*gcPowerGraph[3]));
+                float q4 = (3*ImColorWhite*(1F-gcPowerGraph[4]));
+                float q5 = (3F*(q1 - (q1-q7)*gcPowerGraph[5]));
+                
+                int color2 = (ImColorWhite-ImColorStep);
                 
                 float u0 = ImColorWhite;
                 float v0 = q1;
@@ -542,6 +527,9 @@ partial class image2gcode {
                         }
                     }
                     
+                    x0 = x1;
+                    y0 = y1;
+                    
                     float u1 = (inv_t*inv_t*inv_t*ImColorWhite + inv_t*inv_t*t*q2 + t*t*inv_t*q4);
                     float v1 = (inv_t*inv_t*inv_t*q1 + inv_t*inv_t*t*q3 + t*t*inv_t*q5 + t*t*t*q7);
                     if (u1 < color2) {
@@ -553,9 +541,6 @@ partial class image2gcode {
                         }
                     }
                     
-                    x0 = x1;
-                    y0 = y1;
-                    
                     u0 = u1;
                     v0 = v1;
                 }
@@ -564,442 +549,219 @@ partial class image2gcode {
             }
             
             F[255] = (float)Math.Round(gcWhiteSpeed, 0);
-            if (isNichromeBurner) {
-                S[255] = power;
+            //S[255] = 0F;
+            
+            bool bidirectional = gcBidirectional;
+            bool dontReturnY = gcDontReturnY;
+            
+            bool airAssist = false;
+            if (isLaserEngraver) {
+                airAssist = gcAirAssist;
             }
             
-            float accel = (gcAccel * 3600F);
+            int numberOfPasses = 1;
+            if (isImpactGraver) {
+                numberOfPasses = gcNumberOfPasses;
+            }
+            
+            bool skipWhite = gcSkipWhite;
+            float whiteDistance = gcWhiteDistance;
             
             float[] acceldist = new float[256];
             float[] deceldist = new float[256];
             
-            if (isNotNichromeBurner) {
-                for (int j = 0; j <= ImColorWhite; j += ImColorStep) {
-                    float acctime = (F[j] / accel);
-                    float accdist = (acctime * F[j] / 2F);
-                    
-                    acceldist[j] = (accdist*AccelDistMultiplier);
-                    deceldist[j] = (accdist*DecelDistMultiplier);
-                }
-            }
-            
-            bool bidirectional = gcBidirectional;
-            
-            bool burnToTheStrip = false;
-            CleaningStrategy cleaningStrategy = CleaningStrategy.None;
-            
-            if (isNichromeBurner) {
-                burnToTheStrip = gcBurnToTheStrip;
-                cleaningStrategy = gcCleaningStrategy;
-            }
-            
-            bool skipWhite = true;
-            float whiteDistance = 0F;
-            
-            float shift = 0F;
-            
-            if (isNotNichromeBurner) {
-                skipWhite = gcSkipWhite;
-                whiteDistance = gcWhiteDistance;
+            float accel = (gcAccel*3600F);
+            for (int j = 0; j <= ImColorWhite; j += ImColorStep) {
+                float acctime = (F[j] / accel);
+                float accdist = (acctime * F[j] / 2F);
                 
+                acceldist[j] = (accdist*AccelDistMultiplier);
+                deceldist[j] = (accdist*DecelDistMultiplier);
+            }
+            
+            if (numberOfPasses > 1) {
                 if (bidirectional) {
-                    shift = gcShift;
+                    if (AccelDistMultiplier > DecelDistMultiplier) {
+                        for (int j = 0; j <= ImColorWhite; j += ImColorStep) {
+                            deceldist[j] = acceldist[j];
+                        }
+                    } else if (DecelDistMultiplier > AccelDistMultiplier) {
+                        for (int j = 0; j <= ImColorWhite; j += ImColorStep) {
+                            acceldist[j] = deceldist[j];
+                        }
+                    }
                 }
             }
             
-            float heatDelay = (float)Math.Round(gcHeatDelay, 1);
-            bool stripOnTheRightSide = true;
+            CleaningStrategy cleaningStrategy = gcCleaningStrategy;
+            bool stripOnTheLeftSide = ((width + (int)(left*dpiX - 0.5F)) > 0);
+            
             float stripWidth = gcStripWidth;
             float stripSpeed = (float)Math.Round(gcStripSpeed, 0);
             float cleaningFieldWidth = gcCleaningFieldWidth;
             float cleaningFieldSpeed = (float)Math.Round(gcCleaningFieldSpeed, 0);
             int numberOfCleaningCycles = gcNumberOfCleaningCycles;
             
-            if (cleaningStrategy != CleaningStrategy.None) {
-                stripOnTheRightSide = (gcStripPosition == StripPositionType.Right);
-            }
-            
             if (cleaningFieldWidth > stripWidth) {
                 cleaningFieldWidth = stripWidth;
             }
             
-            GoToNextLineType goToNextLine = gcGoToNextLine;
-            ReturnToOriginType returnToOrigin = gcReturnToOrigin;
-            bool dontReturnY = gcDontReturnY;
-            
-            int numberOfPasses = gcNumberOfPasses;
-            
-            //
-            
-            i = 0;
-            
-            if (sendToDevice) {
-                
-                s_list[i++] = "%";
-                
-                ((BackgroundWorker)sender).ReportProgress(0, resources.GetString("PF_SendingData", culture));
-                
-                progressForm1.button1.Enabled = true;
-                progressForm1.button2.Enabled = true;
-                
-            } else {
-                
-                s_list[i++] = (";Generated with " + AppTitle + " v" + AppVersion + " - https://www.image2gcode.ru");
-                s_list[i++] = ";%";
-                
-            }
-            
-            InitializeParser();
-            if (isNichromeBurner) {
-                
-                if (stripOnTheRightSide) {
-                    MoveAbsX(0F);
-                    MoveAbsY(0F);
-                    
-                    if (prependFrame) {
-                        MoveRelX(width/dpiX, frameSpeed, -1F);
-                        MoveRelY(height/dpiY, frameSpeed, -1F);
-                        MoveRelX(0F, frameSpeed, -1F);
-                        MoveRelY(0F, frameSpeed, -1F);
-                        
-                        ProgramPause();
-                    }
-                    
-                    if (cleaningStrategy != CleaningStrategy.None) {
-                        MoveRelX(-stripWidth/2F, stripSpeed, -1F);
-                    }
-                    
-                    SpindleOn(power);
-                    Dwell(heatDelay);
-                    
-                    MoveRelX(0F, stripSpeed, power);
-                } else {
-                    MoveAbsX(width/dpiX);
-                    MoveAbsY(0F);
-                    
-                    if (prependFrame) {
-                        MoveRelX(0F, frameSpeed, -1F);
-                        MoveRelY(height/dpiY, frameSpeed, -1F);
-                        MoveRelX(width/dpiX, frameSpeed, -1F);
-                        MoveRelY(0F, frameSpeed, -1F);
-                        
-                        ProgramPause();
-                    }
-                    
-                    if (cleaningStrategy != CleaningStrategy.None) {
-                        MoveRelX((width/dpiX + stripWidth/2F), stripSpeed, -1F);
-                    }
-                    
-                    SpindleOn(power);
-                    Dwell(heatDelay);
-                    
-                    MoveRelX(width/dpiX, stripSpeed, power);
-                }
-                
-            } else {
-                
-                if (prependFrame) {
-                    int left2 = 0;
-                    int top2 = 0;
-                    int width2 = width;
-                    int height2 = height;
-                    
-                    if (frameWorkArea) {
-                        left2 = width;
-                        top2 = -1;
-                        width2 = 0;
-                        
-                        for (int y = 0; y < height; y++) {
-                            byte* dest = (byte*)(imDest + y*scanWidth + width);
-                            for (int x = 0; x < width; x++) {
-                                if (dest[-x-1] == ImColorUltraWhite) {
-                                    continue;
-                                }
-                                
-                                if (top2 == -1) {
-                                    top2 = y;
-                                }
-                                if (left2 > x) {
-                                    left2 = x;
-                                }
-                                
-                                for (x = width; x > 0; x--) {
-                                    if (dest[-x] == ImColorUltraWhite) {
-                                        continue;
-                                    }
-                                    if (width2 < x) {
-                                        width2 = x;
-                                    }
-                                    break;
-                                }
-                                height2 = y;
-                                
-                                break;
-                            }
-                        }
-                        
-                        width2 -= left2;
-                        height2 -= (top2-1);
-                    }
-                    
-                    if (top2 != -1) {
-                        switch (goToNextLine) {
-                            case GoToNextLineType.FirstXThenY:
-                                MoveAbsX(left2/dpiX);
-                                MoveAbsY(top2/dpiY);
-                                break;
-                            case GoToNextLineType.FirstYThenX:
-                                MoveAbsY(top2/dpiY);
-                                MoveAbsX(left2/dpiX);
-                                break;
-                            default:
-                                MoveAbs(left2/dpiX, top2/dpiY);
-                                break;
-                        }
-                        
-                        SpindleOn(framePower);
-                        MoveRelX((left2+width2)/dpiX, frameSpeed, framePower);
-                        MoveRelY((top2+height2)/dpiY, frameSpeed, framePower);
-                        MoveRelX(left2/dpiX, frameSpeed, framePower);
-                        MoveRelY(top2/dpiY, frameSpeed, framePower);
-                        SpindleOff();
-                        
-                        ProgramPause();
-                    }
-                }
-                
-                SpindleOn(0F);
-                if (airAssist) {
-                    CoolantOn();
-                }
-                
-            }
-            
-            if (!SendToGrblController()) {
-                return;
-            }
-            
             int cleaningRowsCount;
             switch (cleaningStrategy) {
-                case CleaningStrategy.Always:
+                case CleaningStrategy.None:
+                    cleaningRowsCount = height;
+                    break;
+                case CleaningStrategy.AfterNRows:
+                    cleaningRowsCount = gcCleaningRowsCount;
+                    break;
+                default:
                     if (bidirectional) {
                         cleaningRowsCount = 2;
                     } else {
                         cleaningRowsCount = 1;
                     }
                     break;
-                case CleaningStrategy.AfterNRows:
-                    cleaningRowsCount = (gcCleaningRowsCount*numberOfPasses);
-                    break;
-                case CleaningStrategy.Distance:
-                    cleaningRowsCount = (int)(gcCleaningDistance / (width/dpiX) + 0.5F);
-                    if (cleaningRowsCount == 0) {
-                        cleaningRowsCount = 1;
-                    }
-                    break;
-                default:
-                    cleaningRowsCount = (height*numberOfPasses);
-                    break;
+            }
+            
+            float stripPosition = -left;
+            float cleaningPosition;
+            
+            if (stripOnTheLeftSide) {
+                if (left < 0F) {
+                    stripPosition = 0F;
+                }
+                cleaningPosition = (stripPosition - (stripWidth-cleaningFieldWidth)/2F);
+            } else {
+                cleaningPosition = (stripPosition + (stripWidth-cleaningFieldWidth)/2F);
+                cleaningFieldWidth = -cleaningFieldWidth;
             }
             
             int cleaningCounter = (1+cleaningRowsCount);
+            bool forward = true;
             
-            bool forward = stripOnTheRightSide;
-            if (!bidirectional) {
-                if (burnToTheStrip) {
-                    forward = !stripOnTheRightSide;
+            if (isNichromeBurner) {
+                if (bidirectional) {
+                    forward = stripOnTheLeftSide;
+                } else {
+                    forward = !stripOnTheLeftSide;
                 }
-            }
-            
-            for (int y = 0; y < height; y++) {
-                ((BackgroundWorker)sender).ReportProgress((1000 * y / height), null);
                 
-                byte* dest = (byte*)(imDest + y*scanWidth);
+                if (stripOnTheLeftSide) {
+                    s_list[0] = (
+                        ";"+left.ToString("0.###", invariantCulture)+
+                        ","+(-top).ToString("0.###", invariantCulture)+
+                        ","+(width/dpiX).ToString("0.###", invariantCulture)+
+                        ","+(-(height/dpiY*multiplierY)).ToString("0.###", invariantCulture)
+                    );
+                } else {
+                    s_list[0] = (
+                        ";"+(left + width/dpiX).ToString("0.###", invariantCulture)+
+                        ","+(-top).ToString("0.###", invariantCulture)+
+                        ","+(-(width/dpiX)).ToString("0.###", invariantCulture)+
+                        ","+(-(height/dpiY*multiplierY)).ToString("0.###", invariantCulture)
+                    );
+                }
+                if (cleaningStrategy != CleaningStrategy.None) {
+                    s_list[0] += (
+                        ",12"+
+                        ","+(heatDelay*1000F).ToString(invariantCulture)+
+                        ","+(cleaningPosition-stripPosition).ToString("#.###", invariantCulture)+
+                        ","+stripSpeed.ToString(invariantCulture)
+                    );
+                } else {
+                    s_list[0] += (
+                        ",4"
+                    );
+                }
                 
-                for (int n = 0; n < numberOfPasses; n++) {
-                    int width2 = width;
-                    int x = 0;
+                InitializeParser();
+                
+                MoveAbsX(stripPosition);
+                MoveAbsY(0F);
+                
+                if (cleaningStrategy != CleaningStrategy.None) {
+                    MoveRelX(cleaningPosition, stripSpeed, -1F);
+                    MagicComment();
+                }
+                
+                if (nichromeOnOffCommand < NichromeControl.OUT2_M8_M9) {
+                    switch (nichromeOnOffCommand) {
+                        default: s_list[i++] = ("S"+power.ToString(invariantCulture)+"M3"); break;
+                    }
+                } else {
+                    switch (nichromeOnOffCommand) {
+                        default: s_list[i++] = "M8"; break;
+                    }
+                }
+                Dwell(heatDelay);
+                
+                MoveRelX(stripPosition, stripSpeed, -1F);
+                
+                if (!SendToGrblController()) {
+                    return;
+                }
+                
+                for (int y = 0; y < height; y++) {
+                    ((BackgroundWorker)sender).ReportProgress((1000 * y / height), null);
                     
-                    if (isNichromeBurner) {
+                    MoveAbsY((0.5F+y)/dpiY);
+                    
+                    if (--cleaningCounter == 0) {
+                        MoveAbsX(stripPosition);
+                        MoveRelX(cleaningPosition, stripSpeed, -1F);
+                        MagicComment();
                         
-                        if (--cleaningCounter == 0) {
-                            i = 0;
-                            
-                            if (stripOnTheRightSide) {
-                                MoveAbsX(0F);
-                                MoveRelX(-(stripWidth-cleaningFieldWidth)/2F, stripSpeed, power);
-                                for (int j = 0; j < numberOfCleaningCycles; j++) {
-                                    MoveRelX((-(stripWidth-cleaningFieldWidth)/2F - cleaningFieldWidth), cleaningFieldSpeed, power);
-                                    MoveRelX(-(stripWidth-cleaningFieldWidth)/2F, cleaningFieldSpeed, power);
-                                }
-                                MoveRelX(0F, stripSpeed, power);
-                            } else {
-                                MoveAbsX(width/dpiX);
-                                MoveRelX((width/dpiX + (stripWidth-cleaningFieldWidth)/2F), stripSpeed, power);
-                                for (int j = 0; j < numberOfCleaningCycles; j++) {
-                                    MoveRelX((width/dpiX + (stripWidth-cleaningFieldWidth)/2F + cleaningFieldWidth), cleaningFieldSpeed, power);
-                                    MoveRelX((width/dpiX + (stripWidth-cleaningFieldWidth)/2F), cleaningFieldSpeed, power);
-                                }
-                                MoveRelX(width/dpiX, stripSpeed, power);
-                            }
-                            
-                            if (!SendToGrblController()) {
-                                return;
-                            }
-                            
-                            if (bidirectional) {
-                                forward = stripOnTheRightSide;
-                            }
-                            
-                            cleaningCounter = cleaningRowsCount;
+                        for (int j = 0; j < numberOfCleaningCycles; j++) {
+                            MoveRelX(cleaningPosition-cleaningFieldWidth, cleaningFieldSpeed, -1F);
+                            MoveRelX(cleaningPosition, cleaningFieldSpeed, -1F);
+                        }
+                        MagicComment();
+                        
+                        MoveRelX(stripPosition, stripSpeed, -1F);
+                        
+                        if (!SendToGrblController()) {
+                            return;
                         }
                         
-                    } else {
-                        
-                        if (forward) {
-                            for (; x < width; x++) {
-                                if (dest[width-x-1] != ImColorUltraWhite) {
-                                    break;
-                                }
-                            }
-                            if (x >= width) {
-                                break;
-                            }
-                            for (; width2 > 0; width2--) {
-                                if (dest[width-width2] != ImColorUltraWhite) {
-                                    break;
-                                }
-                            }
-                        } else {
-                            for (; x < width; x++) {
-                                if (dest[x] != ImColorUltraWhite) {
-                                    break;
-                                }
-                            }
-                            if (x >= width) {
-                                break;
-                            }
-                            for (; width2 > 0; width2--) {
-                                if (dest[width2-1] != ImColorUltraWhite) {
-                                    break;
-                                }
-                            }
+                        if (bidirectional) {
+                            forward = stripOnTheLeftSide;
                         }
                         
+                        cleaningCounter = cleaningRowsCount;
                     }
                     
-                    i = 0;
+                    byte* dest;
+                    if (burnFromBottomToTop) {
+                        dest = (byte*)(imDest + (height-y-1)*scanWidth);
+                    } else {
+                        dest = (byte*)(imDest + y*scanWidth);
+                    }
                     
                     if (forward) {
+                        MoveAbsX(0F);
                         
-                        byte prevPixel = dest[width-x-1];
-                        int x2 = -1;
-                        
-                        switch (goToNextLine) {
-                            case GoToNextLineType.FirstXThenY:
-                                MoveAbsX(x/dpiX - acceldist[prevPixel] - shift);
-                                MoveAbsY((y + 0.5F) / dpiY);
-                                break;
-                            case GoToNextLineType.FirstYThenX:
-                                MoveAbsY((y + 0.5F) / dpiY);
-                                MoveAbsX(x/dpiX - acceldist[prevPixel] - shift);
-                                break;
-                            default:
-                                MoveAbs((x/dpiX - acceldist[prevPixel] - shift), ((y + 0.5F) / dpiY));
-                                break;
-                        }
-                        
-                        MoveRelX((x/dpiX - shift), F[prevPixel], S[255]);
-                        for (; x < width2; x++) {
-                            byte pixel = dest[width-x-1];
-                            if (pixel != ImColorUltraWhite) {
-                                if (prevPixel == ImColorUltraWhite) {
-                                    if (skipWhite) {
-                                        if ((x-x2)/dpiX >= whiteDistance) {
-                                            MoveRelX((x/dpiX - shift), F[255], S[255]);
-                                        }
-                                    }
-                                    if (F[pixel] > prevF) {
-                                        MoveRelX((x/dpiX - shift), F[pixel], S[255]);
-                                    } else {
-                                        MoveRelX((x/dpiX - shift), prevF, S[255]);
-                                    }
-                                }
-                                if (isImpactGraver) {
-                                    MoveRelX(((x + 0.5F)/dpiX - shift), speed, S[pixel]);
-                                    MoveRelX(((x + 1.0F)/dpiX - shift), speed, 0F);
-                                } else if (pixel != prevPixel) {
-                                    MoveRelX((x/dpiX - shift), F[prevPixel], S[prevPixel]);
-                                }
-                            } else {
-                                if (prevPixel != ImColorUltraWhite) {
-                                    MoveRelX((x/dpiX - shift), F[prevPixel], S[prevPixel]);
-                                    x2 = x;
-                                }
-                            }
-                            if (x == (width2-1)) {
-                                MoveRelX((width2/dpiX - shift), F[pixel], S[pixel]);
-                            }
-                            prevPixel = pixel;
-                        }
-                        MoveRelX((x/dpiX + deceldist[prevPixel] - shift), F[prevPixel], S[255]);
-                        
-                    } else {
-                        
-                        byte prevPixel = dest[x];
-                        int x2 = -1;
-                        
-                        switch (goToNextLine) {
-                            case GoToNextLineType.FirstXThenY:
-                                MoveAbsX((width-x)/dpiX + acceldist[prevPixel] + shift);
-                                MoveAbsY((y + 0.5F) / dpiY);
-                                break;
-                            case GoToNextLineType.FirstYThenX:
-                                MoveAbsY((y + 0.5F) / dpiY);
-                                MoveAbsX((width-x)/dpiX + acceldist[prevPixel] + shift);
-                                break;
-                            default:
-                                MoveAbs(((width-x)/dpiX + acceldist[prevPixel] + shift), ((y + 0.5F) / dpiY));
-                                break;
-                        }
-                        
-                        MoveRelX(((width-x)/dpiX + shift), F[prevPixel], S[255]);
-                        for (; x < width2; x++) {
+                        byte prevPixel = dest[0];
+                        for (int x = 0; x < width; x++) {
                             byte pixel = dest[x];
-                            if (pixel != ImColorUltraWhite) {
-                                if (prevPixel == ImColorUltraWhite) {
-                                    if (skipWhite) {
-                                        if ((x-x2)/dpiX >= whiteDistance) {
-                                            MoveRelX(((width-x)/dpiX + shift), F[255], S[255]);
-                                        }
-                                    }
-                                    if (F[pixel] > prevF) {
-                                        MoveRelX(((width-x)/dpiX + shift), F[pixel], S[255]);
-                                    } else {
-                                        MoveRelX(((width-x)/dpiX + shift), prevF, S[255]);
-                                    }
-                                }
-                                if (isImpactGraver) {
-                                    MoveRelX(((width-x - 0.5F)/dpiX + shift), speed, S[pixel]);
-                                    MoveRelX(((width-x - 1.0F)/dpiX + shift), speed, 0F);
-                                } else if (pixel != prevPixel) {
-                                    MoveRelX(((width-x)/dpiX + shift), F[prevPixel], S[prevPixel]);
-                                }
-                            } else {
-                                if (prevPixel != ImColorUltraWhite) {
-                                    MoveRelX(((width-x)/dpiX + shift), F[prevPixel], S[prevPixel]);
-                                    x2 = x;
-                                }
-                            }
-                            if (x == (width2-1)) {
-                                MoveRelX(((width-width2)/dpiX + shift), F[pixel], S[pixel]);
+                            if (pixel != prevPixel) {
+                                MoveRelX(x/dpiX, F[prevPixel], -1F);
                             }
                             prevPixel = pixel;
                         }
-                        MoveRelX(((width-x)/dpiX - deceldist[prevPixel] + shift), F[prevPixel], S[255]);
+                        MoveRelX(width/dpiX, F[prevPixel], -1F);
+                    } else {
+                        MoveAbsX(width/dpiX);
                         
+                        byte prevPixel = dest[width-1];
+                        for (int x = 0; x < width; x++) {
+                            byte pixel = dest[width-x-1];
+                            if (pixel != prevPixel) {
+                                MoveRelX((width-x)/dpiX, F[prevPixel], -1F);
+                            }
+                            prevPixel = pixel;
+                        }
+                        MoveRelX(0F, F[prevPixel], -1F);
                     }
-                    
                     if (!SendToGrblController()) {
                         return;
                     }
@@ -1008,75 +770,219 @@ partial class image2gcode {
                         forward = !forward;
                     }
                 }
-            }
-            
-            i = 0;
-            
-            if (isNichromeBurner) {
                 
-                if (stripOnTheRightSide) {
-                    MoveAbsX(0F);
-                    if (!dontReturnY) {
-                        MoveAbsY(0F);
+                ((BackgroundWorker)sender).ReportProgress(1000, null);
+                
+                MoveAbsX(stripPosition);
+                if (!dontReturnY) {
+                    MoveAbsY(0F);
+                }
+                
+                if (cleaningStrategy != CleaningStrategy.None) {
+                    MoveRelX(cleaningPosition, stripSpeed, -1F);
+                }
+                
+                if (nichromeOnOffCommand < NichromeControl.OUT2_M8_M9) {
+                    switch (nichromeOnOffCommand) {
+                        //default: s_list[i++] = "M5"; break;
                     }
-                    
-                    if (cleaningStrategy != CleaningStrategy.None) {
-                        MoveRelX(-stripWidth/2F, stripSpeed, power);
-                    }
-                    
-                    SpindleOff();
                 } else {
-                    MoveAbsX(width/dpiX);
-                    if (!dontReturnY) {
-                        MoveAbsY(0F);
+                    switch (nichromeOnOffCommand) {
+                        //default: s_list[i++] = "M9"; break;
                     }
-                    
-                    if (cleaningStrategy != CleaningStrategy.None) {
-                        MoveRelX((width/dpiX + stripWidth/2F), stripSpeed, power);
-                    }
-                    
-                    SpindleOff();
                 }
+                ProgramEnd();
                 
+                if (!SendToGrblController()) {
+                    return;
+                }
             } else {
+                s_list[0] = (
+                    ";"+(left + left2/dpiX).ToString("0.###", invariantCulture)+
+                    ","+(-(top + top2/dpiY*multiplierY)).ToString("0.###", invariantCulture)+
+                    ","+(width2/dpiX).ToString("0.###", invariantCulture)+
+                    ","+(-(height2/dpiY*multiplierY)).ToString("0.###", invariantCulture)+
+                    ",7"
+                );
                 
-                switch (returnToOrigin) {
-                    case ReturnToOriginType.XAxis:
-                        MoveAbsX(0F);
-                        break;
-                    case ReturnToOriginType.YAxis:
-                        MoveAbsY(0F);
-                        break;
-                    case ReturnToOriginType.FirstXThenY:
-                        MoveAbsX(0F);
-                        MoveAbsY(0F);
-                        break;
-                    case ReturnToOriginType.FirstYThenX:
-                        MoveAbsY(0F);
-                        MoveAbsX(0F);
-                        break;
-                    case ReturnToOriginType.XYatTheSameTime:
-                        MoveAbs(0F, 0F);
-                        break;
+                InitializeParser();
+                if (wrappedOutput) {
+                    MoveAbs(-left, -top/multiplierY);
+                    MagicComment();
                 }
                 
-                SpindleOff();
+                SpindleOn(0F);
                 if (airAssist) {
-                    CoolantOff();
+                    CoolantOn();
                 }
                 
+                if (!SendToGrblController()) {
+                    return;
+                }
+                
+                for (int y = 0; y < height; y++) {
+                    ((BackgroundWorker)sender).ReportProgress((1000 * y / height), null);
+                    
+                    byte* dest;
+                    if (burnFromBottomToTop) {
+                        dest = (byte*)(imDest + (height-y-1)*scanWidth);
+                    } else {
+                        dest = (byte*)(imDest + y*scanWidth);
+                    }
+                    
+                    for (int j = 0; j < numberOfPasses; j++) {
+                        int jj = width;
+                        int x = 0;
+                        
+                        if (forward) {
+                            for (; x < width; x++) {
+                                if (dest[x] != ImColorUltraWhite) {
+                                    break;
+                                }
+                            }
+                            if (x >= width) {
+                                break;
+                            }
+                            for (; jj > 0; jj--) {
+                                if (dest[jj-1] != ImColorUltraWhite) {
+                                    break;
+                                }
+                            }
+                            
+                            byte prevPixel = dest[x];
+                            
+                            if (wrappedOutput) {
+                                MoveAbsRotary((0.5F+y)/dpiY);
+                                MoveAbsX(x/dpiX - acceldist[prevPixel] - scanOffset);
+                            } else {
+                                MoveAbs((x/dpiX - acceldist[prevPixel] - scanOffset), (0.5F+y)/dpiY);
+                            }
+                            if (i != 0) {
+                                MagicComment();
+                            }
+                            
+                            MoveRelX((x/dpiX - scanOffset), F[prevPixel], 0F);
+                            for (int x2 = -1; x < jj; x++) {
+                                byte pixel = dest[x];
+                                if (pixel != ImColorUltraWhite) {
+                                    if (prevPixel == ImColorUltraWhite) {
+                                        if (skipWhite && (x-x2)/dpiX >= whiteDistance) {
+                                            MoveRelX((x/dpiX - scanOffset), F[255], 0F);
+                                        } else {
+                                            if (F[pixel] > prevF) {
+                                                MoveRelX((x/dpiX - scanOffset), F[pixel], 0F);
+                                            } else {
+                                                MoveRelX((x/dpiX - scanOffset), prevF, 0F);
+                                            }
+                                        }
+                                    }
+                                    if (isImpactGraver) {
+                                        MoveRelX(((x+0.5F)/dpiX - scanOffset), F[pixel], S[pixel]);
+                                        MoveRelX(((x+1)/dpiX - scanOffset), F[pixel], 0F);
+                                    } else if (pixel != prevPixel) {
+                                        MoveRelX((x/dpiX - scanOffset), F[prevPixel], S[prevPixel]);
+                                    }
+                                } else {
+                                    if (prevPixel != ImColorUltraWhite) {
+                                        MoveRelX((x/dpiX - scanOffset), F[prevPixel], S[prevPixel]);
+                                        x2 = x;
+                                    }
+                                }
+                                prevPixel = pixel;
+                            }
+                            MoveRelX((x/dpiX - scanOffset), F[prevPixel], S[prevPixel]);
+                            MoveRelX((x/dpiX + deceldist[prevPixel] - scanOffset), F[prevPixel], 0F);
+                            MagicComment();
+                        } else {
+                            for (; x < width; x++) {
+                                if (dest[width-x-1] != ImColorUltraWhite) {
+                                    break;
+                                }
+                            }
+                            if (x >= width) {
+                                break;
+                            }
+                            for (; jj > 0; jj--) {
+                                if (dest[width-jj] != ImColorUltraWhite) {
+                                    break;
+                                }
+                            }
+                            
+                            byte prevPixel = dest[width-x-1];
+                            
+                            if (wrappedOutput) {
+                                MoveAbsRotary((0.5F+y)/dpiY);
+                                MoveAbsX((width-x)/dpiX + acceldist[prevPixel] + scanOffset);
+                            } else {
+                                MoveAbs(((width-x)/dpiX + acceldist[prevPixel] + scanOffset), (0.5F+y)/dpiY);
+                            }
+                            if (i != 0) {
+                                MagicComment();
+                            }
+                            
+                            MoveRelX(((width-x)/dpiX + scanOffset), F[prevPixel], 0F);
+                            for (int x2 = -1; x < jj; x++) {
+                                byte pixel = dest[width-x-1];
+                                if (pixel != ImColorUltraWhite) {
+                                    if (prevPixel == ImColorUltraWhite) {
+                                        if (skipWhite && (x-x2)/dpiX >= whiteDistance) {
+                                            MoveRelX(((width-x)/dpiX + scanOffset), F[255], 0F);
+                                        } else {
+                                            if (F[pixel] > prevF) {
+                                                MoveRelX(((width-x)/dpiX + scanOffset), F[pixel], 0F);
+                                            } else {
+                                                MoveRelX(((width-x)/dpiX + scanOffset), prevF, 0F);
+                                            }
+                                        }
+                                    }
+                                    if (isImpactGraver) {
+                                        MoveRelX(((width-x-0.5F)/dpiX + scanOffset), F[pixel], S[pixel]);
+                                        MoveRelX(((width-x-1)/dpiX + scanOffset), F[pixel], 0F);
+                                    } else if (pixel != prevPixel) {
+                                        MoveRelX(((width-x)/dpiX + scanOffset), F[prevPixel], S[prevPixel]);
+                                    }
+                                } else {
+                                    if (prevPixel != ImColorUltraWhite) {
+                                        MoveRelX(((width-x)/dpiX + scanOffset), F[prevPixel], S[prevPixel]);
+                                        x2 = x;
+                                    }
+                                }
+                                prevPixel = pixel;
+                            }
+                            MoveRelX(((width-x)/dpiX + scanOffset), F[prevPixel], S[prevPixel]);
+                            MoveRelX(((width-x)/dpiX - deceldist[prevPixel] + scanOffset), F[prevPixel], 0F);
+                            MagicComment();
+                        }
+                        if (!SendToGrblController()) {
+                            return;
+                        }
+                        
+                        if (bidirectional) {
+                            forward = !forward;
+                        }
+                    }
+                }
+                
+                ((BackgroundWorker)sender).ReportProgress(1000, null);
+                
+                if (wrappedOutput) {
+                    MoveAbsX(-left);
+                    MoveAbsRotary(-top/multiplierY);
+                } else {
+                    if (isImpactGraver) {
+                        MoveAbsX(0F);
+                    } else {
+                        MoveAbs(-left, -top/multiplierY);
+                    }
+                }
+                ProgramEnd();
+                
+                if (!SendToGrblController()) {
+                    return;
+                }
             }
-            ProgramEnd();
             
-            if (!SendToGrblController()) {
-                return;
-            }
-            
-            ((BackgroundWorker)sender).ReportProgress(1000, null);
-            
-            i = -1;
             SendToGrblController();
-            
             return;
         } finally {
             outFile.Close();
@@ -1086,8 +992,14 @@ partial class image2gcode {
     
     private void BackgroundWorker2RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
         progressForm1.Close();
-        if (e.Error != null) {
-            MessageBox.Show(this, e.Error.Message, AppTitle, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        
+        Exception err = e.Error;
+        if (err != null) {
+            if (err is WarningException) {
+                MessageBox.Show(this, err.Message, AppTitle, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            } else {
+                MessageBox.Show(this, err.Message, AppTitle, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

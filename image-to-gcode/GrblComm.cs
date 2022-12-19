@@ -8,10 +8,6 @@ partial class image2gcode {
     private GrblSettingsForm grblSettings1;
     private ProgressForm2 progressForm3;
     
-    private enum GrblOptions {
-        None = 0,
-    }
-    
     private void SettingsToolStripMenuItemClick(object sender, EventArgs e) {
         try {
             progressForm3.Left = (this.Left + (this.Width - progressForm3.Width)/2);
@@ -28,11 +24,6 @@ partial class image2gcode {
                 serialPort1.Open();
                 
                 Grbl_GetSync();
-                
-                string fwVersion = null;
-                GrblOptions fwFlags = GrblOptions.None;
-                
-                Grbl_GetBuildInfo(ref fwVersion, ref fwFlags);
                 
                 serialPort1.Write("$$\n");
                 
@@ -75,8 +66,6 @@ partial class image2gcode {
                     
                     NEXT_LINE:;
                 }
-                
-                grblSettings1.label23.Text = (resources.GetString("GrblSet_FwVer", culture) + " " + fwVersion);
             } catch (TimeoutException) {
                 MessageBox.Show(this, resources.GetString("Grbl_NotResponding", culture), AppTitle, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -175,45 +164,6 @@ partial class image2gcode {
                 return true;
             }
             
-            throw new Exception(resources.GetString("Grbl_NotResponding", culture));
-        } finally {
-            serialPort1.ReadTimeout = prevReadTimeout;
-        }
-    }
-    
-    private int Grbl_GetBuildInfo(ref string fwVersion, ref GrblOptions fwFlags) {
-        int prevReadTimeout = serialPort1.ReadTimeout;
-        try {
-            serialPort1.ReadTimeout = 100;
-            serialPort1.Write("$I\n");
-            
-            string[] resp = serialPort1.ReadTo("ok\r\n").Split(new string[] { "]\r\n", }, 4, StringSplitOptions.None);
-            if (resp.Length != 3) {
-                throw new Exception(resources.GetString("Grbl_InvalidResponse", culture));
-            }
-            
-            string[] ver = resp[0].Split(new string[] { ":", ".", }, 5, StringSplitOptions.None);
-            if (ver.Length != 4) {
-                throw new Exception(resources.GetString("Grbl_InvalidResponse", culture));
-            }
-            if (ver[0] != "[VER") {
-                throw new Exception(resources.GetString("Grbl_InvalidResponse", culture));
-            }
-            
-            fwVersion = (ver[1] + "." + ver[2] + " (" + ver[3].Insert(6, "-").Insert(4, "-") + ")");
-            
-            string[] opt = resp[1].Split(new string[] { ":", ",", }, 4, StringSplitOptions.None);
-            if (opt.Length != 3) {
-                throw new Exception(resources.GetString("Grbl_InvalidResponse", culture));
-            }
-            if (opt[0] != "[OPT") {
-                throw new Exception(resources.GetString("Grbl_InvalidResponse", culture));
-            }
-            
-            fwFlags = GrblOptions.None;
-            
-            return Int32.Parse(opt[2], invariantCulture);
-        } catch (TimeoutException) {
             throw new Exception(resources.GetString("Grbl_NotResponding", culture));
         } finally {
             serialPort1.ReadTimeout = prevReadTimeout;

@@ -9,25 +9,15 @@ partial class image2gcode {
     private RegistryKey[] preset = new RegistryKey[PresetCount];
     
     private enum MachineType {
-        Invalid = -1,
-        NichromeBurner,
         LaserEngraver,
+        NichromeBurner,
         ImpactGraver,
     }
     
-    private enum Origin {
-        Invalid = -1,
-        TopRight,
-        TopLeft,
-        BottomLeft,
-        BottomRight,
-    }
-    
-    private const int PresetFileSize = ((13 + 4*27 + 3) / 2 * 2);
+    private const int PresetFileSize = ((12 + 4*26 + 3) / 2 * 2);
     
     private string presetName = "";
-    private MachineType machineType = MachineType.Invalid;
-    private Origin machineOrigin = Origin.Invalid;
+    private MachineType machineType = MachineType.LaserEngraver;
     
     private unsafe void LoadPreset(int idx, byte[] buf = null) {
         if (idx == -2) {
@@ -51,23 +41,20 @@ partial class image2gcode {
         }
         
         machineType = (MachineType)ReadByte("MachineType", (int)MachineType.LaserEngraver);
-        machineOrigin = (Origin)ReadByte("MachineOrigin", (int)Origin.BottomLeft);
         gcG0Speed = ReadFloat("G0Speed", 12000F);
-        gcGoToNextLine = (GoToNextLineType)ReadByte("GoToNextLine", (int)GoToNextLineType.XYatTheSameTime);
-        gcReturnToOrigin = (ReturnToOriginType)ReadByte("ReturnToOrigin", (int)ReturnToOriginType.XYatTheSameTime);
-        gcDontReturnY = (ReadByte("DontReturnY", 0) != 0);
-        
-        wrappedOutputDialog1.textBox1.Text = ReadFloat("MmPerRevolutionX", 360F).ToString();
-        wrappedOutputDialog1.textBox2.Text = ReadFloat("MmPerRevolutionY", 360F).ToString();
+        gcRotarySpeed = ReadFloat("RotarySpeed", 1500F);
+        gcAccel = ReadFloat("Accel", 3000F);
+        gcNichromeOnOffCommand = (NichromeControl)ReadByte("NichromeOnOffCommand", (int)NichromeControl.Default_M3_M5);
+        gcBurnFromBottomToTop = (ReadByte("BurnFromBottomToTop", 0) != 0);
+        gcDontReturnY = (ReadByte("DontReturnY", 1) != 0);
         
         textBox5.Text = ReadFloat("Speed", 1200F).ToString();
         textBox6.Text = ReadFloat("Power", 255F).ToString();
-        textBox7.Text = ReadFloat("Accel", 3000F).ToString();
-        textBox8.Text = ReadFloat("Shift", 0F).ToString();
         
+        comboBox9.Text = ReadByte("NumberOfPasses", 1).ToString();
         textBox9.Text = ReadFloat("HeatDelay", 7F).ToString();
-        
         checkBox12.Checked = (ReadByte("AirAssist", 0) != 0);
+        
         checkBox6.Checked = (ReadByte("SkipWhite", 1) != 0);
         textBox10.Text = ReadFloat("WhiteSpeed", 4000F).ToString();
         textBox23.Text = ReadFloat("WhiteDistance", 5F).ToString();
@@ -99,59 +86,62 @@ partial class image2gcode {
         panel2.Invalidate(false);
         
         checkBox7.Checked = (ReadByte("Bidirectional", 1) != 0);
-        checkBox8.Checked = (ReadByte("BurnToTheStrip", 1) != 0);
         
         comboBox5.SelectedItem = (CleaningStrategy)ReadByte("CleaningStrategy", (int)CleaningStrategy.Always);
         comboBox6.Text = ReadByte("CleaningRowsCount", 2).ToString();
-        textBox16.Text = ReadFloat("CleaningDistance", 500F).ToString();
-        comboBox7.SelectedItem = (StripPositionType)ReadByte("StripPosition", (int)StripPositionType.Right);
         textBox17.Text = ReadFloat("StripWidth", 20F).ToString();
         textBox18.Text = ReadFloat("StripSpeed", 1000F).ToString();
         textBox19.Text = ReadFloat("CleaningFieldWidth", 5F).ToString();
         textBox20.Text = ReadFloat("CleaningFieldSpeed", 5000F).ToString();
         comboBox8.Text = ReadByte("NumberOfCleaningCycles", 2).ToString();
         
+        checkBox3.Checked = (ReadByte("WrappedOutput", 0) != 0);
+        textBox7.Text = ReadFloat("MmPerRevolution", 360F).ToString();
+        textBox8.Text = ReadFloat("CylinderDiameter", 50F).ToString();
+        
         if (idx != -1) {
-            textBox22.Text = preset[idx].GetString("PresetName", resources.GetString("DefaultPresetName", culture));
+            textBox22.Text = preset[idx].GetString("PresetName", ("Preset" + (1+idx).ToString(invariantCulture)));
         } else {
             textBox22.Text = Path.GetFileNameWithoutExtension(openFileDialog3.FileName);
         }
         
         SKIP_PRESET_LOAD:
         bool isNichromeBurner = (machineType == MachineType.NichromeBurner);
-        bool isNotNichromeBurner = (machineType != MachineType.NichromeBurner);
         bool isImpactGraver = (machineType == MachineType.ImpactGraver);
-        bool isNotImpactGraver = (machineType != MachineType.ImpactGraver);
-        bool isLaserEngraver = (!(isNichromeBurner || isImpactGraver));
-        //bool isNotLaserEngraver = (isNichromeBurner || isImpactGraver);
+        bool isLaserEngraver = !(isNichromeBurner || isImpactGraver);
+        
+        resetSpeedGraphToolStripMenuItem.Visible = !isImpactGraver;
+        resetPowerGraphToolStripMenuItem.Visible = !isNichromeBurner;
+        rotarySpeedToolStripMenuItem.Visible = isLaserEngraver;
+        accelToolStripMenuItem.Visible = !isNichromeBurner;
+        nichromeOnOffCommandToolStripMenuItem.Visible = isNichromeBurner;
+        doNotReturnYToolStripMenuItem.Visible = isNichromeBurner;
         
         tableLayoutPanel4.SuspendLayout2();
-        label23.Visible = isNotNichromeBurner;
-        textBox7.Visible = isNotNichromeBurner;
-        label24.Visible = isNotNichromeBurner;
-        textBox8.Visible = isNotNichromeBurner;
+        tableLayoutPanel29.Visible = isImpactGraver;
         tableLayoutPanel18.Visible = isNichromeBurner;
         checkBox12.Visible = isLaserEngraver;
-        checkBox6.Visible = isNotNichromeBurner;
-        label44.Visible = isNotNichromeBurner;
-        textBox23.Visible = isNotNichromeBurner;
-        tableLayoutPanel20.Visible = isNotImpactGraver;
-        tableLayoutPanel21.Visible = isNotNichromeBurner;
+        checkBox6.Visible = !isNichromeBurner;
+        label44.Visible = !isNichromeBurner;
+        textBox23.Visible = !isNichromeBurner;
+        tableLayoutPanel20.Visible = !isImpactGraver;
+        tableLayoutPanel21.Visible = !isNichromeBurner;
         tableLayoutPanel26.Visible = isNichromeBurner;
-        label43.Visible = isNotNichromeBurner;
-        textBox21.Visible = isNotNichromeBurner;
-        checkBox11.Visible = isNotNichromeBurner;
+        tableLayoutPanel11.Visible = isLaserEngraver;
         tableLayoutPanel4.ResumeLayout2();
         
         label21.Enabled = (im1bitPalette || isImpactGraver);
         textBox5.Enabled = (im1bitPalette || isImpactGraver);
-        label22.Enabled = (im1bitPalette || isNichromeBurner);
-        textBox6.Enabled = (im1bitPalette || isNichromeBurner);
+        if (isNichromeBurner) {
+            label22.Enabled = (gcNichromeOnOffCommand < NichromeControl.OUT2_M8_M9);
+            textBox6.Enabled = (gcNichromeOnOffCommand < NichromeControl.OUT2_M8_M9);
+        } else {
+            label22.Enabled = im1bitPalette;
+            textBox6.Enabled = im1bitPalette;
+        }
         tableLayoutPanel19.Enabled = (gcSkipWhite || isNichromeBurner);
-        label43.Enabled = isLaserEngraver;
-        textBox21.Enabled = isLaserEngraver;
         
-        bWorkerFlags = BWorkerFlagDoWork;
+        bWorkerFlags = (BWorkerFlags.CalcJobTime|BWorkerFlags.RedrawOrigin);
     }
     
     private unsafe void SavePreset(int idx, byte[] buf = null) {
@@ -178,23 +168,20 @@ partial class image2gcode {
         }
         
         WriteByte("MachineType", machineType);
-        WriteByte("MachineOrigin", machineOrigin);
         WriteFloat("G0Speed", gcG0Speed);
-        WriteByte("GoToNextLine", gcGoToNextLine);
-        WriteByte("ReturnToOrigin", gcReturnToOrigin);
+        WriteFloat("RotarySpeed", gcRotarySpeed);
+        WriteFloat("Accel", gcAccel);
+        WriteByte("NichromeOnOffCommand", gcNichromeOnOffCommand);
+        WriteBoolean("BurnFromBottomToTop", gcBurnFromBottomToTop);
         WriteBoolean("DontReturnY", gcDontReturnY);
-        
-        WriteFloat("MmPerRevolutionX", mmPerRevolutionX);
-        WriteFloat("MmPerRevolutionY", mmPerRevolutionY);
         
         WriteFloat("Speed", gcSpeed);
         WriteFloat("Power", gcPower);
-        WriteFloat("Accel", gcAccel);
-        WriteFloat("Shift", gcShift);
         
+        WriteByte("NumberOfPasses", gcNumberOfPasses);
         WriteFloat("HeatDelay", gcHeatDelay);
-        
         WriteBoolean("AirAssist", gcAirAssist);
+        
         WriteBoolean("SkipWhite", gcSkipWhite);
         WriteFloat("WhiteSpeed", gcWhiteSpeed);
         WriteFloat("WhiteDistance", gcWhiteDistance);
@@ -214,17 +201,18 @@ partial class image2gcode {
         WriteFloat("PowerGraphPt2Y", gcPowerGraph[5]);
         
         WriteBoolean("Bidirectional", gcBidirectional);
-        WriteBoolean("BurnToTheStrip", gcBurnToTheStrip);
         
         WriteByte("CleaningStrategy", gcCleaningStrategy);
         WriteByte("CleaningRowsCount", gcCleaningRowsCount);
-        WriteFloat("CleaningDistance", gcCleaningDistance);
-        WriteByte("StripPosition", gcStripPosition);
         WriteFloat("StripWidth", gcStripWidth);
         WriteFloat("StripSpeed", gcStripSpeed);
         WriteFloat("CleaningFieldWidth", gcCleaningFieldWidth);
         WriteFloat("CleaningFieldSpeed", gcCleaningFieldSpeed);
         WriteByte("NumberOfCleaningCycles", gcNumberOfCleaningCycles);
+        
+        WriteBoolean("WrappedOutput", gcWrappedOutput);
+        WriteFloat("MmPerRevolution", mmPerRevolution);
+        WriteFloat("CylinderDiameter", cylinderDiameter);
         
         if (idx != -1) {
             preset[idx].SetString("PresetName", presetName);

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -18,7 +17,7 @@ using System.Windows.Forms;
 
 using Microsoft.Win32;
 
-[assembly: AssemblyTitle(image2gcode.AppTitle + " v" + image2gcode.AppVersion)]
+[assembly: AssemblyTitle(image2gcode.AppTitle)]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany(image2gcode.AppAuthor)]
@@ -33,15 +32,14 @@ using Microsoft.Win32;
 
 partial class image2gcode:Form {
     public const string AppTitle = "image2gcode";
-    public const string AppVersion = "3.1.4";
-    public const string AppVersionBuild = "2022-03-12";
+    public const string AppVersion = "3.2.0";
+    public const string AppVersionBuild = "2022-12-17";
     public const string AppAuthor = "Artur Kurpukov";
-    public const string AppCopyright = "Copyright (C) 2017-2022 Artur Kurpukov";
-    private const string SettingsVersion = "3.1";
+    public const string AppCopyright = "Copyright (C) 2017-2023 Artur Kurpukov";
+    private const string SettingsVersion = "3.2";
     
     private const float PI = 3.1415926535897931F;
     private const float MmPerInch = 25.4F;
-    private const int NaN = -4194304;
     
     private const int BezierSegmentsCount = 1000;
     
@@ -51,7 +49,6 @@ partial class image2gcode:Form {
     private const byte ImColorWhite = (254/ImColorStep*ImColorStep);
     private const int ImColorCount = (ImColorWhite/ImColorStep+1);
     
-    private const int PreviewCount = 5;
     private const int PresetCount = 14;
     
     private readonly object imResizeLock = new object();
@@ -61,8 +58,8 @@ partial class image2gcode:Form {
     private readonly ResourceManager resources = new ResourceManager(typeof(I2GResources));
     private readonly EventWaitHandle bWorkerWaitHandle = new EventWaitHandle(true, EventResetMode.AutoReset, null);
     
-    private readonly Dictionary<string, Image> bitmapThumbnails = new Dictionary<string, Image>(0, null);
-    private readonly Dictionary<string, Stream> bitmapTextures = new Dictionary<string, Stream>(0, null);
+    private readonly Font regularFont = new Font("Segoe UI", 9F, FontStyle.Regular);
+    private readonly Font boldFont = new Font("Segoe UI", 9F, FontStyle.Bold);
     
     private RegistryKey settings;
     
@@ -93,9 +90,6 @@ partial class image2gcode:Form {
     
     private StreamReader customGraphs;
     
-    private int prevPreview = -2;
-    private int activePreview;
-    
     private int prevPreset = -1;
     private int activePreset;
     
@@ -104,25 +98,24 @@ partial class image2gcode:Form {
     
     private bool bWorkerIsBusy = true;
     
-    private const int BWorkerFlagDoWork = 0x4000;
-    private const int BWorkerFlagImageChanged = 0x2000;
-    private const int BWorkerFlagBackgroundChanged = 0x400000;
-    private const int BWorkerFlagPreviewChanged = 0x200000;
-    private const int BWorkerFlagRedrawOrigin = 0x100000;
-    private const int BWorkerFlagExit = 0x1000;
+    [Flags]
+    private enum BWorkerFlags {
+        ImageChanged = 0x2000,
+        CalcJobTime = 0x4000,
+        RedrawPreview = 0x200000,
+        RedrawOrigin = 0x100000,
+        Exit = 0x1000,
+    }
     
-    private int _bWorkerFlags = 0;
-    private int bWorkerFlags {
+    private BWorkerFlags _bWorkerFlags = 0;
+    private BWorkerFlags bWorkerFlags {
         set
         {
-            if (value == -1) {
-                _bWorkerFlags = ~BWorkerFlagExit;
-            } else {
-                if (value == 0) {
-                    return;
-                }
-                _bWorkerFlags |= value;
+            if (value == 0) {
+                return;
             }
+            
+            _bWorkerFlags |= value;
             bWorkerWaitHandle.Set();
         }
     }
@@ -135,6 +128,7 @@ partial class image2gcode:Form {
     }
     
     public image2gcode() {
+        this.Font = new Font("Segoe UI", 9F);
         InitializeComponent();
         
         openFileDialog1.Title = AppTitle;
@@ -149,14 +143,11 @@ partial class image2gcode:Form {
         
         x4axisToolStripMenuItem.Tag = new float[] { 4000F, 2820F, 350F, 0.206F, 0.279F, 0.168F, 0.912F, };
         
-        button1.Tag = RotateFlipType.Rotate270FlipNone;
-        button2.Tag = RotateFlipType.RotateNoneFlipXY;
-        button3.Tag = RotateFlipType.Rotate90FlipNone;
-        button4.Tag = RotateFlipType.RotateNoneFlipX;
-        button5.Tag = RotateFlipType.RotateNoneFlipY;
-        
-        comboBox12.SelectedIndex = 0;
-        comboBox13.SelectedItem = WrapMode.Tile;
+        rotate270ToolStripMenuItem.Tag = RotateFlipType.Rotate270FlipNone;
+        rotate90ToolStripMenuItem.Tag = RotateFlipType.Rotate90FlipNone;
+        flipXYToolStripMenuItem.Tag = RotateFlipType.RotateNoneFlipXY;
+        flipXToolStripMenuItem.Tag = RotateFlipType.RotateNoneFlipX;
+        flipYToolStripMenuItem.Tag = RotateFlipType.RotateNoneFlipY;
         
         panel1.Tag = gcSpeedGraph;
         panel2.Tag = gcPowerGraph;
@@ -166,7 +157,7 @@ partial class image2gcode:Form {
     
     private void Image2gcodeLoad(object sender, EventArgs e) {
         for (int i = 0; i < ImColorCount; i++) {
-            gvColors[i] = Color.FromArgb(-16777216 + i*ImColorStep*65536 + i*ImColorStep*256 + i*ImColorStep);
+            gvBrushes[i] = new SolidBrush(Color.FromArgb(-16777216 + i*ImColorStep*65536 + i*ImColorStep*256 + i*ImColorStep));
         }
         
         settings = Registry.CurrentUser.CreateSubKey("SOFTWARE\\" + AppTitle + "\\v" + SettingsVersion + "\\Settings");
@@ -238,78 +229,11 @@ partial class image2gcode:Form {
         comboBox3.Text = settings.GetSingle("ImageDpiY", 200F).ToString();
         checkBox4.Checked = (settings.GetInt32("ImageLockDpiY", 1) != 0);
         
-        comboBox4.SelectedItem = (InterpolationMode)settings.GetInt32("ImageInterpolation", (int)InterpolationMode.Bicubic);
+        checkBox5.CheckedChanged += (sender2, e2) => {
+            ((CheckBox)sender2).ImageIndex = (((CheckBox)sender2).Checked ? 1 : 0);
+        };
         
-        string[] sArray;
-        try {
-            sArray = Directory.GetFiles("BitmapTextures", "*.jpg", SearchOption.AllDirectories);
-        } catch {
-            sArray = new string[0];
-        }
-        
-        foreach (string file in sArray) {
-            try {
-                string key = Path.GetFileNameWithoutExtension(file);
-                FileStream inFile = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read);
-                
-                try {
-                    Image thumbnail;
-                    using (Image image = Image.FromStream(inFile, false, true)) {
-                        if (image.Height < (2*MinImageSize) || image.Width < (2*MinImageSize)) {
-                            throw new ArgumentException();
-                        }
-                        
-                        thumbnail = new Bitmap(32, 32, PixelFormat.Format24bppRgb);
-                        using (Graphics g = Graphics.FromImage(thumbnail)) {
-                            g.DrawImage(image, 0, 0, 32, 32);
-                        }
-                    }
-                    
-                    bitmapThumbnails[key] = thumbnail;
-                    bitmapTextures[key] = inFile;
-                } catch {
-                    inFile.Close();
-                }
-            } catch {
-            }
-        }
-        
-        foreach (string key in bitmapTextures.Keys) {
-            comboBox12.Items.Add(key);
-        }
-        
-        for (int i = 0; i < PreviewCount; i++) {
-            string idx = (1+i).ToString(invariantCulture);
-            
-            string background = settings.GetString(("PreviewBackground" + idx), "");
-            if (bitmapTextures.ContainsKey(background)) {
-                previewBackground[i] = background;
-            }
-            
-            WrapMode wrapMode = (WrapMode)settings.GetInt32(("PreviewWrapMode" + idx), -1);
-            if (wrapMode < WrapMode.Tile || wrapMode >= WrapMode.Clamp) {
-                previewWrapMode[i] = WrapMode.TileFlipXY;
-            } else {
-                previewWrapMode[i] = wrapMode;
-            }
-            
-            int scale = settings.GetInt32(("PreviewSize" + idx), 100);
-            if (scale < 50 || scale > 200) {
-                previewSize[i] = 100;
-            } else {
-                previewSize[i] = scale;
-            }
-            
-            previewBgColor[i] = Color.FromArgb(settings.GetInt32(("PreviewBgColor" + idx), -1));
-            previewDotColor[i] = Color.FromArgb(settings.GetInt32(("PreviewDotColor" + idx), -16777216));
-        }
-        
-        activePreview = settings.GetInt32("ActivePreview", -2);
-        if (activePreview < -1 || activePreview >= PreviewCount) {
-            activePreview = -1;
-        }
-        
-        PreviewButtonClick(tableLayoutPanel40.Controls[activePreview+1], EventArgs.Empty);
+        comboBox4.SelectedItem = (InterpolationMode)settings.GetInt32("ImageInterpolation", (int)InterpolationMode.HighQualityBicubic);
         
         presetCheckedIcon = (Image)resources.GetObject("PresetCheckedIcon", invariantCulture);
         
@@ -321,9 +245,12 @@ partial class image2gcode:Form {
             format.LineAlignment = StringAlignment.Center;
             
             for (int i = 0; i < PresetCount; i++) {
-                string idx = i.ToString("00", invariantCulture);
+                string idx = (1+i).ToString("00", invariantCulture);
                 
                 preset[i] = Registry.CurrentUser.CreateSubKey("SOFTWARE\\" + AppTitle + "\\v" + SettingsVersion + "\\Preset" + idx);
+                
+                tableLayoutPanel31.Controls[i].Text = idx;
+                tableLayoutPanel31.Controls[i].Tag = i;
                 
                 presetIcons[i] = new Bitmap(16, 16, PixelFormat.Format32bppArgb);
                 using (Graphics g = Graphics.FromImage(presetIcons[i])) {
@@ -409,33 +336,12 @@ partial class image2gcode:Form {
         toolStripSeparator14.Visible = (resetSpeedGraphToolStripMenuItem.DropDownItems.Count > 3);
         toolStripSeparator15.Visible = (resetPowerGraphToolStripMenuItem.DropDownItems.Count > 2);
         
-        wrappedOutputDialog1 = new WrappedOutputDialog();
-        wrappedOutputDialog1.Load += (sender2, e2) => {
-            if (wrappingAxis == GcAxis.X) {
-                ((WrappedOutputDialog)sender2).label5.Text = String.Format(culture, resources.GetString("WO_label5", culture), (imWidth/imDpiX*MmPerInch * 360F / (cylinderDiameter*PI)));
-            } else {
-                ((WrappedOutputDialog)sender2).label5.Text = String.Format(culture, resources.GetString("WO_label5", culture), (imHeight/imDpiY*MmPerInch * 360F / (cylinderDiameter*PI)));
-            }
-        };
-        wrappedOutputDialog1.comboBox1.SelectedIndexChanged += Control_ValueChanged;
-        wrappedOutputDialog1.textBox1.TextChanged += Control_ValueChanged;
-        wrappedOutputDialog1.textBox2.TextChanged += Control_ValueChanged;
-        wrappedOutputDialog1.textBox3.TextChanged += Control_ValueChanged;
-        
-        wrappedOutputDialog1.comboBox1.SelectedItem = (GcAxis)settings.GetInt32("WrappingAxis", (int)GcAxis.Y);
-        wrappedOutputDialog1.textBox3.Text = settings.GetSingle("CylinderDiameter", 80F).ToString();
-        
         activePreset = settings.GetInt32("ActivePreset", -1);
         if (activePreset < 0 || activePreset >= PresetCount) {
             activePreset = 0;
         }
         
         PresetButtonClick(tableLayoutPanel31.Controls[activePreset], EventArgs.Empty);
-        
-        checkBox10.Checked = (settings.GetInt32("GcodePrependFrame", 0) != 0);
-        textBox15.Text = settings.GetSingle("GcodeFrameSpeed", 1000F).ToString();
-        textBox21.Text = settings.GetSingle("GcodeFramePower", 0F).ToString();
-        checkBox11.Checked = (settings.GetInt32("GcodeFrameWorkArea", 0) != 0);
         
         graphView1 = new GraphView();
         graphView1.Width = settings.GetInt32("GraphViewWidth", graphView1.Width);
@@ -530,9 +436,6 @@ partial class image2gcode:Form {
             }
         };
         
-        progressForm1.button1.Click += (sender2, e2) => serialPort1.Write(new byte[] { (byte)'~', }, 0, 1);
-        progressForm1.button2.Click += (sender2, e2) => serialPort1.Write(new byte[] { (byte)'!', }, 0, 1);
-        
         progressForm3 = new ProgressForm2(resources.GetString("PF_RetrievingGrblSettings", culture));
         progressForm3.Load += (sender2, e2) => {
             ((Form)sender2).Left = (this.Left + (this.Width - ((Form)sender2).Width)/2);
@@ -584,7 +487,7 @@ partial class image2gcode:Form {
         tableLayoutPanel1.Enabled = false;
         statusStrip1.Enabled = false;
         
-        bWorkerFlags = BWorkerFlagExit;
+        bWorkerFlags = BWorkerFlags.Exit;
         while (backgroundWorker1.IsBusy) {
             Application.DoEvents();
         }
@@ -592,9 +495,6 @@ partial class image2gcode:Form {
         toolStripStatusLabel1.Text = resources.GetString("Status_AppIsClosing", culture);
         
         customGraphs.Close();
-        foreach (Stream fileStream in bitmapTextures.Values) {
-            fileStream.Close();
-        }
         
         Marshal.FreeHGlobal((IntPtr)imColorTable);
         
@@ -635,11 +535,6 @@ partial class image2gcode:Form {
             settings.SetInt32("WindowTop", this.Top);
         }
         
-        settings.SetInt32("GraphViewWidth", graphView1.Width);
-        settings.SetInt32("GraphViewHeight", graphView1.Height);
-        settings.SetInt32("GraphViewLeft", graphView1.Left);
-        settings.SetInt32("GraphViewTop", graphView1.Top);
-        
         settings.SetInt32("UICulture", culture.LCID);
         
         settings.SetString("ComPort", comPort);
@@ -652,30 +547,13 @@ partial class image2gcode:Form {
         settings.SetInt32("ImageLockDpiY", imLockDpiY);
         settings.SetInt32("ImageInterpolation", imInterpolation);
         
-        settings.SetInt32("ActivePreview", activePreview);
-        for (int i = 0; i < PreviewCount; i++) {
-            string idx = (1+i).ToString(invariantCulture);
-            if (previewBackground[i] == null) {
-                settings.SetString(("PreviewBackground" + idx), "");
-            } else {
-                settings.SetString(("PreviewBackground" + idx), previewBackground[i]);
-            }
-            settings.SetInt32(("PreviewWrapMode" + idx), previewWrapMode[i]);
-            settings.SetInt32(("PreviewSize" + idx), previewSize[i]);
-            settings.SetInt32(("PreviewBgColor" + idx), previewBgColor[i].ToArgb());
-            settings.SetInt32(("PreviewDotColor" + idx), previewDotColor[i].ToArgb());
-        }
-        
         settings.SetInt32("ActivePreset", activePreset);
         SavePreset(activePreset);
         
-        settings.SetInt32("GcodePrependFrame", gcPrependFrame);
-        settings.SetSingle("GcodeFrameSpeed", gcFrameSpeed);
-        settings.SetSingle("GcodeFramePower", gcFramePower);
-        settings.SetInt32("GcodeFrameWorkArea", gcFrameWorkArea);
-        
-        settings.SetInt32("WrappingAxis", wrappingAxis);
-        settings.SetSingle("CylinderDiameter", cylinderDiameter);
+        settings.SetInt32("GraphViewWidth", graphView1.Width);
+        settings.SetInt32("GraphViewHeight", graphView1.Height);
+        settings.SetInt32("GraphViewLeft", graphView1.Left);
+        settings.SetInt32("GraphViewTop", graphView1.Top);
         
         settings.Flush();
     }
@@ -806,16 +684,15 @@ partial class image2gcode:Form {
         loadPresetToolStripMenuItem.DropDownItems[2+activePreset].Visible = false;
         savePresetToolStripMenuItem.DropDownItems[2+activePreset].Visible = false;
         
-        presetToolStripMenuItem.DropDownItems[12+activePreset].Image = presetCheckedIcon;
-        presetToolStripMenuItem.DropDownItems[12+activePreset].Text = presetName;
+        presetToolStripMenuItem.DropDownItems[13+activePreset].Image = presetCheckedIcon;
+        presetToolStripMenuItem.DropDownItems[13+activePreset].Text = presetName;
         
-        string defaultPresetName = resources.GetString("DefaultPresetName", culture);
         for (int i = 0; i < PresetCount; i++) {
             if (i == activePreset) {
                 continue;
             }
             
-            string text = preset[i].GetString("PresetName", defaultPresetName);
+            string text = preset[i].GetString("PresetName", ("Preset" + (1+i).ToString(invariantCulture)));
             
             loadPresetToolStripMenuItem.DropDownItems[2+i].Text = text;
             loadPresetToolStripMenuItem.DropDownItems[2+i].Visible = true;
@@ -823,17 +700,11 @@ partial class image2gcode:Form {
             savePresetToolStripMenuItem.DropDownItems[2+i].Text = text;
             savePresetToolStripMenuItem.DropDownItems[2+i].Visible = true;
             
-            presetToolStripMenuItem.DropDownItems[12+i].Image = presetIcons[i];
-            presetToolStripMenuItem.DropDownItems[12+i].Text = text;
+            presetToolStripMenuItem.DropDownItems[13+i].Image = presetIcons[i];
+            presetToolStripMenuItem.DropDownItems[13+i].Text = text;
         }
         
-        bool isNichromeBurner = (machineType == MachineType.NichromeBurner);
-        bool isNotNichromeBurner = (machineType != MachineType.NichromeBurner);
-        bool isNotImpactGraver = (machineType != MachineType.ImpactGraver);
-        
-        resetSpeedGraphToolStripMenuItem.Visible = isNotImpactGraver;
         resetSpeedGraphToolStripMenuItem.Enabled = !im1bitPalette;
-        resetPowerGraphToolStripMenuItem.Visible = isNotNichromeBurner;
         resetPowerGraphToolStripMenuItem.Enabled = !im1bitPalette;
         
         machineTypeToolStripMenuItem.Text = String.Format(culture, resources.GetString("Menu_MachineType", culture), machineType);
@@ -841,28 +712,28 @@ partial class image2gcode:Form {
             toolStripItem.Checked = ((MachineType)toolStripItem.Tag == machineType);
         }
         
-        originToolStripMenuItem.Text = String.Format(culture, resources.GetString("Menu_MachineOrigin", culture), machineOrigin);
-        foreach (ToolStripMenuItem toolStripItem in originToolStripMenuItem.DropDownItems) {
-            toolStripItem.Checked = ((Origin)toolStripItem.Tag == machineOrigin);
-        }
-        
         G0SpdToolStripMenuItem.Text = String.Format(culture, resources.GetString("Menu_G0Spd", culture), gcG0Speed);
         foreach (ToolStripMenuItem toolStripItem in G0SpdToolStripMenuItem.DropDownItems) {
             toolStripItem.Checked = ((float)toolStripItem.Tag == gcG0Speed);
         }
         
-        goToNextLineToolStripMenuItem.Text = String.Format(culture, resources.GetString("Menu_GoToNextLine", culture), gcGoToNextLine);
-        foreach (ToolStripMenuItem toolStripItem in goToNextLineToolStripMenuItem.DropDownItems) {
-            toolStripItem.Checked = ((GoToNextLineType)toolStripItem.Tag == gcGoToNextLine);
+        rotarySpeedToolStripMenuItem.Enabled = gcWrappedOutput;
+        rotarySpeedToolStripMenuItem.Text = String.Format(culture, resources.GetString("Menu_RotarySpeed", culture), gcRotarySpeed);
+        foreach (ToolStripMenuItem toolStripItem in rotarySpeedToolStripMenuItem.DropDownItems) {
+            toolStripItem.Checked = ((float)toolStripItem.Tag == gcRotarySpeed);
         }
         
-        returnToOriginToolStripMenuItem.Visible = isNotNichromeBurner;
-        returnToOriginToolStripMenuItem.Text = String.Format(culture, resources.GetString("Menu_ReturnToOrigin", culture), gcReturnToOrigin);
-        foreach (ToolStripMenuItem toolStripItem in returnToOriginToolStripMenuItem.DropDownItems) {
-            toolStripItem.Checked = ((ReturnToOriginType)toolStripItem.Tag == gcReturnToOrigin);
+        accelToolStripMenuItem.Text = String.Format(culture, resources.GetString("Menu_Accel", culture), gcAccel);
+        foreach (ToolStripMenuItem toolStripItem in accelToolStripMenuItem.DropDownItems) {
+            toolStripItem.Checked = ((float)toolStripItem.Tag == gcAccel);
         }
         
-        doNotReturnYToolStripMenuItem.Visible = isNichromeBurner;
+        nichromeOnOffCommandToolStripMenuItem.Text = String.Format(culture, resources.GetString("Menu_NichromeOnOffCommand", culture), gcNichromeOnOffCommand);
+        foreach (ToolStripMenuItem toolStripItem in nichromeOnOffCommandToolStripMenuItem.DropDownItems) {
+            toolStripItem.Checked = ((NichromeControl)toolStripItem.Tag == gcNichromeOnOffCommand);
+        }
+        
+        burnFromBottomToTopToolStripMenuItem.Checked = gcBurnFromBottomToTop;
         doNotReturnYToolStripMenuItem.Checked = gcDontReturnY;
     }
     
@@ -899,7 +770,7 @@ partial class image2gcode:Form {
         gcSpeedGraph[5] = tag[6];
         panel1.Invalidate(false);
         
-        bWorkerFlags = BWorkerFlagDoWork;
+        bWorkerFlags = BWorkerFlags.CalcJobTime;
     }
     
     private void ResetPowerGraphToolStripMenuItemDropDownItemClicked(object sender, ToolStripItemClickedEventArgs e) {
@@ -924,21 +795,30 @@ partial class image2gcode:Form {
         LoadPreset(-2);
     }
     
-    private void OriginToolStripMenuItemDropDownItemClicked(object sender, ToolStripItemClickedEventArgs e) {
-        machineOrigin = (Origin)e.ClickedItem.Tag;
-    }
-    
     private void G0SpdToolStripMenuItemDropDownItemClicked(object sender, ToolStripItemClickedEventArgs e) {
         gcG0Speed = (float)e.ClickedItem.Tag;
-        bWorkerFlags = BWorkerFlagDoWork;
+        bWorkerFlags = BWorkerFlags.CalcJobTime;
     }
     
-    private void GoToNextLineToolStripMenuItemDropDownItemClicked(object sender, ToolStripItemClickedEventArgs e) {
-        gcGoToNextLine = (GoToNextLineType)e.ClickedItem.Tag;
+    private void RotarySpeedToolStripMenuItemDropDownItemClicked(object sender, ToolStripItemClickedEventArgs e) {
+        gcRotarySpeed = (float)e.ClickedItem.Tag;
     }
     
-    private void ReturnToOriginToolStripMenuItemDropDownItemClicked(object sender, ToolStripItemClickedEventArgs e) {
-        gcReturnToOrigin = (ReturnToOriginType)e.ClickedItem.Tag;
+    private void AccelToolStripMenuItemDropDownItemClicked(object sender, ToolStripItemClickedEventArgs e) {
+        gcAccel = (float)e.ClickedItem.Tag;
+        bWorkerFlags = BWorkerFlags.CalcJobTime;
+    }
+    
+    private void NichromeOnOffCommandToolStripMenuItemDropDownItemClicked(object sender, ToolStripItemClickedEventArgs e) {
+        gcNichromeOnOffCommand = (NichromeControl)e.ClickedItem.Tag;
+        
+        label22.Enabled = (gcNichromeOnOffCommand < NichromeControl.OUT2_M8_M9);
+        textBox6.Enabled = (gcNichromeOnOffCommand < NichromeControl.OUT2_M8_M9);
+    }
+    
+    private void BurnFromBottomToTopToolStripMenuItemClick(object sender, EventArgs e) {
+        gcBurnFromBottomToTop = !gcBurnFromBottomToTop;
+        bWorkerFlags = (BWorkerFlags.CalcJobTime|BWorkerFlags.RedrawOrigin);
     }
     
     private void DoNotReturnYToolStripMenuItemClick(object sender, EventArgs e) {
@@ -985,34 +865,12 @@ partial class image2gcode:Form {
             return;
         }
         
-        gcInverseTime = false;
-        
-        gcMultiplierX = 1F;
-        gcMultiplierY = 1F;
-        
-        GcOutputMode outputMode = (GcOutputMode)((ToolStripItem)sender).Tag;
-        if (outputMode == GcOutputMode.WrappedOutput) {
-            if (wrappedOutputDialog1.ShowDialog(this) != DialogResult.OK) {
-                return;
-            }
-            
-            if (wrappingAxis == GcAxis.X) {
-                gcInverseTime = true;
-                gcMultiplierX = (mmPerRevolutionX / (cylinderDiameter*PI));
-            } else {
-                gcMultiplierY = (mmPerRevolutionY / (cylinderDiameter*PI));
-            }
-        }
-        
         if (saveFileDialog1.ShowDialog(this) != DialogResult.OK) {
             return;
         }
         
         progressForm1.label1.Text = resources.GetString("PF_GeneratingGCode", culture);
         progressForm1.progressBar1.Value = 0;
-        
-        progressForm1.button1.Visible = false;
-        progressForm1.button2.Visible = false;
         
         bWorker2SendToDevice = false;
         bWorker2ReadFromFile = false;
@@ -1025,33 +883,8 @@ partial class image2gcode:Form {
             return;
         }
         
-        gcInverseTime = false;
-        
-        gcMultiplierX = 1F;
-        gcMultiplierY = 1F;
-        
-        GcOutputMode outputMode = (GcOutputMode)((ToolStripItem)sender).Tag;
-        if (outputMode == GcOutputMode.WrappedOutput) {
-            if (wrappedOutputDialog1.ShowDialog(this) != DialogResult.OK) {
-                return;
-            }
-            
-            if (wrappingAxis == GcAxis.X) {
-                gcInverseTime = true;
-                gcMultiplierX = (mmPerRevolutionX / (cylinderDiameter*PI));
-            } else {
-                gcMultiplierY = (mmPerRevolutionY / (cylinderDiameter*PI));
-            }
-        }
-        
         progressForm1.label1.Text = resources.GetString("PF_Initializing", culture);
         progressForm1.progressBar1.Value = 0;
-        
-        progressForm1.button1.Visible = true;
-        progressForm1.button2.Visible = true;
-        
-        progressForm1.button1.Enabled = false;
-        progressForm1.button2.Enabled = false;
         
         bWorker2SendToDevice = true;
         bWorker2ReadFromFile = false;
@@ -1068,12 +901,6 @@ partial class image2gcode:Form {
         progressForm1.label1.Text = resources.GetString("PF_Initializing", culture);
         progressForm1.progressBar1.Value = 0;
         
-        progressForm1.button1.Visible = true;
-        progressForm1.button2.Visible = true;
-        
-        progressForm1.button1.Enabled = false;
-        progressForm1.button2.Enabled = false;
-        
         bWorker2SendToDevice = true;
         bWorker2ReadFromFile = true;
         
@@ -1088,7 +915,7 @@ partial class image2gcode:Form {
     
     private void AboutToolStripMenuItemClick(object sender, EventArgs e) {
         string s = (AppTitle + " v" + AppVersion + " (" + AppVersionBuild + ")\n\n" + AppCopyright + "\n");
-        s += ("\n" + resources.GetString("About_MakeASmallDonation", culture) + "\n");
+        //s += ("\n" + resources.GetString("About_MakeASmallDonation", culture) + "\n");
         
         string s2 = resources.GetString("TranslationAuthor", culture);
         if (s2 != null) {
@@ -1100,114 +927,90 @@ partial class image2gcode:Form {
     
     private void ApplyTranslation() {
         this.SuspendLayout2();
-        fileToolStripMenuItem.Text = resources.GetString("Menu_File", culture);
-        openToolStripMenuItem.Text = resources.GetString("Menu_Open", culture);
-        reloadToolStripMenuItem.Text = resources.GetString("Menu_Reload", culture);
-        exportToolStripMenuItem.Text = resources.GetString("Menu_SaveGCode", culture);
-        export2ToolStripMenuItem.Text = resources.GetString("Menu_SaveGCodeWO", culture);
-        closeToolStripMenuItem.Text = resources.GetString("Menu_Close", culture);
-        languageToolStripMenuItem.Text = resources.GetString("Menu_Language", culture);
-        exitToolStripMenuItem.Text = resources.GetString("Menu_Exit", culture);
-        imageToolStripMenuItem.Text = resources.GetString("Menu_Image", culture);
-        clipboardToolStripMenuItem.Text = resources.GetString("Menu_OpenClipboard", culture);
-        saveToolStripMenuItem.Text = resources.GetString("Menu_SaveImage", culture);
-        cropToolStripMenuItem.Text = resources.GetString("Menu_CropBorder", culture);
-        presetToolStripMenuItem.Text = resources.GetString("Menu_Preset", culture);
-        loadPresetToolStripMenuItem.Text = resources.GetString("Menu_PresetLoad", culture);
-        fileToolStripMenuItem1.Text = resources.GetString("Menu_PresetFile", culture);
-        savePresetToolStripMenuItem.Text = resources.GetString("Menu_PresetSave", culture);
-        fileToolStripMenuItem2.Text = resources.GetString("Menu_PresetFile", culture);
-        resetSpeedGraphToolStripMenuItem.Text = resources.GetString("Menu_SpeedGraphReset", culture);
-        defaultToolStripMenuItem1.Text = resources.GetString("Menu_GraphLinear", culture);
-        x4axisToolStripMenuItem.Text = resources.GetString("Menu_GraphDefault", culture);
-        resetPowerGraphToolStripMenuItem.Text = resources.GetString("Menu_PowerGraphReset", culture);
-        defaultToolStripMenuItem2.Text = resources.GetString("Menu_GraphLinear", culture);
-        doNotReturnYToolStripMenuItem.Text = resources.GetString("Menu_DoNotReturnY", culture);
-        machineToolStripMenuItem.Text = resources.GetString("Menu_Machine", culture);
-        sendToolStripMenuItem.Text = resources.GetString("Menu_Send", culture);
-        send2ToolStripMenuItem.Text = resources.GetString("Menu_SendWO", culture);
-        settingsToolStripMenuItem.Text = resources.GetString("Menu_Configuration", culture);
-        uploadToolStripMenuItem.Text = resources.GetString("Menu_SendFile", culture);
-        helpToolStripMenuItem.Text = resources.GetString("Menu_Help", culture);
-        websiteToolStripMenuItem.Text = resources.GetString("Menu_Website", culture);
-        CH341SERToolStripMenuItem.Text = resources.GetString("Menu_DownloadCH340Driver", culture);
-        checkForUpdatesToolStripMenuItem.Text = resources.GetString("Menu_CheckForUpdates", culture);
-        donateToolStripMenuItem.Text = resources.GetString("Menu_Donate", culture);
-        aboutToolStripMenuItem.Text = resources.GetString("Menu_About", culture);
-        openToolStripButton.Text = resources.GetString("Btn_Open", culture);
-        exportToolStripButton.Text = resources.GetString("Btn_SaveGCode", culture);
-        sendToolStripButton.Text = resources.GetString("Btn_Send", culture);
-        checkBox1.Text = resources.GetString("Im_1BitPalette", culture);
-        label1.Text = resources.GetString("Im_Dithering", culture);
-        label2.Text = resources.GetString("Im_BlackThreshold", culture);
-        checkBox2.Text = resources.GetString("Im_InvertColors", culture);
-        label4.Text = resources.GetString("Im_Brightness", culture);
-        label6.Text = resources.GetString("Im_Contrast", culture);
-        label8.Text = resources.GetString("Im_Gamma", culture);
-        label14.Text = resources.GetString("Im_SharpenForce", culture);
-        label13.Text = resources.GetString("Im_RotateFlip", culture);
-        label10.Text = resources.GetString("Im_Resolution", culture);
-        label11.Text = resources.GetString("Im_DpiX", culture);
-        label12.Text = resources.GetString("Im_DpiY", culture);
-        checkBox4.Text = resources.GetString("Im_SameAsX", culture);
-        label46.Text = resources.GetString("Im_ResultPreview", culture);
-        label47.Text = resources.GetString("Im_PreviewBackground", culture);
-        label50.Text = resources.GetString("Im_TextureWrapMode", culture);
-        label51.Text = resources.GetString("Im_TextureSize", culture);
-        label48.Text = resources.GetString("Im_PreviewColor", culture);
-        label15.Text = resources.GetString("Im_Left", culture);
-        label16.Text = resources.GetString("Im_Top", culture);
-        label17.Text = resources.GetString("Im_Width", culture);
-        label18.Text = resources.GetString("Im_Height", culture);
-        label19.Text = resources.GetString("Im_Interpolation", culture);
-        label20.Text = resources.GetString("Im_AspectRatio", culture);
-        checkBox5.Text = resources.GetString("Im_KeepAspectRatio", culture);
-        label21.Text = resources.GetString("Gc_Speed", culture);
-        label22.Text = resources.GetString("Gc_Power", culture);
-        label23.Text = resources.GetString("Gc_Accel", culture);
-        label24.Text = resources.GetString("Gc_Shift", culture);
-        label25.Text = resources.GetString("Gc_HeatDelay", culture);
-        checkBox12.Text = resources.GetString("Gc_AirAssist", culture);
-        checkBox6.Text = resources.GetString("Gc_ChangeSpeedOnWhite", culture);
-        label26.Text = resources.GetString("Gc_WhiteSpeed", culture);
-        label44.Text = resources.GetString("Gc_WhiteDistance", culture);
-        label27.Text = resources.GetString("Gc_MaxMinSpeed", culture);
-        button29.Text = resources.GetString("Gc_EditGraph", culture);
-        label29.Text = resources.GetString("Gc_MinMaxPower", culture);
-        button30.Text = resources.GetString("Gc_EditGraph", culture);
-        checkBox7.Text = resources.GetString("Gc_Bidirectional", culture);
-        checkBox8.Text = resources.GetString("Gc_BurnToTheCleaningStrip", culture);
-        label31.Text = resources.GetString("Gc_CleaningStrategy", culture);
-        label32.Text = resources.GetString("Gc_CleaningRowsCount", culture);
-        label33.Text = resources.GetString("Gc_CleaningDistance", culture);
-        label34.Text = resources.GetString("Gc_StripSide", culture);
-        label35.Text = resources.GetString("Gc_StripWidth", culture);
-        label36.Text = resources.GetString("Gc_StripSpeed", culture);
-        label37.Text = resources.GetString("Gc_CleaningField", culture);
-        label38.Text = resources.GetString("Gc_CleaningSpd", culture);
-        label39.Text = resources.GetString("Gc_CleaningCycles", culture);
-        label40.Text = resources.GetString("Gc_NumberOfPasses", culture);
-        checkBox10.Text = resources.GetString("Gc_PrependImageFrame", culture);
-        label42.Text = resources.GetString("Gc_FrameSpeed", culture);
-        label43.Text = resources.GetString("Gc_FramePower", culture);
-        checkBox11.Text = resources.GetString("Gc_FrameWorkArea", culture);
+        this.fileToolStripMenuItem.Text = resources.GetString("Menu_File", culture);
+        this.openToolStripMenuItem.Text = resources.GetString("Menu_Open", culture);
+        this.reloadToolStripMenuItem.Text = resources.GetString("Menu_Reload", culture);
+        this.exportToolStripMenuItem.Text = resources.GetString("Menu_SaveGCode", culture);
+        this.closeToolStripMenuItem.Text = resources.GetString("Menu_Close", culture);
+        this.languageToolStripMenuItem.Text = resources.GetString("Menu_Language", culture);
+        this.exitToolStripMenuItem.Text = resources.GetString("Menu_Exit", culture);
+        this.imageToolStripMenuItem.Text = resources.GetString("Menu_Image", culture);
+        this.clipboardToolStripMenuItem.Text = resources.GetString("Menu_OpenClipboard", culture);
+        this.saveToolStripMenuItem.Text = resources.GetString("Menu_SaveImage", culture);
+        this.rotate270ToolStripMenuItem.Text = resources.GetString("Menu_Rotate270", culture);
+        this.rotate90ToolStripMenuItem.Text = resources.GetString("Menu_Rotate90", culture);
+        this.flipXYToolStripMenuItem.Text = resources.GetString("Menu_Rotate180", culture);
+        this.flipXToolStripMenuItem.Text = resources.GetString("Menu_FlipX", culture);
+        this.flipYToolStripMenuItem.Text = resources.GetString("Menu_FlipY", culture);
+        this.cropToolStripMenuItem.Text = resources.GetString("Menu_CropBorder", culture);
+        this.presetToolStripMenuItem.Text = resources.GetString("Menu_Preset", culture);
+        this.loadPresetToolStripMenuItem.Text = resources.GetString("Menu_PresetLoad", culture);
+        this.fileToolStripMenuItem1.Text = resources.GetString("Menu_PresetFile", culture);
+        this.savePresetToolStripMenuItem.Text = resources.GetString("Menu_PresetSave", culture);
+        this.fileToolStripMenuItem2.Text = resources.GetString("Menu_PresetFile", culture);
+        this.resetSpeedGraphToolStripMenuItem.Text = resources.GetString("Menu_SpeedGraphReset", culture);
+        this.defaultToolStripMenuItem1.Text = resources.GetString("Menu_GraphLinear", culture);
+        this.x4axisToolStripMenuItem.Text = resources.GetString("Menu_GraphDefault", culture);
+        this.resetPowerGraphToolStripMenuItem.Text = resources.GetString("Menu_PowerGraphReset", culture);
+        this.defaultToolStripMenuItem2.Text = resources.GetString("Menu_GraphLinear", culture);
+        this.burnFromBottomToTopToolStripMenuItem.Text = resources.GetString("Menu_BurnFromBottomToTop", culture);
+        this.doNotReturnYToolStripMenuItem.Text = resources.GetString("Menu_DoNotReturnY", culture);
+        this.machineToolStripMenuItem.Text = resources.GetString("Menu_Machine", culture);
+        this.sendToolStripMenuItem.Text = resources.GetString("Menu_Send", culture);
+        this.settingsToolStripMenuItem.Text = resources.GetString("Menu_Configuration", culture);
+        this.uploadToolStripMenuItem.Text = resources.GetString("Menu_SendFile", culture);
+        this.helpToolStripMenuItem.Text = resources.GetString("Menu_Help", culture);
+        this.websiteToolStripMenuItem.Text = resources.GetString("Menu_Website", culture);
+        this.CH341SERToolStripMenuItem.Text = resources.GetString("Menu_DownloadCH340Driver", culture);
+        this.aboutToolStripMenuItem.Text = resources.GetString("Menu_About", culture);
+        this.openToolStripButton.Text = resources.GetString("Btn_Open", culture);
+        this.exportToolStripButton.Text = resources.GetString("Btn_SaveGCode", culture);
+        this.sendToolStripButton.Text = resources.GetString("Btn_Send", culture);
+        this.checkBox1.Text = resources.GetString("Im_1BitPalette", culture);
+        this.label1.Text = resources.GetString("Im_Dithering", culture);
+        this.label2.Text = resources.GetString("Im_BlackThreshold", culture);
+        this.checkBox2.Text = resources.GetString("Im_InvertColors", culture);
+        this.label4.Text = resources.GetString("Im_Brightness", culture);
+        this.label6.Text = resources.GetString("Im_Contrast", culture);
+        this.label8.Text = resources.GetString("Im_Gamma", culture);
+        this.label14.Text = resources.GetString("Im_SharpenForce", culture);
+        this.label10.Text = resources.GetString("Im_Resolution", culture);
+        this.label11.Text = resources.GetString("Im_DpiX", culture);
+        this.label12.Text = resources.GetString("Im_DpiY", culture);
+        this.checkBox4.Text = resources.GetString("Im_SameAsX", culture);
+        this.label15.Text = resources.GetString("Im_Left", culture);
+        this.label16.Text = resources.GetString("Im_Top", culture);
+        this.label17.Text = resources.GetString("Im_Width", culture);
+        this.label18.Text = resources.GetString("Im_Height", culture);
+        this.label19.Text = resources.GetString("Im_Interpolation", culture);
+        this.label21.Text = resources.GetString("Gc_Speed", culture);
+        this.label22.Text = resources.GetString("Gc_Power", culture);
+        this.label24.Text = resources.GetString("Gc_NumberOfPasses", culture);
+        this.label25.Text = resources.GetString("Gc_HeatDelay", culture);
+        this.checkBox12.Text = resources.GetString("Gc_AirAssist", culture);
+        this.checkBox6.Text = resources.GetString("Gc_ChangeSpeedOnWhite", culture);
+        this.label26.Text = resources.GetString("Gc_WhiteSpeed", culture);
+        this.label44.Text = resources.GetString("Gc_WhiteDistance", culture);
+        this.label27.Text = resources.GetString("Gc_MaxMinSpeed", culture);
+        this.button29.Text = resources.GetString("Gc_EditGraph", culture);
+        this.label29.Text = resources.GetString("Gc_MinMaxPower", culture);
+        this.button30.Text = resources.GetString("Gc_EditGraph", culture);
+        this.checkBox7.Text = resources.GetString("Gc_Bidirectional", culture);
+        this.label31.Text = resources.GetString("Gc_CleaningStrategy", culture);
+        this.label32.Text = resources.GetString("Gc_CleaningRowsCount", culture);
+        this.label35.Text = resources.GetString("Gc_StripWidth", culture);
+        this.label36.Text = resources.GetString("Gc_StripSpeed", culture);
+        this.label37.Text = resources.GetString("Gc_CleaningField", culture);
+        this.label38.Text = resources.GetString("Gc_CleaningSpd", culture);
+        this.label39.Text = resources.GetString("Gc_CleaningCycles", culture);
+        this.checkBox3.Text = resources.GetString("Gc_RotaryOutput", culture);
+        this.label13.Text = resources.GetString("Gc_MmPerRevolution", culture);
+        this.label23.Text = resources.GetString("Gc_CylinderDiameter", culture);
         this.ResumeLayout2();
         
         progressForm1.SuspendLayout2();
-        progressForm1.button1.Text = resources.GetString("PF_Run", culture);
-        progressForm1.button2.Text = resources.GetString("PF_Pause", culture);
-        progressForm1.button3.Text = resources.GetString("PF_Abort", culture);
+        progressForm1.button1.Text = resources.GetString("PF_Abort", culture);
         progressForm1.ResumeLayout2();
-        
-        wrappedOutputDialog1.SuspendLayout2();
-        wrappedOutputDialog1.Text = resources.GetString("WO_Title", culture);
-        wrappedOutputDialog1.label1.Text = resources.GetString("WO_AxisBeingWrapped", culture);
-        wrappedOutputDialog1.label2.Text = resources.GetString("WO_MmPerRevolutionX", culture);
-        wrappedOutputDialog1.label3.Text = resources.GetString("WO_MmPerRevolutionY", culture);
-        wrappedOutputDialog1.label4.Text = resources.GetString("WO_CylinderDiameter", culture);
-        wrappedOutputDialog1.button1.Text = resources.GetString("Btn_OK", culture);
-        wrappedOutputDialog1.button2.Text = resources.GetString("Btn_Cancel", culture);
-        wrappedOutputDialog1.ResumeLayout2();
         
         grblSettings1.SuspendLayout2();
         grblSettings1.Text = resources.GetString("GrblSet_Title", culture);
@@ -1216,35 +1019,38 @@ partial class image2gcode:Form {
         grblSettings1.label4.Text = resources.GetString("GrblSet_StepsPerMM", culture);
         grblSettings1.label5.Text = resources.GetString("GrblSet_MaxVelocity", culture);
         grblSettings1.label6.Text = resources.GetString("GrblSet_MaxAccel", culture);
-        grblSettings1.label7.Text = resources.GetString("GrblSet_MaxTravel", culture);
         grblSettings1.label8.Text = resources.GetString("GrblSet_FastJog", culture);
         grblSettings1.label9.Text = resources.GetString("GrblSet_SlowJog", culture);
+        grblSettings1.label7.Text = resources.GetString("GrblSet_MaxTravel", culture);
         grblSettings1.checkBox1.Text = resources.GetString("GrblSet_InvertStepPin", culture);
         grblSettings1.checkBox2.Text = resources.GetString("GrblSet_InvertStepPin", culture);
         grblSettings1.checkBox4.Text = resources.GetString("GrblSet_InvertDirectionPin", culture);
         grblSettings1.checkBox5.Text = resources.GetString("GrblSet_InvertDirectionPin", culture);
         grblSettings1.checkBox3.Text = resources.GetString("GrblSet_InvertHomePin", culture);
         grblSettings1.checkBox6.Text = resources.GetString("GrblSet_InvertHomePin", culture);
-        grblSettings1.checkBox7.Text = resources.GetString("GrblSet_HomingDirInvert", culture);
-        grblSettings1.checkBox8.Text = resources.GetString("GrblSet_HomingDirInvert", culture);
         grblSettings1.checkBox14.Text = resources.GetString("GrblSet_InvertJogKeys", culture);
         grblSettings1.checkBox15.Text = resources.GetString("GrblSet_InvertJogKeys", culture);
+        grblSettings1.checkBox7.Text = resources.GetString("GrblSet_HomingDirInvert", culture);
+        grblSettings1.checkBox8.Text = resources.GetString("GrblSet_HomingDirInvert", culture);
         grblSettings1.label3.Text = resources.GetString("GrblSet_HomingCycle1", culture);
         grblSettings1.label10.Text = resources.GetString("GrblSet_HomingCycle2", culture);
-        grblSettings1.label15.Text = resources.GetString("GrblSet_HomingFeedRate", culture);
         grblSettings1.label16.Text = resources.GetString("GrblSet_HomingSeekRate", culture);
         grblSettings1.label19.Text = resources.GetString("GrblSet_FastGrid", culture);
         grblSettings1.label20.Text = resources.GetString("GrblSet_SlowGrid", culture);
-        grblSettings1.label12.Text = resources.GetString("GrblSet_JunctionDeviation", culture);
-        grblSettings1.label13.Text = resources.GetString("GrblSet_ArcTolerance", culture);
         grblSettings1.label11.Text = resources.GetString("GrblSet_PWMFrequency", culture);
         grblSettings1.label22.Text = resources.GetString("GrblSet_MarkerPower", culture);
-        grblSettings1.checkBox20.Text = resources.GetString("GrblSet_LaserMode", culture);
-        grblSettings1.checkBox16.Text = resources.GetString("GrblSet_CoreXY", culture);
+        grblSettings1.label12.Text = resources.GetString("GrblSet_FrameSpeed", culture);
+        grblSettings1.label13.Text = resources.GetString("GrblSet_FramePower", culture);
         grblSettings1.checkBox12.Text = resources.GetString("GrblSet_InvertStEnablePin", culture);
         grblSettings1.checkBox17.Text = resources.GetString("GrblSet_InvertLaserENPin", culture);
-        grblSettings1.checkBox18.Text = resources.GetString("GrblSet_InvertLaserPWM", culture);
+        grblSettings1.checkBox20.Text = resources.GetString("GrblSet_InvertEStopPin", culture);
+        grblSettings1.checkBox18.Text = resources.GetString("GrblSet_InvertLaserPWMPin", culture);
         grblSettings1.checkBox19.Text = resources.GetString("GrblSet_PWMAlwaysOn", culture);
+        grblSettings1.checkBox23.Text = resources.GetString("GrblSet_ServoControl", culture);
+        grblSettings1.checkBox16.Text = resources.GetString("GrblSet_CoreXY", culture);
+        grblSettings1.checkBox22.Text = resources.GetString("GrblSet_HBridgeControl", culture);
+        grblSettings1.checkBox25.Text = resources.GetString("GrblSet_SwapJogKeys", culture);
+        grblSettings1.checkBox24.Text = resources.GetString("GrblSet_PSUControl", culture);
         grblSettings1.checkBox21.Text = resources.GetString("GrblSet_DisableBuzzer", culture);
         grblSettings1.button1.Text = resources.GetString("Btn_OK", culture);
         grblSettings1.button2.Text = resources.GetString("Btn_Cancel", culture);
@@ -1341,17 +1147,17 @@ partial class image2gcode:Form {
                             throw new FormatException();
                         }
                         break;
-                    case 32: case 39: case 40:
+                    case 20: case 32: case 39:
                         if (int_value > 255) {
                             throw new FormatException();
                         }
                         break;
-                    case 18: case 24: case 36: case 38: case 25: case 26: case 44:
+                    case 18: case 24: case 36: case 38: case 25: case 26:
                         if (value > MaxGcSpeed) {
                             throw new FormatException();
                         }
                         break;
-                    case 19: case 27: case 28: case 45:
+                    case 19: case 27: case 28:
                         if (value > MaxGcPower) {
                             throw new FormatException();
                         }
@@ -1421,45 +1227,25 @@ partial class image2gcode:Form {
             case 13: imTop = value; break;
             case 16: imInterpolation = (InterpolationMode)selectedItem; break;
             
-            case 52:
-            if (((ComboBox)sender).SelectedIndex == 0) {
-                previewBackground[activePreview] = null;
-                tableLayoutPanel38.Enabled = false;
-                tableLayoutPanel39.Enabled = false;
-                button31.Enabled = true;
-            } else {
-                previewBackground[activePreview] = (string)selectedItem;
-                tableLayoutPanel38.Enabled = true;
-                tableLayoutPanel39.Enabled = true;
-                button31.Enabled = false;
-            }
-            tableLayoutPanel40.Controls[activePreview+1].Invalidate(false);
-            break;
-            
-            case 53: previewWrapMode[activePreview] = (WrapMode)selectedItem; break;
-            case 54: previewSize[activePreview] = int_value; break;
-            
             case 18: gcSpeed = value; break;
             case 19: gcPower = value; break;
-            case 20: gcAccel = value; break;
-            case 21: gcShift = value; break;
+            case 20: gcNumberOfPasses = int_value; break;
             case 22: gcHeatDelay = value; break;
             case 51: gcAirAssist = bool_value; break;
             case 23: gcSkipWhite = bool_value; break;
             case 24: gcWhiteSpeed = value; break;
             case 49: gcWhiteDistance = value; break;
             case 29: gcBidirectional = bool_value; break;
-            case 30: gcBurnToTheStrip = bool_value; break;
             case 31: gcCleaningStrategy = (CleaningStrategy)selectedItem; break;
             case 32: gcCleaningRowsCount = int_value; break;
-            case 33: gcCleaningDistance = value; break;
-            case 34: gcStripPosition = (StripPositionType)selectedItem; break;
             case 35: gcStripWidth = value; break;
             case 36: gcStripSpeed = value; break;
             case 37: gcCleaningFieldWidth = value; break;
             case 38: gcCleaningFieldSpeed = value; break;
             case 39: gcNumberOfCleaningCycles = int_value; break;
-            case 40: gcNumberOfPasses = int_value; break;
+            case 40: gcWrappedOutput = bool_value; break;
+            case 41: mmPerRevolution = value; break;
+            case 42: cylinderDiameter = value; break;
             
             case 25: case 26:
             gcSpeedGraph[26-idx] = value;
@@ -1470,11 +1256,6 @@ partial class image2gcode:Form {
             gcPowerGraph[28-idx] = value;
             panel2.Invalidate(false);
             break;
-            
-            case 43: gcPrependFrame = bool_value; break;
-            case 44: gcFrameSpeed = value; break;
-            case 45: gcFramePower = value; break;
-            case 46: gcFrameWorkArea = bool_value; break;
             
             case 47: presetName = string_value; break;
             
@@ -1559,35 +1340,6 @@ partial class image2gcode:Form {
             imLockAspectRatio = bool_value;
             imAspectRatio = ((imWidth/imDpiX) / (imHeight/imDpiY));
             break;
-            
-            case 56: mmPerRevolutionX = value; break;
-            case 57: mmPerRevolutionY = value; break;
-            
-            case 55:
-            wrappingAxis = (GcAxis)selectedItem;
-            if ((GcAxis)selectedItem == GcAxis.X) {
-                wrappedOutputDialog1.label2.Enabled = true;
-                wrappedOutputDialog1.textBox1.Enabled = true;
-                wrappedOutputDialog1.label3.Enabled = false;
-                wrappedOutputDialog1.textBox2.Enabled = false;
-                wrappedOutputDialog1.label5.Text = String.Format(culture, resources.GetString("WO_label5", culture), (imWidth/imDpiX*MmPerInch * 360F / (cylinderDiameter*PI)));
-            } else {
-                wrappedOutputDialog1.label2.Enabled = false;
-                wrappedOutputDialog1.textBox1.Enabled = false;
-                wrappedOutputDialog1.label3.Enabled = true;
-                wrappedOutputDialog1.textBox2.Enabled = true;
-                wrappedOutputDialog1.label5.Text = String.Format(culture, resources.GetString("WO_label5", culture), (imHeight/imDpiY*MmPerInch * 360F / (cylinderDiameter*PI)));
-            }
-            break;
-            
-            case 58:
-            cylinderDiameter = value;
-            if (wrappingAxis == GcAxis.X) {
-                wrappedOutputDialog1.label5.Text = String.Format(culture, resources.GetString("WO_label5", culture), (imWidth/imDpiX*MmPerInch * 360F / (value*PI)));
-            } else {
-                wrappedOutputDialog1.label5.Text = String.Format(culture, resources.GetString("WO_label5", culture), (imHeight/imDpiY*MmPerInch * 360F / (value*PI)));
-            }
-            break;
         }
         
         if (valueAffectUI) {
@@ -1597,169 +1349,49 @@ partial class image2gcode:Form {
             
             bool isNichromeBurner = (machineType == MachineType.NichromeBurner);
             bool isImpactGraver = (machineType == MachineType.ImpactGraver);
+            //bool isLaserEngraver = !(isNichromeBurner || isImpactGraver);
             
             label21.Enabled = (im1bitPalette || isImpactGraver);
             textBox5.Enabled = (im1bitPalette || isImpactGraver);
-            label22.Enabled = (im1bitPalette || isNichromeBurner);
-            textBox6.Enabled = (im1bitPalette || isNichromeBurner);
-            label24.Enabled = gcBidirectional;
-            textBox8.Enabled = gcBidirectional;
+            if (isNichromeBurner) {
+                label22.Enabled = (gcNichromeOnOffCommand < NichromeControl.OUT2_M8_M9);
+                textBox6.Enabled = (gcNichromeOnOffCommand < NichromeControl.OUT2_M8_M9);
+            } else {
+                label22.Enabled = im1bitPalette;
+                textBox6.Enabled = im1bitPalette;
+            }
             tableLayoutPanel19.Enabled = (gcSkipWhite || isNichromeBurner);
-            tableLayoutPanel32.Visible = (!(im1bitPalette || gcSpeedGraph[1] == gcSpeedGraph[0]));
+            tableLayoutPanel32.Visible = !(im1bitPalette || gcSpeedGraph[1] == gcSpeedGraph[0]);
             tableLayoutPanel20.Enabled = !im1bitPalette;
-            tableLayoutPanel33.Visible = (!(im1bitPalette || gcPowerGraph[1] == gcPowerGraph[0]));
+            tableLayoutPanel33.Visible = !(im1bitPalette || gcPowerGraph[1] == gcPowerGraph[0]);
             tableLayoutPanel21.Enabled = !im1bitPalette;
-            checkBox8.Enabled = !gcBidirectional;
             tableLayoutPanel25.Enabled = (gcCleaningStrategy != CleaningStrategy.None);
             label32.Enabled = (gcCleaningStrategy == CleaningStrategy.AfterNRows);
             comboBox6.Enabled = (gcCleaningStrategy == CleaningStrategy.AfterNRows);
-            label33.Enabled = (gcCleaningStrategy == CleaningStrategy.Distance);
-            textBox16.Enabled = (gcCleaningStrategy == CleaningStrategy.Distance);
-            tableLayoutPanel29.Enabled = gcPrependFrame;
+            tableLayoutPanel27.Enabled = gcWrappedOutput;
         }
         
-        bWorkerFlags = (tag & 0x706000);
-    }
-    
-    private void PreviewButtonClick(object sender, EventArgs e) {
-        activePreview = (int)((Control)sender).Tag;
-        if (activePreview == prevPreview) {
-            return;
-        }
-        
-        if (prevPreview != -2) {
-            tableLayoutPanel40.Controls[prevPreview+1].Invalidate(false);
-        }
-        
-        prevPreview = activePreview;
-        
-        ((Control)sender).Invalidate(false);
-        
-        if (activePreview == -1) {
-            tableLayoutPanel34.Enabled = false;
-        } else {
-            tableLayoutPanel34.Enabled = true;
-            if (previewBackground[activePreview] == null) {
-                comboBox12.SelectedIndex = 0;
-            } else {
-                comboBox12.SelectedItem = previewBackground[activePreview];
-            }
-            comboBox13.SelectedItem = previewWrapMode[activePreview];
-            trackBar5.Value = previewSize[activePreview];
-            button31.BackColor = previewBgColor[activePreview];
-            button32.BackColor = previewDotColor[activePreview];
-        }
-        
-        bWorkerFlags = (BWorkerFlagBackgroundChanged|BWorkerFlagPreviewChanged);
-    }
-    
-    private void PreviewButtonPaint(object sender, PaintEventArgs e) {
-        int tag = (int)((Control)sender).Tag;
-        
-        Size clientSize = ((Control)sender).ClientSize;
-        int width = clientSize.Width;
-        int height = clientSize.Height;
-        
-        if (tag != -1) {
-            if (previewBackground[tag] == null) {
-                using (Brush brush = new SolidBrush(previewBgColor[tag])) {
-                    e.Graphics.FillRectangle(brush, 0, 0, width, height);
-                }
-            } else {
-                e.Graphics.DrawImage(bitmapThumbnails[previewBackground[tag]], 0, 0, width, height);
-            }
-            using (Brush brush = new SolidBrush(previewDotColor[tag])) {
-                e.Graphics.FillRectangle(brush, width/2-3, height/2-3, 6, 6);
-            }
-            if (tag == activePreview) {
-                using (Pen pen = new Pen(previewDotColor[tag], 1F)) {
-                    e.Graphics.DrawRectangle(pen, 0, 0, width-1, height-1);
-                }
-            }
-        } else {
-            e.Graphics.FillRectangle(Brushes.White, 0, 0, width, height);
-            e.Graphics.DrawLine(Pens.Red, width-1, 0, 0, height-1);
-            e.Graphics.DrawLine(Pens.Red, width-1, height-1, 0, 0);
-            if (tag == activePreview) {
-                e.Graphics.DrawRectangle(Pens.Black, 0, 0, width-1, height-1);
-            }
-        }
-    }
-    
-    private void PreviewColorButtonBackColorChanged(object sender, EventArgs e) {
-        int color = ((Control)sender).BackColor.ToArgb();
-        byte r = (byte)(color >> 16);
-        byte g = (byte)(color >> 8);
-        byte b = (byte)(color >> 0);
-        
-        byte gray = (byte)(0.299F*r + 0.587F*g + 0.114F*b);
-        if (gray > 127) {
-            ((Control)sender).ForeColor = Color.Black;
-        } else {
-            ((Control)sender).ForeColor = Color.White;
-        }
-    }
-    
-    private void PreviewColorButton1Click(object sender, EventArgs e) {
-        colorDialog1.Color = previewBgColor[activePreview];
-        if (colorDialog1.ShowDialog(this) != DialogResult.OK) {
-            return;
-        }
-        
-        ((Control)sender).BackColor = previewBgColor[activePreview] = colorDialog1.Color;
-        tableLayoutPanel40.Controls[activePreview+1].Invalidate(false);
-        
-        bWorkerFlags = (BWorkerFlagBackgroundChanged|BWorkerFlagPreviewChanged);
-    }
-    
-    private void PreviewColorButton2Click(object sender, EventArgs e) {
-        colorDialog1.Color = previewDotColor[activePreview];
-        if (colorDialog1.ShowDialog(this) != DialogResult.OK) {
-            return;
-        }
-        
-        ((Control)sender).BackColor = previewDotColor[activePreview] = colorDialog1.Color;
-        tableLayoutPanel40.Controls[activePreview+1].Invalidate(false);
-        
-        bWorkerFlags = BWorkerFlagPreviewChanged;
+        bWorkerFlags = (BWorkerFlags)(tag & 0x306000);
     }
     
     private void ImOriginButtonClick(object sender, EventArgs e) {
         int tag = (int)((Control)sender).Tag;
+        if (gcBurnFromBottomToTop) {
+            tag ^= 4;
+        }
         
         float left = 0F;
+        if ((tag & 2) != 0) {
+            left = (-imWidth/imDpiX * MmPerInch / 2F);
+        } else if ((tag & 1) != 0) {
+            left = (-imWidth/imDpiX * MmPerInch);
+        }
+        
         float top = 0F;
-        float width = (-imWidth/imDpiX * MmPerInch);
-        float height = (-imHeight/imDpiY * MmPerInch);
-        switch (tag) {
-            case 1:
-                left = (width/2F);
-                break;
-            case 2:
-                left = width;
-                break;
-            case 3:
-                top = (height/2F);
-                break;
-            case 4:
-                left = (width/2F);
-                top = (height/2F);
-                break;
-            case 5:
-                left = width;
-                top = (height/2F);
-                break;
-            case 6:
-                top = height;
-                break;
-            case 7:
-                left = (width/2F);
-                top = height;
-                break;
-            case 8:
-                left = width;
-                top = height;
-                break;
+        if ((tag & 8) != 0) {
+            top = (-imHeight/imDpiY * MmPerInch / 2F);
+        } else if ((tag & 4) != 0) {
+            top = (-imHeight/imDpiY * MmPerInch);
         }
         
         textBox1.Text = left.ToString("0.###");
@@ -1775,7 +1407,7 @@ partial class image2gcode:Form {
         graphView1.Tag = gcSpeedGraph;
         graphView1.ShowDialog(this);
         panel1.Invalidate(false);
-        bWorkerFlags = BWorkerFlagDoWork;
+        bWorkerFlags = BWorkerFlags.CalcJobTime;
     }
     
     private void EditGraphButton2Click(object sender, EventArgs e) {
@@ -1796,7 +1428,7 @@ partial class image2gcode:Form {
         
         if (prevPreset != -1) {
             ((Button)tableLayoutPanel31.Controls[prevPreset]).FlatAppearance.BorderSize = 0;
-            ((Button)tableLayoutPanel31.Controls[prevPreset]).Font = new Font(Control.DefaultFont, FontStyle.Regular);
+            ((Button)tableLayoutPanel31.Controls[prevPreset]).Font = regularFont;
             
             SavePreset(prevPreset);
         }
@@ -1804,7 +1436,7 @@ partial class image2gcode:Form {
         prevPreset = activePreset;
         
         ((Button)tableLayoutPanel31.Controls[activePreset]).FlatAppearance.BorderSize = 1;
-        ((Button)tableLayoutPanel31.Controls[activePreset]).Font = new Font(Control.DefaultFont, FontStyle.Bold);
+        ((Button)tableLayoutPanel31.Controls[activePreset]).Font = boldFont;
         
         LoadPreset(activePreset);
     }

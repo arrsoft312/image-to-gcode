@@ -6,8 +6,12 @@ using System.Windows.Forms;
 partial class image2gcode {
     private GraphView graphView1;
     
-    private Color[] gvColors = new Color[ImColorCount];
+    private Font gvFont = new Font(FontFamily.GenericSansSerif, 11F, FontStyle.Regular, GraphicsUnit.Pixel);
+    private Brush[] gvBrushes = new Brush[ImColorCount];
+    
+    private Pen gvGhostPen = new Pen(Color.FromArgb(127*16777216 + 0*65536 + 0*256 + 255), 1F);
     private float[] gvGhostValues = new float[4];
+    
     private int gvSelectedColor;
     private int gvSelectedPoint;
     
@@ -115,9 +119,7 @@ partial class image2gcode {
         for (int i = 0; i < ImColorCount; i++) {
             int x = (i*width / (ImColorCount-1));
             int w = ((1+i)*width / (ImColorCount-1) - x);
-            using (Brush brush = new SolidBrush(gvColors[ImColorCount-1-i])) {
-                e.Graphics.FillRectangle(brush, x-width/ImColorCount/2, 0, w, height);
-            }
+            e.Graphics.FillRectangle(gvBrushes[ImColorCount-1-i], x-width/ImColorCount/2, 0, w, height);
         }
         
         if (gvValues[0] == gvValues[1]) {
@@ -144,19 +146,13 @@ partial class image2gcode {
         int height = (clientSize.Height-25-21);
         
         e.Graphics.DrawRectangle(SystemPens.WindowFrame, left-1, top-1, width+1, height+1);
-        using (Brush brush = new SolidBrush(gvColors[ImColorCount-1])) {
-            e.Graphics.FillRectangle(brush, left, top, width/(ImColorCount-1)-width/ImColorCount/2, height);
-        }
+        e.Graphics.FillRectangle(gvBrushes[ImColorCount-1], left, top, width/(ImColorCount-1)-width/ImColorCount/2, height);
         for (int i = 1; i < (ImColorCount-1); i++) {
             int x = (i*width / (ImColorCount-1));
             int w = ((1+i)*width / (ImColorCount-1) - x);
-            using (Brush brush = new SolidBrush(gvColors[ImColorCount-1-i])) {
-                e.Graphics.FillRectangle(brush, left+x-width/ImColorCount/2, top, w, height);
-            }
+            e.Graphics.FillRectangle(gvBrushes[ImColorCount-1-i], left+x-width/ImColorCount/2, top, w, height);
         }
-        using (Brush brush = new SolidBrush(gvColors[0])) {
-            e.Graphics.FillRectangle(brush, left+width-width/ImColorCount/2, top, width/ImColorCount/2, height);
-        }
+        e.Graphics.FillRectangle(gvBrushes[0], left+width-width/ImColorCount/2, top, width/ImColorCount/2, height);
         
         float p0 = left;
         float p1;
@@ -182,9 +178,7 @@ partial class image2gcode {
             p7 = (top + j);
         }
         
-        using (Pen pen = new Pen(Color.FromArgb(127*16777216 + 0*65536 + 0*256 + 255), 1F)) {
-            e.Graphics.DrawBezier(pen, p0, p1, left+(width-1)*gvGhostValues[0], top+j*gvGhostValues[1], left+(width-1)*gvGhostValues[2], top+j*gvGhostValues[3], p6, p7);
-        }
+        e.Graphics.DrawBezier(gvGhostPen, p0, p1, left+(width-1)*gvGhostValues[0], top+j*gvGhostValues[1], left+(width-1)*gvGhostValues[2], top+j*gvGhostValues[3], p6, p7);
         e.Graphics.DrawLine(Pens.DarkOrange, p0, p1, p2, p3);
         e.Graphics.DrawLine(Pens.DarkOrange, p6, p7, p4, p5);
         e.Graphics.DrawBezier(Pens.Crimson, p0, p1, p2, p3, p4, p5, p6, p7);
@@ -196,60 +190,53 @@ partial class image2gcode {
             e.Graphics.FillEllipse(Brushes.Crimson, p4-6, p5-6, 11, 11);
         }
         
-        using (Font font = new Font(FontFamily.GenericSansSerif, 11F, FontStyle.Regular, GraphicsUnit.Pixel)) {
-            int color = (gvSelectedColor*ImColorStep);
+        int color = (gvSelectedColor*ImColorStep);
+        float value = Single.NaN;
+        
+        if (color > ImColorBlack && color < ImColorWhite) {
+            p1 = gvValues[1];
+            p7 = gvValues[0];
             
-            float value = Single.NaN;
-            if (color > ImColorBlack && color < ImColorWhite) {
-                p1 = gvValues[1];
-                p7 = gvValues[0];
+            p2 = (3*ImColorWhite*(1F-gvValues[2]));
+            p3 = (3F*(p1 - (p1-p7)*gvValues[3]));
+            p4 = (3*ImColorWhite*(1F-gvValues[4]));
+            p5 = (3F*(p1 - (p1-p7)*gvValues[5]));
+            
+            float x0 = ImColorWhite;
+            float y0 = p1;
+            for (int i = 1; i < BezierSegmentsCount; i++) {
+                float t = ((float)i/BezierSegmentsCount);
+                float inv_t = (1F - t);
                 
-                p2 = (3*ImColorWhite*(1F-gvValues[2]));
-                p3 = (3F*(p1 - (p1-p7)*gvValues[3]));
-                p4 = (3*ImColorWhite*(1F-gvValues[4]));
-                p5 = (3F*(p1 - (p1-p7)*gvValues[5]));
+                float x1 = (inv_t*inv_t*inv_t*ImColorWhite + inv_t*inv_t*t*p2 + t*t*inv_t*p4);
+                float y1 = (inv_t*inv_t*inv_t*p1 + inv_t*inv_t*t*p3 + t*t*inv_t*p5 + t*t*t*p7);
+                if (x1 < color) {
+                    value = (y0 + (color-x0) * (y1-y0) / (x1-x0));
+                    break;
+                }
                 
-                float x0 = ImColorWhite;
-                float y0 = p1;
-                for (int i = 1; i < BezierSegmentsCount; i++) {
-                    float t = ((float)i/BezierSegmentsCount);
-                    float inv_t = (1F - t);
-                    
-                    float x1 = (inv_t*inv_t*inv_t*ImColorWhite + inv_t*inv_t*t*p2 + t*t*inv_t*p4);
-                    float y1 = (inv_t*inv_t*inv_t*p1 + inv_t*inv_t*t*p3 + t*t*inv_t*p5 + t*t*t*p7);
-                    if (x1 < color) {
-                        value = (y0 + (color-x0) * (y1-y0) / (x1-x0));
-                        break;
-                    }
-                    
-                    x0 = x1;
-                    y0 = y1;
-                }
+                x0 = x1;
+                y0 = y1;
+            }
+        } else {
+            if (color == ImColorWhite) {
+                value = gvValues[1];
             } else {
-                if (color == ImColorWhite) {
-                    value = gvValues[1];
-                } else {
-                    value = gvValues[0];;
-                }
+                value = gvValues[0];;
             }
-            
-            string text = (color.ToString(culture) + " | " + value.ToString("0.0", culture));
-            SizeF textSize = e.Graphics.MeasureString(text, font, new SizeF(), null);
-            int w = (int)textSize.Width;
-            int h = (int)textSize.Height;
-            
-            e.Graphics.DrawRectangle(SystemPens.WindowFrame, left-1, top+height+5-1, w+7, 22);
-            using (Brush brush = new SolidBrush(gvColors[gvSelectedColor])) {
-                e.Graphics.FillRectangle(brush, left, top+height+5, w+6, 21);
-            }
-            
-            Brush brush2;
-            if (color > 127) {
-                brush2 = Brushes.Black;
-            } else {
-                brush2 = Brushes.GhostWhite;
-            }
-            e.Graphics.DrawString(text, font, brush2, new RectangleF(left+3, top+height+5+(21-h)/2, 0F, 0F), null);
+        }
+        
+        string text = (color.ToString(culture) + " | " + value.ToString("0.0", culture));
+        SizeF textSize = e.Graphics.MeasureString(text, gvFont, new SizeF(), null);
+        int ww = (int)textSize.Width;
+        int hh = (int)textSize.Height;
+        
+        e.Graphics.DrawRectangle(SystemPens.WindowFrame, left-1, top+height+5-1, ww+7, 22);
+        e.Graphics.FillRectangle(gvBrushes[gvSelectedColor], left, top+height+5, ww+6, 21);
+        if (color > 127) {
+            e.Graphics.DrawString(text, gvFont, Brushes.Black, new RectangleF(left+3, top+height+5+(21-hh)/2, 0F, 0F), null);
+        } else {
+            e.Graphics.DrawString(text, gvFont, Brushes.GhostWhite, new RectangleF(left+3, top+height+5+(21-hh)/2, 0F, 0F), null);
         }
     }
 }
@@ -259,6 +246,7 @@ class GraphView:Form {
         this.SetStyle((ControlStyles.OptimizedDoubleBuffer|ControlStyles.AllPaintingInWmPaint|ControlStyles.UserPaint|ControlStyles.ResizeRedraw), true);
         this.SetStyle(ControlStyles.StandardDoubleClick, false);
         
+        this.Font = new Font("Segoe UI", 9F);
         this.AutoScaleDimensions = new SizeF(6F, 13F);
         this.AutoScaleMode = AutoScaleMode.Font;
         this.AutoSize = true;

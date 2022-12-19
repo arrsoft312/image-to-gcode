@@ -7,10 +7,8 @@ static class MyExtensions {
         foreach (Control ctrl2 in ctrl.Controls) {
             if (ctrl2 is TableLayoutPanel || ctrl2 is Panel) {
                 ctrl2.SuspendLayout2();
-            } else {
-                if (ctrl2 is MenuStrip || ctrl2 is ToolStrip || ctrl2 is StatusStrip) {
-                    ctrl2.SuspendLayout();
-                }
+            } else if (ctrl2 is MenuStrip || ctrl2 is ToolStrip || ctrl2 is StatusStrip) {
+                ctrl2.SuspendLayout();
             }
         }
         ctrl.SuspendLayout();
@@ -20,11 +18,9 @@ static class MyExtensions {
         foreach (Control ctrl2 in ctrl.Controls) {
             if (ctrl2 is TableLayoutPanel || ctrl2 is Panel) {
                 ctrl2.ResumeLayout2();
-            } else {
-                if (ctrl2 is MenuStrip || ctrl2 is ToolStrip || ctrl2 is StatusStrip) {
-                    ctrl2.ResumeLayout(false);
-                    ctrl2.PerformLayout();
-                }
+            } else if (ctrl2 is MenuStrip || ctrl2 is ToolStrip || ctrl2 is StatusStrip) {
+                ctrl2.ResumeLayout(false);
+                ctrl2.PerformLayout();
             }
         }
         ctrl.ResumeLayout(false);

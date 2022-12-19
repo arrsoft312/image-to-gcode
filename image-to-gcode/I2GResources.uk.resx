@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -222,17 +222,14 @@
   <data name="Im_Interpolation" xml:space="preserve">
     <value>Інтерполяція:</value>
   </data>
-  <data name="Im_KeepAspectRatio" xml:space="preserve">
-    <value>Зберегти пропорції</value>
-  </data>
   <data name="Gc_Speed" xml:space="preserve">
     <value>Швидкість:</value>
   </data>
   <data name="Gc_Power" xml:space="preserve">
     <value>Потужність:</value>
   </data>
-  <data name="Gc_Accel" xml:space="preserve">
-    <value>Пришвидшення:</value>
+  <data name="Menu_Accel" xml:space="preserve">
+    <value>Пришвидшення ({0:0.#})</value>
   </data>
   <data name="Gc_ChangeSpeedOnWhite" xml:space="preserve">
     <value>Змінювати швидкість на білому</value>
@@ -242,12 +239,6 @@
   </data>
   <data name="Gc_WhiteDistance" xml:space="preserve">
     <value>Мін. відстань:</value>
-  </data>
-  <data name="Gc_MaxMinSpeed" xml:space="preserve">
-    <value>Max/Min Speed:</value>
-  </data>
-  <data name="Gc_MinMaxPower" xml:space="preserve">
-    <value>Min/Max Power:</value>
   </data>
   <data name="Gc_Bidirectional" xml:space="preserve">
     <value>В дві сторони</value>

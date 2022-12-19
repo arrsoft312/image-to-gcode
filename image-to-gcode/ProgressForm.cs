@@ -3,8 +3,6 @@ using System.Drawing;
 using System.Windows.Forms;
 
 class ProgressForm:Form {
-    public Button button3;
-    public Button button2;
     public Button button1;
     private TableLayoutPanel tableLayoutPanel5;
     public ProgressBar progressBar1;
@@ -13,14 +11,14 @@ class ProgressForm:Form {
     private Panel panel1;
     
     public ProgressForm() {
+        this.Font = new Font("Segoe UI", 9F);
+        
         panel1 = new Panel();
         tableLayoutPanel1 = new TableLayoutPanel();
         label1 = new Label();
         progressBar1 = new ProgressBar();
         tableLayoutPanel5 = new TableLayoutPanel();
         button1 = new Button();
-        button2 = new Button();
-        button3 = new Button();
         
         panel1.SuspendLayout();
         tableLayoutPanel1.SuspendLayout();
@@ -61,48 +59,28 @@ class ProgressForm:Form {
         progressBar1.TabIndex = 1;
         
         tableLayoutPanel5.AutoSize = true;
-        tableLayoutPanel5.ColumnCount = 4;
+        tableLayoutPanel5.ColumnCount = 2;
         tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
         tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle());
-        tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle());
-        tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle());
         tableLayoutPanel5.Controls.Add(button1, 1, 0);
-        tableLayoutPanel5.Controls.Add(button2, 2, 0);
-        tableLayoutPanel5.Controls.Add(button3, 3, 0);
         tableLayoutPanel5.Dock = DockStyle.Fill;
         tableLayoutPanel5.RowCount = 1;
         tableLayoutPanel5.RowStyles.Add(new RowStyle());
         tableLayoutPanel5.TabIndex = 2;
         
         button1.AutoSize = true;
+        button1.DialogResult = DialogResult.Abort;
         button1.Dock = DockStyle.Fill;
         button1.FlatStyle = FlatStyle.Popup;
         button1.Size = new Size();
         button1.TabIndex = 0;
-        button1.Text = "&RUN";
+        button1.Text = "&ABORT";
         button1.UseVisualStyleBackColor = true;
-        
-        button2.AutoSize = true;
-        button2.Dock = DockStyle.Fill;
-        button2.FlatStyle = FlatStyle.Popup;
-        button2.Size = new Size();
-        button2.TabIndex = 1;
-        button2.Text = "&PAUSE";
-        button2.UseVisualStyleBackColor = true;
-        
-        button3.AutoSize = true;
-        button3.DialogResult = DialogResult.Abort;
-        button3.Dock = DockStyle.Fill;
-        button3.FlatStyle = FlatStyle.Popup;
-        button3.Size = new Size();
-        button3.TabIndex = 2;
-        button3.Text = "&ABORT";
-        button3.UseVisualStyleBackColor = true;
         
         this.AutoScaleDimensions = new SizeF(6F, 13F);
         this.AutoScaleMode = AutoScaleMode.Font;
         this.AutoSize = true;
-        this.CancelButton = button3;
+        this.CancelButton = button1;
         this.ClientSize = new Size(399, -1);
         this.Controls.Add(panel1);
         this.FormBorderStyle = FormBorderStyle.None;

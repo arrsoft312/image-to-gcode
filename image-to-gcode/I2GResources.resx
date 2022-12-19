@@ -123,12 +123,6 @@
   <data name="PF_GeneratingGCode" xml:space="preserve">
     <value>Generating G-code...</value>
   </data>
-  <data name="PF_Run" xml:space="preserve">
-    <value>&amp;RUN</value>
-  </data>
-  <data name="PF_Pause" xml:space="preserve">
-    <value>&amp;PAUSE</value>
-  </data>
   <data name="PF_Abort" xml:space="preserve">
     <value>&amp;ABORT</value>
   </data>
@@ -195,9 +189,6 @@
   <data name="Menu_MachineType" xml:space="preserve">
     <value>&amp;Machine Type ({0})</value>
   </data>
-  <data name="Menu_MachineOrigin" xml:space="preserve">
-    <value>Machine &amp;Origin ({0})</value>
-  </data>
   <data name="Menu_Machine" xml:space="preserve">
     <value>Mac&amp;hine</value>
   </data>
@@ -220,10 +211,7 @@
     <value>H&amp;elp</value>
   </data>
   <data name="Menu_Website" xml:space="preserve">
-    <value>Image2GCode Web&amp;site</value>
-  </data>
-  <data name="Menu_Donate" xml:space="preserve">
-    <value>&amp;Donate</value>
+    <value>Page on &amp;GitHub</value>
   </data>
   <data name="Menu_About" xml:space="preserve">
     <value>&amp;About...</value>
@@ -303,9 +291,6 @@
   <data name="Im_SameAsX" xml:space="preserve">
     <value>S&amp;ame as X</value>
   </data>
-  <data name="Im_RotateFlip" xml:space="preserve">
-    <value>Rotate/Flip Image:</value>
-  </data>
   <data name="Im_Left" xml:space="preserve">
     <value>X:</value>
   </data>
@@ -321,26 +306,17 @@
   <data name="Im_Interpolation" xml:space="preserve">
     <value>Inter&amp;polation:</value>
   </data>
-  <data name="Im_AspectRatio" xml:space="preserve">
-    <value>Aspect ratio:</value>
-  </data>
-  <data name="Im_KeepAspectRatio" xml:space="preserve">
-    <value>&amp;Keep aspect ratio</value>
-  </data>
   <data name="Gc_Speed" xml:space="preserve">
     <value>Spee&amp;d:</value>
   </data>
   <data name="Gc_Power" xml:space="preserve">
     <value>&amp;Power:</value>
   </data>
-  <data name="Gc_Accel" xml:space="preserve">
-    <value>A&amp;ccel:</value>
+  <data name="Menu_Accel" xml:space="preserve">
+    <value>A&amp;cceleration ({0:0.#})</value>
   </data>
   <data name="Menu_G0Spd" xml:space="preserve">
     <value>Rapid Spee&amp;d ({0:0.#})</value>
-  </data>
-  <data name="Gc_Shift" xml:space="preserve">
-    <value>Shif&amp;t:</value>
   </data>
   <data name="Gc_HeatDelay" xml:space="preserve">
     <value>Heat &amp;Delay:</value>
@@ -366,17 +342,11 @@
   <data name="Gc_Bidirectional" xml:space="preserve">
     <value>&amp;Bidirectional</value>
   </data>
-  <data name="Gc_BurnToTheCleaningStrip" xml:space="preserve">
-    <value>B&amp;urn to the Cleaning Strip</value>
-  </data>
   <data name="Gc_CleaningStrategy" xml:space="preserve">
     <value>Cleaning Strate&amp;gy:</value>
   </data>
-  <data name="Gc_StripSide" xml:space="preserve">
-    <value>S&amp;trip Position:</value>
-  </data>
   <data name="Gc_StripWidth" xml:space="preserve">
-    <value>&amp;Width:</value>
+    <value>Strip &amp;Width:</value>
   </data>
   <data name="Gc_StripSpeed" xml:space="preserve">
     <value>Sp&amp;d on the Strip:</value>
@@ -390,62 +360,17 @@
   <data name="Gc_CleaningCycles" xml:space="preserve">
     <value>&amp;Cycles:</value>
   </data>
-  <data name="Gc_NumberOfPasses" xml:space="preserve">
-    <value>Number of &amp;Passes:</value>
-  </data>
-  <data name="Menu_GoToNextLine" xml:space="preserve">
-    <value>&amp;Go to Next Line ({0})</value>
-  </data>
-  <data name="Menu_ReturnToOrigin" xml:space="preserve">
-    <value>Return to O&amp;rigin ({0})</value>
-  </data>
   <data name="Menu_DoNotReturnY" xml:space="preserve">
     <value>Do not return Y to O&amp;rigin</value>
-  </data>
-  <data name="Gc_PrependImageFrame" xml:space="preserve">
-    <value>Prepend Image Frame to G-code</value>
-  </data>
-  <data name="Gc_FrameSpeed" xml:space="preserve">
-    <value>Frame Spee&amp;d:</value>
-  </data>
-  <data name="Gc_FramePower" xml:space="preserve">
-    <value>Frame &amp;Power:</value>
-  </data>
-  <data name="Gc_FrameWorkArea" xml:space="preserve">
-    <value>Image work area</value>
   </data>
   <data name="Gc_EditGraph" xml:space="preserve">
     <value>EDIT GRAPH</value>
   </data>
-  <data name="DefaultPresetName" xml:space="preserve">
-    <value>Standard Preset</value>
-  </data>
   <data name="Gc_CleaningRowsCount" xml:space="preserve">
     <value>Ro&amp;ws count:</value>
   </data>
-  <data name="Gc_CleaningDistance" xml:space="preserve">
-    <value>&amp;Distance:</value>
-  </data>
-  <data name="Im_ResultPreview" xml:space="preserve">
-    <value>Result Preview:</value>
-  </data>
-  <data name="Im_PreviewBackground" xml:space="preserve">
-    <value>Ba&amp;ckground:</value>
-  </data>
-  <data name="Im_TextureWrapMode" xml:space="preserve">
-    <value>&amp;Wrap Mode:</value>
-  </data>
-  <data name="Im_TextureSize" xml:space="preserve">
-    <value>Si&amp;ze:</value>
-  </data>
-  <data name="Im_PreviewColor" xml:space="preserve">
-    <value>&amp;Color:</value>
-  </data>
   <data name="Menu_DownloadCH340Driver" xml:space="preserve">
     <value>Do&amp;wnload COM-port driver</value>
-  </data>
-  <data name="Menu_CheckForUpdates" xml:space="preserve">
-    <value>Check for &amp;updates</value>
   </data>
   <data name="About_Title" xml:space="preserve">
     <value>About</value>
@@ -468,12 +393,6 @@
   <data name="Status_ApplyingDithering" xml:space="preserve">
     <value>Applying dithering...</value>
   </data>
-  <data name="Status_PreparingTexture" xml:space="preserve">
-    <value>Preparing texture...</value>
-  </data>
-  <data name="Status_GeneratingPreview" xml:space="preserve">
-    <value>Generating preview...</value>
-  </data>
   <data name="Status_CalculatingWorkTime" xml:space="preserve">
     <value>Calculating work time...</value>
   </data>
@@ -491,20 +410,11 @@
   <data name="GrblSet_HomingCycle2" xml:space="preserve">
     <value>Homing Cycle &amp;2:</value>
   </data>
-  <data name="WO_MmPerRevolutionX" xml:space="preserve">
-    <value>MM per R&amp;evolution X:</value>
+  <data name="Gc_MmPerRevolution" xml:space="preserve">
+    <value>MM per Revol&amp;ution:</value>
   </data>
-  <data name="WO_MmPerRevolutionY" xml:space="preserve">
-    <value>MM per R&amp;evolution Y:</value>
-  </data>
-  <data name="WO_CylinderDiameter" xml:space="preserve">
-    <value>&amp;Diameter of Cylinder:</value>
-  </data>
-  <data name="WO_AxisBeingWrapped" xml:space="preserve">
-    <value>&amp;Axis Being Wrapped:</value>
-  </data>
-  <data name="WO_label5" xml:space="preserve">
-    <value>Image is wrapped {0:0.#} degrees around the cylinder.</value>
+  <data name="Gc_CylinderDiameter" xml:space="preserve">
+    <value>Cylinder Diame&amp;ter:</value>
   </data>
   <data name="Menu_SpeedGraphReset" xml:space="preserve">
     <value>Reset Sp&amp;eed Graph to</value>
@@ -517,15 +427,6 @@
   </data>
   <data name="Menu_GraphDefault" xml:space="preserve">
     <value>&amp;Default</value>
-  </data>
-  <data name="Menu_SaveGCodeWO" xml:space="preserve">
-    <value>Save G-code (&amp;Wrapped Output)...</value>
-  </data>
-  <data name="Menu_SendWO" xml:space="preserve">
-    <value>Send (&amp;Wrapped Output)...</value>
-  </data>
-  <data name="WO_Title" xml:space="preserve">
-    <value>Wrapped Output</value>
   </data>
   <data name="Error_CouldNotFindFile" xml:space="preserve">
     <value>Couldn't find '{0}'!</value>
@@ -569,11 +470,11 @@
   <data name="GrblSet_HomingDirInvert" xml:space="preserve">
     <value>Invert Homing Direction</value>
   </data>
-  <data name="GrblSet_JunctionDeviation" xml:space="preserve">
-    <value>&amp;Junction Deviation:</value>
+  <data name="GrblSet_FrameSpeed" xml:space="preserve">
+    <value>Fr&amp;ame Speed:</value>
   </data>
-  <data name="GrblSet_ArcTolerance" xml:space="preserve">
-    <value>&amp;Arc Tolerance:</value>
+  <data name="GrblSet_FramePower" xml:space="preserve">
+    <value>Frame Pow&amp;er:</value>
   </data>
   <data name="GrblSet_InvertStEnablePin" xml:space="preserve">
     <value>Invert Ste&amp;pper EN Pin</value>
@@ -587,14 +488,8 @@
   <data name="GrblSet_HomingCycle1" xml:space="preserve">
     <value>Homing Cycle &amp;1:</value>
   </data>
-  <data name="GrblSet_HomingFeedRate" xml:space="preserve">
-    <value>Homing &amp;Feed Rate:</value>
-  </data>
   <data name="GrblSet_HomingSeekRate" xml:space="preserve">
     <value>Homing S&amp;eek Rate:</value>
-  </data>
-  <data name="GrblSet_LaserMode" xml:space="preserve">
-    <value>&amp;Laser Mode</value>
   </data>
   <data name="GrblSet_MarkerPower" xml:space="preserve">
     <value>&amp;Marker Power:</value>
@@ -617,9 +512,6 @@
   <data name="PF_RetrievingGrblSettings" xml:space="preserve">
     <value>Retrieving controller settings...</value>
   </data>
-  <data name="GrblSet_FwVer" xml:space="preserve">
-    <value>FW Version:</value>
-  </data>
   <data name="Grbl_UnknownParameter" xml:space="preserve">
     <value>Response from controller contains one or more unknown parameters. Try changing controller settings using the latest version of image2gcode.</value>
   </data>
@@ -628,9 +520,6 @@
   </data>
   <data name="Grbl_GCodeErrorFile" xml:space="preserve">
     <value>G-code error in '{0}' near line {1}. Controller responded with error code {2}.</value>
-  </data>
-  <data name="Error_FileComment" xml:space="preserve">
-    <value>Only one line starting with a percent symbol is allowed in the G-Code comment block.</value>
   </data>
   <data name="GrblSet_InvertJogKeys" xml:space="preserve">
     <value>Invert Jog Keys</value>
@@ -641,7 +530,7 @@
   <data name="GrblSet_InvertLaserENPin" xml:space="preserve">
     <value>I&amp;nvert Laser EN Pin</value>
   </data>
-  <data name="GrblSet_InvertLaserPWM" xml:space="preserve">
+  <data name="GrblSet_InvertLaserPWMPin" xml:space="preserve">
     <value>Inve&amp;rt Laser PWM Pin</value>
   </data>
   <data name="GrblSet_PWMAlwaysOn" xml:space="preserve">
@@ -649,5 +538,59 @@
   </data>
   <data name="GrblSet_DisableBuzzer" xml:space="preserve">
     <value>Disable Bu&amp;zzer</value>
+  </data>
+  <data name="Menu_Rotate270" xml:space="preserve">
+    <value>Rotate &amp;left 90°</value>
+  </data>
+  <data name="Menu_Rotate90" xml:space="preserve">
+    <value>Rotate &amp;right 90°</value>
+  </data>
+  <data name="Menu_Rotate180" xml:space="preserve">
+    <value>Ro&amp;tate 180°</value>
+  </data>
+  <data name="Menu_FlipX" xml:space="preserve">
+    <value>Flip &amp;horizontal</value>
+  </data>
+  <data name="Menu_FlipY" xml:space="preserve">
+    <value>Flip &amp;vertical</value>
+  </data>
+  <data name="Menu_RotarySpeed" xml:space="preserve">
+    <value>R&amp;otary Speed ({0:0.#})</value>
+  </data>
+  <data name="Gc_RotaryOutput" xml:space="preserve">
+    <value>R&amp;otary Output</value>
+  </data>
+  <data name="Gc_NumberOfPasses" xml:space="preserve">
+    <value>Passes Co&amp;unt:</value>
+  </data>
+  <data name="Grbl_GCodeUnknownResponse" xml:space="preserve">
+    <value>Something went wrong. An unknown response was received from Controller!</value>
+  </data>
+  <data name="Error_BlankImage" xml:space="preserve">
+    <value>Image are blank, it contains only white pixels!</value>
+  </data>
+  <data name="Grbl_GCodeLock" xml:space="preserve">
+    <value>Controller is locked out during ALARM state.</value>
+  </data>
+  <data name="GrblSet_InvertEStopPin" xml:space="preserve">
+    <value>&amp;Invert E-Stop Pin</value>
+  </data>
+  <data name="GrblSet_ServoControl" xml:space="preserve">
+    <value>&amp;Servo Control</value>
+  </data>
+  <data name="GrblSet_HBridgeControl" xml:space="preserve">
+    <value>&amp;H-Bridge Control</value>
+  </data>
+  <data name="GrblSet_SwapJogKeys" xml:space="preserve">
+    <value>Swap &amp;Jog Keys</value>
+  </data>
+  <data name="GrblSet_PSUControl" xml:space="preserve">
+    <value>Enable PS&amp;U Control</value>
+  </data>
+  <data name="Menu_BurnFromBottomToTop" xml:space="preserve">
+    <value>Burn from &amp;Bottom to Top</value>
+  </data>
+  <data name="Menu_NichromeOnOffCommand" xml:space="preserve">
+    <value>Nichrome O&amp;n/Off command ({0})</value>
   </data>
 </root>

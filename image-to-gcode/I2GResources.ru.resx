@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Im_KeepAspectRatio" xml:space="preserve">
-    <value>Сохранять пропорции</value>
-  </data>
   <data name="Im_DpiY" xml:space="preserve">
     <value>Y:</value>
   </data>
@@ -132,20 +129,11 @@
   <data name="Menu_File" xml:space="preserve">
     <value>Файл</value>
   </data>
-  <data name="Gc_MaxMinSpeed" xml:space="preserve">
-    <value>Max/Min Speed:</value>
-  </data>
-  <data name="Menu_ReturnToOrigin" xml:space="preserve">
-    <value>Возврат в ноль ({0})</value>
-  </data>
   <data name="Gc_HeatDelay" xml:space="preserve">
     <value>Задержка на нагрев:</value>
   </data>
   <data name="Menu_DoNotReturnY" xml:space="preserve">
     <value>Не возвращать Y в ноль</value>
-  </data>
-  <data name="Gc_FramePower" xml:space="preserve">
-    <value>Мощность:</value>
   </data>
   <data name="Gc_StripWidth" xml:space="preserve">
     <value>Ширина полосы:</value>
@@ -155,9 +143,6 @@
   </data>
   <data name="Menu_CropBorder" xml:space="preserve">
     <value>Обрезать фон</value>
-  </data>
-  <data name="Gc_BurnToTheCleaningStrip" xml:space="preserve">
-    <value>Выжигать к полосе очистки</value>
   </data>
   <data name="Menu_Open" xml:space="preserve">
     <value>Открыть...</value>
@@ -172,7 +157,7 @@
     <value>СТОП</value>
   </data>
   <data name="Gc_Bidirectional" xml:space="preserve">
-    <value>Змейкой</value>
+    <value>В обе стороны</value>
   </data>
   <data name="Menu_Machine" xml:space="preserve">
     <value>Станок</value>
@@ -190,13 +175,13 @@
     <value>Шаг по Y: {0:0.0##} мм</value>
   </data>
   <data name="Menu_Website" xml:space="preserve">
-    <value>Веб-сайт Image2GCode</value>
+    <value>Страница на GitHub</value>
   </data>
   <data name="Gc_Power" xml:space="preserve">
     <value>Мощность:</value>
   </data>
-  <data name="Gc_Accel" xml:space="preserve">
-    <value>Ускорение:</value>
+  <data name="Menu_Accel" xml:space="preserve">
+    <value>Ускорение ({0:0.#})</value>
   </data>
   <data name="Gc_WhiteDistance" xml:space="preserve">
     <value>Мин. растояние:</value>
@@ -204,47 +189,26 @@
   <data name="Menu_MachineType" xml:space="preserve">
     <value>Тип станка ({0})</value>
   </data>
-  <data name="Gc_PrependImageFrame" xml:space="preserve">
-    <value>Сделать обход по контуру</value>
-  </data>
   <data name="PF_GeneratingGCode" xml:space="preserve">
     <value>Генерация G-кода...</value>
   </data>
   <data name="Im_SharpenForce" xml:space="preserve">
     <value>Усиление резкости:</value>
   </data>
-  <data name="PF_Run" xml:space="preserve">
-    <value>ПРОДОЛЖИТЬ</value>
-  </data>
   <data name="Menu_PresetFile" xml:space="preserve">
     <value>Файл...</value>
-  </data>
-  <data name="Menu_Donate" xml:space="preserve">
-    <value>Поддержать рублем</value>
   </data>
   <data name="Menu_Configuration" xml:space="preserve">
     <value>Конфигурация...</value>
   </data>
-  <data name="Gc_FrameSpeed" xml:space="preserve">
-    <value>Скорость:</value>
-  </data>
   <data name="Menu_Reload" xml:space="preserve">
     <value>Перечитать</value>
-  </data>
-  <data name="Gc_NumberOfPasses" xml:space="preserve">
-    <value>Кол-во проходов:</value>
   </data>
   <data name="Menu_Send" xml:space="preserve">
     <value>Отправить...</value>
   </data>
-  <data name="PF_Pause" xml:space="preserve">
-    <value>ПАУЗА</value>
-  </data>
   <data name="Gc_Speed" xml:space="preserve">
     <value>Скорость:</value>
-  </data>
-  <data name="DefaultPresetName" xml:space="preserve">
-    <value>Стандартный пресет</value>
   </data>
   <data name="PF_SendingFile" xml:space="preserve">
     <value>Отправка NC-файла...</value>
@@ -261,9 +225,6 @@
   <data name="Gc_CleaningCycles" xml:space="preserve">
     <value>Циклов:</value>
   </data>
-  <data name="Gc_CleaningDistance" xml:space="preserve">
-    <value>Растояние:</value>
-  </data>
   <data name="Im_Height" xml:space="preserve">
     <value>Высота:</value>
   </data>
@@ -272,9 +233,6 @@
   </data>
   <data name="Menu_PresetSave" xml:space="preserve">
     <value>Сохранить пресет в</value>
-  </data>
-  <data name="Im_PreviewColor" xml:space="preserve">
-    <value>Цвет:</value>
   </data>
   <data name="Im_Contrast" xml:space="preserve">
     <value>Контраст:</value>
@@ -291,29 +249,14 @@
   <data name="Im_1BitPalette" xml:space="preserve">
     <value>Черно-белая палитра</value>
   </data>
-  <data name="Im_ResultPreview" xml:space="preserve">
-    <value>Предпросмотр:</value>
-  </data>
-  <data name="Menu_MachineOrigin" xml:space="preserve">
-    <value>Начало координат ({0})</value>
-  </data>
   <data name="Btn_Send" xml:space="preserve">
     <value>Отправить...</value>
   </data>
   <data name="Menu_BaudRate" xml:space="preserve">
     <value>Бод-рейт ({0})</value>
   </data>
-  <data name="Gc_StripSide" xml:space="preserve">
-    <value>Положение полосы:</value>
-  </data>
   <data name="Im_SameAsX" xml:space="preserve">
     <value>Как по X</value>
-  </data>
-  <data name="Im_AspectRatio" xml:space="preserve">
-    <value>Соотношение сторон:</value>
-  </data>
-  <data name="Im_TextureWrapMode" xml:space="preserve">
-    <value>Wrap Mode:</value>
   </data>
   <data name="Menu_Image" xml:space="preserve">
     <value>Изображение</value>
@@ -324,14 +267,8 @@
   <data name="Menu_Exit" xml:space="preserve">
     <value>Выход</value>
   </data>
-  <data name="Im_RotateFlip" xml:space="preserve">
-    <value>Повернуть/Отразить картинку:</value>
-  </data>
   <data name="Gc_AirAssist" xml:space="preserve">
     <value>Помощь воздухом</value>
-  </data>
-  <data name="Gc_FrameWorkArea" xml:space="preserve">
-    <value>Рабочая область картинки</value>
   </data>
   <data name="Menu_Language" xml:space="preserve">
     <value>Язык</value>
@@ -344,9 +281,6 @@
   </data>
   <data name="Gc_CleaningRowsCount" xml:space="preserve">
     <value>Кол-во строк:</value>
-  </data>
-  <data name="Gc_MinMaxPower" xml:space="preserve">
-    <value>Min/Max Power:</value>
   </data>
   <data name="Menu_Close" xml:space="preserve">
     <value>Закрыть</value>
@@ -362,9 +296,6 @@
   </data>
   <data name="Gc_ChangeSpeedOnWhite" xml:space="preserve">
     <value>Менять скорость на белом</value>
-  </data>
-  <data name="Im_PreviewBackground" xml:space="preserve">
-    <value>Фон:</value>
   </data>
   <data name="Status_Zoom" xml:space="preserve">
     <value>Масштаб: {0}%</value>
@@ -387,14 +318,8 @@
   <data name="Menu_OpenClipboard" xml:space="preserve">
     <value>Открыть из буфера обмена</value>
   </data>
-  <data name="Im_TextureSize" xml:space="preserve">
-    <value>Размер:</value>
-  </data>
   <data name="Status_ApproxRunTimeMinutes" xml:space="preserve">
     <value>Время выполнения: ~{0}м</value>
-  </data>
-  <data name="Menu_GoToNextLine" xml:space="preserve">
-    <value>Переход к след. строке ({0})</value>
   </data>
   <data name="Menu_About" xml:space="preserve">
     <value>О программе...</value>
@@ -420,14 +345,11 @@
   <data name="Im_Width" xml:space="preserve">
     <value>Ширина:</value>
   </data>
-  <data name="Gc_Shift" xml:space="preserve">
-    <value>Сдвиг:</value>
-  </data>
   <data name="Btn_Open" xml:space="preserve">
     <value>Открыть...</value>
   </data>
   <data name="Gc_CleaningStrategy" xml:space="preserve">
-    <value>Стратегия очистки:</value>
+    <value>Очистка жала:</value>
   </data>
   <data name="Im_Gamma" xml:space="preserve">
     <value>Гамма:</value>
@@ -443,9 +365,6 @@
   </data>
   <data name="Menu_DownloadCH340Driver" xml:space="preserve">
     <value>Скачать драйвер COM-порта</value>
-  </data>
-  <data name="Menu_CheckForUpdates" xml:space="preserve">
-    <value>Проверить наличие новой версии</value>
   </data>
   <data name="About_Title" xml:space="preserve">
     <value>О программе</value>
@@ -468,35 +387,17 @@
   <data name="Status_ApplyingDithering" xml:space="preserve">
     <value>Применение дизеринга...</value>
   </data>
-  <data name="Status_PreparingTexture" xml:space="preserve">
-    <value>Подготовка текстуры...</value>
-  </data>
-  <data name="Status_GeneratingPreview" xml:space="preserve">
-    <value>Создание предпросмотра...</value>
-  </data>
   <data name="Status_CalculatingWorkTime" xml:space="preserve">
     <value>Расчет времени выполнения...</value>
   </data>
   <data name="Status_ResizingImage" xml:space="preserve">
     <value>Изменение размера...</value>
   </data>
-  <data name="GrblSet_HomingCycle1" xml:space="preserve">
-    <value>Homing Cycle 1:</value>
+  <data name="Gc_MmPerRevolution" xml:space="preserve">
+    <value>ММ на оборот:</value>
   </data>
-  <data name="WO_MmPerRevolutionX" xml:space="preserve">
-    <value>ММ на оборот X:</value>
-  </data>
-  <data name="WO_MmPerRevolutionY" xml:space="preserve">
-    <value>ММ на оборот Y:</value>
-  </data>
-  <data name="WO_CylinderDiameter" xml:space="preserve">
+  <data name="Gc_CylinderDiameter" xml:space="preserve">
     <value>Диаметр цилиндра:</value>
-  </data>
-  <data name="WO_AxisBeingWrapped" xml:space="preserve">
-    <value>Axis Being Wrapped:</value>
-  </data>
-  <data name="WO_label5" xml:space="preserve">
-    <value>Image is wrapped {0:0.#} degrees around the cylinder.</value>
   </data>
   <data name="Menu_SpeedGraphReset" xml:space="preserve">
     <value>Вернуть график скорости к</value>
@@ -510,20 +411,8 @@
   <data name="Menu_GraphDefault" xml:space="preserve">
     <value>ПАУК</value>
   </data>
-  <data name="Menu_SaveGCodeWO" xml:space="preserve">
-    <value>Сохранить G-код (Wrapped Output)...</value>
-  </data>
-  <data name="Menu_SendWO" xml:space="preserve">
-    <value>Отправить (Wrapped Output)...</value>
-  </data>
-  <data name="WO_Title" xml:space="preserve">
-    <value>Wrapped Output</value>
-  </data>
   <data name="Error_CouldNotFindFile" xml:space="preserve">
     <value>Не удалось найти '{0}'!</value>
-  </data>
-  <data name="Error_InvalidImageFile" xml:space="preserve">
-    <value>'{0}' does not have a valid image format!</value>
   </data>
   <data name="GrblSet_Title" xml:space="preserve">
     <value>Конфигурация контроллера</value>
@@ -546,29 +435,11 @@
   <data name="GrblSet_MaxTravel" xml:space="preserve">
     <value>Размер стола:</value>
   </data>
-  <data name="GrblSet_FastJog" xml:space="preserve">
-    <value>Fast Jog:</value>
-  </data>
-  <data name="GrblSet_SlowJog" xml:space="preserve">
-    <value>Slow Jog:</value>
-  </data>
   <data name="GrblSet_InvertStepPin" xml:space="preserve">
     <value>Инверт. пин STEP</value>
   </data>
   <data name="GrblSet_InvertDirectionPin" xml:space="preserve">
     <value>Инверт. пин DIR</value>
-  </data>
-  <data name="GrblSet_HomingDirInvert" xml:space="preserve">
-    <value>Invert Homing Direction</value>
-  </data>
-  <data name="GrblSet_JunctionDeviation" xml:space="preserve">
-    <value>Откл. от траектории:</value>
-  </data>
-  <data name="GrblSet_ArcTolerance" xml:space="preserve">
-    <value>Arc Tolerance:</value>
-  </data>
-  <data name="GrblSet_InvertStEnablePin" xml:space="preserve">
-    <value>Invert Stepper EN Pin</value>
   </data>
   <data name="GrblSet_InvertHomePin" xml:space="preserve">
     <value>Инверт. пин HOME</value>
@@ -576,26 +447,8 @@
   <data name="GrblSet_CoreXY" xml:space="preserve">
     <value>Кинематика CoreXY/H-бот</value>
   </data>
-  <data name="GrblSet_HomingCycle2" xml:space="preserve">
-    <value>Homing Cycle 2:</value>
-  </data>
-  <data name="GrblSet_HomingFeedRate" xml:space="preserve">
-    <value>Homing Feed Rate:</value>
-  </data>
-  <data name="GrblSet_HomingSeekRate" xml:space="preserve">
-    <value>Homing Seek Rate:</value>
-  </data>
-  <data name="GrblSet_LaserMode" xml:space="preserve">
-    <value>Режим "Лазера"</value>
-  </data>
   <data name="GrblSet_MarkerPower" xml:space="preserve">
     <value>Мощность маркера:</value>
-  </data>
-  <data name="GrblSet_FastGrid" xml:space="preserve">
-    <value>Fast Grid:</value>
-  </data>
-  <data name="GrblSet_SlowGrid" xml:space="preserve">
-    <value>Slow Grid:</value>
   </data>
   <data name="Btn_OK" xml:space="preserve">
     <value>OK</value>
@@ -612,34 +465,22 @@
   <data name="Grbl_UnknownParameter" xml:space="preserve">
     <value>Ответ от контроллера содержит один или несколько неизвестных параметров. Попробуйте изменить настройки контроллера используя последнюю версию программы image2gcode.</value>
   </data>
-  <data name="GrblSet_FwVer" xml:space="preserve">
-    <value>Версия ПО:</value>
-  </data>
   <data name="Grbl_GCodeError" xml:space="preserve">
     <value>Что-то пошло не так. Контроллер ответил кодом ошибки {0}.</value>
   </data>
   <data name="Grbl_GCodeErrorFile" xml:space="preserve">
     <value>Ошибка G-кода в файле '{0}' на строке {1}. Контроллер ответил кодом ошибки {2}.</value>
   </data>
-  <data name="Error_FileComment" xml:space="preserve">
-    <value>В блоке комментариев G-кода должна быть только одна строка начинающаяся с символа процента.</value>
-  </data>
-  <data name="GrblSet_InvertJogKeys" xml:space="preserve">
-    <value>Invert Jog Keys</value>
-  </data>
   <data name="GrblSet_PWMFrequency" xml:space="preserve">
     <value>Частота ШИМ:</value>
   </data>
-  <data name="GrblSet_InvertLaserENPin" xml:space="preserve">
-    <value>Invert Laser EN Pin</value>
-  </data>
-  <data name="GrblSet_InvertLaserPWM" xml:space="preserve">
-    <value>Invert Laser PWM Pin</value>
-  </data>
-  <data name="GrblSet_PWMAlwaysOn" xml:space="preserve">
-    <value>PWM Always On</value>
-  </data>
   <data name="GrblSet_DisableBuzzer" xml:space="preserve">
     <value>Отключить зуммер</value>
+  </data>
+  <data name="Gc_NumberOfPasses" xml:space="preserve">
+    <value>Кол-во проходов:</value>
+  </data>
+  <data name="Menu_BurnFromBottomToTop" xml:space="preserve">
+    <value>Выжигать снизу вверх</value>
   </data>
 </root>

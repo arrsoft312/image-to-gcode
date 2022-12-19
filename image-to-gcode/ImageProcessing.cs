@@ -69,7 +69,6 @@ partial class image2gcode {
     
     private Bitmap imSrc;
     
-    private IntPtr imPreview;
     private IntPtr imResized;
     private IntPtr imDest;
     
@@ -80,12 +79,6 @@ partial class image2gcode {
     
     private int gcPixelsCount;
     private int gcJobTime;
-    
-    private string[] previewBackground = new string[PreviewCount];
-    private WrapMode[] previewWrapMode = new WrapMode[PreviewCount];
-    private int[] previewSize = new int[PreviewCount];
-    private Color[] previewBgColor = new Color[PreviewCount];
-    private Color[] previewDotColor = new Color[PreviewCount];
     
     private unsafe bool LoadImage(string fileName, Bitmap im = null) {
         if (fileName != null) {
@@ -103,7 +96,7 @@ partial class image2gcode {
             }
         }
         
-        bWorkerFlags = BWorkerFlagExit;
+        bWorkerFlags = BWorkerFlags.Exit;
         while (backgroundWorker1.IsBusy) {
             Application.DoEvents();
         }
@@ -117,12 +110,15 @@ partial class image2gcode {
         
         reloadToolStripMenuItem.Enabled = (fileName != null);
         exportToolStripMenuItem.Enabled = true;
-        export2ToolStripMenuItem.Enabled = true;
         closeToolStripMenuItem.Enabled = true;
         saveToolStripMenuItem.Enabled = true;
+        rotate270ToolStripMenuItem.Enabled = true;
+        rotate90ToolStripMenuItem.Enabled = true;
+        flipXYToolStripMenuItem.Enabled = true;
+        flipXToolStripMenuItem.Enabled = true;
+        flipYToolStripMenuItem.Enabled = true;
         cropToolStripMenuItem.Enabled = true;
         sendToolStripMenuItem.Enabled = true;
-        send2ToolStripMenuItem.Enabled = true;
         
         exportToolStripButton.Enabled = true;
         sendToolStripButton.Enabled = true;
@@ -231,14 +227,13 @@ partial class image2gcode {
         
         ImageBox1ZoomChanged(imageBox1, EventArgs.Empty);
         
-        bWorkerFlags = -1;
         backgroundWorker1.RunWorkerAsync(null);
         
         return true;
     }
     
     private void CloseToolStripMenuItemClick(object sender, EventArgs e) {
-        bWorkerFlags = BWorkerFlagExit;
+        bWorkerFlags = BWorkerFlags.Exit;
         while (backgroundWorker1.IsBusy) {
             Application.DoEvents();
         }
@@ -249,12 +244,15 @@ partial class image2gcode {
         
         reloadToolStripMenuItem.Enabled = false;
         exportToolStripMenuItem.Enabled = false;
-        export2ToolStripMenuItem.Enabled = false;
         closeToolStripMenuItem.Enabled = false;
         saveToolStripMenuItem.Enabled = false;
+        rotate270ToolStripMenuItem.Enabled = false;
+        rotate90ToolStripMenuItem.Enabled = false;
+        flipXYToolStripMenuItem.Enabled = false;
+        flipXToolStripMenuItem.Enabled = false;
+        flipYToolStripMenuItem.Enabled = false;
         cropToolStripMenuItem.Enabled = false;
         sendToolStripMenuItem.Enabled = false;
-        send2ToolStripMenuItem.Enabled = false;
         
         exportToolStripButton.Enabled = false;
         sendToolStripButton.Enabled = false;
@@ -360,7 +358,7 @@ partial class image2gcode {
         textBox3.Text = (imWidth/imDpiX * MmPerInch).ToString("0.0##");
         textBox4.Text = (imHeight/imDpiY * MmPerInch).ToString("0.0##");
         
-        bWorkerFlags = (BWorkerFlagDoWork|BWorkerFlagImageChanged|BWorkerFlagPreviewChanged);
+        bWorkerFlags = (BWorkerFlags.CalcJobTime|BWorkerFlags.ImageChanged|BWorkerFlags.RedrawPreview);
     }
     
     private unsafe void RotateFlipButtonClick(object sender, EventArgs e) {
@@ -376,7 +374,7 @@ partial class image2gcode {
         
         int scanWidth = ((width+3) / 4 * 4);
         
-        RotateFlipType rotateFlipType = (RotateFlipType)((Control)sender).Tag;
+        RotateFlipType rotateFlipType = (RotateFlipType)((ToolStripItem)sender).Tag;
         imSrc.RotateFlip(rotateFlipType);
         
         switch (rotateFlipType) {
@@ -447,7 +445,7 @@ partial class image2gcode {
         textBox3.Text = (imWidth/imDpiX * MmPerInch).ToString("0.0##");
         textBox4.Text = (imHeight/imDpiY * MmPerInch).ToString("0.0##");
         
-        bWorkerFlags = (BWorkerFlagDoWork|BWorkerFlagImageChanged|BWorkerFlagPreviewChanged);
+        bWorkerFlags = (BWorkerFlags.CalcJobTime|BWorkerFlags.ImageChanged|BWorkerFlags.RedrawPreview);
     }
     
     private void ImageBox1ZoomChanged(object sender, EventArgs e) {
@@ -488,9 +486,6 @@ partial class image2gcode {
         int height = imHeight;
         
         int scanWidth = ((width+3) / 4 * 4);
-        int scanWidth2 = ((width*3+3) / 4 * 4);
-        
-        imPreview = Marshal.AllocHGlobal((IntPtr)(height*scanWidth2));
         
         imResized = Marshal.AllocHGlobal((IntPtr)(height*scanWidth));
         imDest = Marshal.AllocHGlobal((IntPtr)(height*scanWidth));
@@ -536,10 +531,6 @@ partial class image2gcode {
         byte* lookupTable = (byte*)Marshal.AllocHGlobal((IntPtr)256);
         byte* lookupTable2 = (byte*)Marshal.AllocHGlobal((IntPtr)256);
         
-        byte* lookupTable4 = (byte*)Marshal.AllocHGlobal((IntPtr)65536);
-        byte* lookupTable5 = (byte*)Marshal.AllocHGlobal((IntPtr)65536);
-        byte* lookupTable6 = (byte*)Marshal.AllocHGlobal((IntPtr)65536);
-        
         float* F = (float*)Marshal.AllocHGlobal((IntPtr)1024);
         
         int* acctime = (int*)Marshal.AllocHGlobal((IntPtr)1024);
@@ -551,13 +542,12 @@ partial class image2gcode {
         prevCanvas = new Rectangle(0, 0, width, height);
         prevInterpolation = imInterpolation;
         
-        IntPtr imBackground = IntPtr.Zero;
-        int textureWidth = 0;
-        int textureHeight = 0;
+        IntPtr imTemp = IntPtr.Zero;
         
-        int prevDotColor = -1;
+        _bWorkerFlags = ~BWorkerFlags.Exit;
+        bWorkerWaitHandle.Set();
         
-        int flags = 0;
+        BWorkerFlags flags = 0;
         for (;;) {
             bWorkerWaitHandle.WaitOne(-1, false);
             
@@ -566,7 +556,7 @@ partial class image2gcode {
             flags |= _bWorkerFlags;
             _bWorkerFlags = 0;
             
-            if ((flags & BWorkerFlagExit) != 0) {
+            if ((flags & BWorkerFlags.Exit) != 0) {
                 break;
             }
             
@@ -574,7 +564,6 @@ partial class image2gcode {
             height = imHeight;
             
             scanWidth = ((width+3) / 4 * 4);
-            scanWidth2 = ((width*3+3) / 4 * 4);
             
             float dpiX = (imDpiX / MmPerInch);
             float dpiY = (imDpiY / MmPerInch);
@@ -582,15 +571,13 @@ partial class image2gcode {
             float left = imLeft;
             float top = imTop;
             
-            int previewIdx = activePreview;
-            
-            MachineType machine = machineType;
-            bool isNichromeBurner = (machine == MachineType.NichromeBurner);
-            bool isImpactGraver = (machine == MachineType.ImpactGraver);
+            bool isNichromeBurner = (machineType == MachineType.NichromeBurner);
+            bool isImpactGraver = (machineType == MachineType.ImpactGraver);
+            //bool isLaserEngraver = !(isNichromeBurner || isImpactGraver);
             
             bool _1bitPalette = im1bitPalette;
             
-            if ((flags & BWorkerFlagImageChanged) != 0) {
+            if ((flags & BWorkerFlags.ImageChanged) != 0) {
                 ImageDithering dithering = imDithering;
                 int blackThreshold = imBlackThreshold;
                 bool invertColors = imInvertColors;
@@ -609,9 +596,6 @@ partial class image2gcode {
                     prevHeight = -1;
                     
                     lock (imResizeLock) {
-                        Marshal.FreeHGlobal(imPreview);
-                        imPreview = Marshal.AllocHGlobal((IntPtr)(height*scanWidth2));
-                        
                         Marshal.FreeHGlobal(imResized);
                         imResized = Marshal.AllocHGlobal((IntPtr)(height*scanWidth));
                         
@@ -626,7 +610,12 @@ partial class image2gcode {
                         continue;
                     }
                     
-                    using (Graphics g = Graphics.FromImage(new Bitmap(width, height, scanWidth2, PixelFormat.Format24bppRgb, imPreview))) {
+                    int scanWidth2 = ((width*3+3) / 4 * 4);
+                    
+                    Marshal.FreeHGlobal(imTemp);
+                    imTemp = Marshal.AllocHGlobal((IntPtr)(height*scanWidth2));
+                    
+                    using (Graphics g = Graphics.FromImage(new Bitmap(width, height, scanWidth2, PixelFormat.Format24bppRgb, imTemp))) {
                         g.PixelOffsetMode = PixelOffsetMode.HighQuality;
                         g.InterpolationMode = interpolation;
                         g.DrawImage(imSrc, new Rectangle(0, 0, width, height), imCanvas.X, imCanvas.Y, imCanvas.Width, imCanvas.Height, GraphicsUnit.Pixel, null, (callbackdata) => (_bWorkerFlags != 0), IntPtr.Zero);
@@ -636,7 +625,7 @@ partial class image2gcode {
                     }
                     
                     Parallel.For(0, height, (y, loop) => {
-                        byte* src = (byte*)(imPreview + y*scanWidth2);
+                        byte* src = (byte*)(imTemp + y*scanWidth2);
                         byte* dest = (byte*)(imResized + y*scanWidth);
                         
                         for (int x = 0; x < width; x++) {
@@ -649,6 +638,9 @@ partial class image2gcode {
                     if (_bWorkerFlags != 0) {
                         continue;
                     }
+                    
+                    Marshal.FreeHGlobal(imTemp);
+                    imTemp = IntPtr.Zero;
                     
                     prevInterpolation = interpolation;
                     
@@ -685,13 +677,14 @@ partial class image2gcode {
                         nPixel = 255;
                     }
                     
-                    if (!_1bitPalette) {
-                        if (invertColors) {
-                            nPixel ^= 255;
-                        }
-                        nPixel = colorTable[nPixel];
-                    } else {
-                        if (dithering == ImageDithering.Threshold) {
+                    if (_1bitPalette) {
+                        if (dithering != ImageDithering.Threshold) {
+                            if (invertColors) {
+                                lookupTable2[i] = (byte)(255 + i/128);
+                            } else {
+                                lookupTable2[i] = (byte)(256 - i/128);
+                            }
+                        } else {
                             if (invertColors) {
                                 nPixel ^= 255;
                             }
@@ -700,13 +693,12 @@ partial class image2gcode {
                             } else {
                                 nPixel = 255;
                             }
-                        } else {
-                            if (!invertColors) {
-                                lookupTable2[i] = (byte)(i/128 * 255);
-                            } else {
-                                lookupTable2[i] = (byte)(255 + i/128);
-                            }
                         }
+                    } else {
+                        if (invertColors) {
+                            nPixel ^= 255;
+                        }
+                        nPixel = colorTable[nPixel];
                     }
                     
                     lookupTable[i] = (byte)nPixel;
@@ -1031,210 +1023,10 @@ partial class image2gcode {
                     }
                 }
                 
-                flags &= ~BWorkerFlagImageChanged;
+                flags &= ~BWorkerFlags.ImageChanged;
             }
             
-            if ((flags & BWorkerFlagBackgroundChanged) != 0) {
-                if (previewIdx != -1) {
-                    ((BackgroundWorker)sender).ReportProgress(-1, resources.GetString("Status_PreparingTexture", culture));
-                    
-                    string background = previewBackground[previewIdx];
-                    if (background == null) {
-                        int bgColor = previewBgColor[previewIdx].ToArgb();
-                        
-                        Marshal.FreeHGlobal(imBackground);
-                        imBackground = Marshal.AllocHGlobal((IntPtr)196608);
-                        
-                        textureWidth = 256;
-                        textureHeight = 256;
-                        
-                        byte bgR = (byte)(bgColor >> 16);
-                        byte bgG = (byte)(bgColor >> 8);
-                        byte bgB = (byte)(bgColor >> 0);
-                        
-                        Parallel.For(0, 256, (y, loop) => {
-                            byte* dest = (byte*)(imBackground + y*768);
-                            for (int x = 0; x < 256; x++) {
-                                dest[x*3+2] = bgR;
-                                dest[x*3+1] = bgG;
-                                dest[x*3+0] = bgB;
-                            }
-                            if (_bWorkerFlags != 0) {
-                                loop.Stop();
-                            }
-                        });
-                        if (_bWorkerFlags != 0) {
-                            continue;
-                        }
-                    } else {
-                        float textureScale = (100F / previewSize[previewIdx]);
-                        using (Bitmap im = (Bitmap)Image.FromStream(bitmapTextures[background], false, true)) {
-                            int W = im.Width;
-                            int H = im.Height;
-                            
-                            textureWidth = (int)(W / textureScale);
-                            textureHeight = (int)(H / textureScale);
-                            
-                            Marshal.FreeHGlobal(imBackground);
-                            imBackground = Marshal.AllocHGlobal((IntPtr)(textureHeight*textureWidth*3));
-                            
-                            im.LockBits(new Rectangle(0, 0, W, H), ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb, bDataSrc);
-                            
-                            imScan0 = bDataSrc.Scan0;
-                            imScanWidth = bDataSrc.Stride;
-                            
-                            Parallel.For(0, textureHeight, (y, loop) => {
-                                byte* dest = (byte*)(imBackground + y*textureWidth*3);
-                                
-                                int floorY = (int)(y*textureScale);
-                                int ceilY = (floorY+1);
-                                if (ceilY >= H) {
-                                    ceilY = (H-1);
-                                }
-                                float fractionY = (y*textureScale - floorY);
-                                float invFractionY = (1F - fractionY);
-                                
-                                byte* srcFloor = (byte*)(imScan0 + floorY*imScanWidth);
-                                byte* srcCeil = (byte*)(imScan0 + ceilY*imScanWidth);
-                                
-                                for (int x = 0; x < textureWidth; x++) {
-                                    int floorX = (int)(x*textureScale);
-                                    int ceilX = (floorX+1);
-                                    if (ceilX >= W) {
-                                        ceilX = (W-1);
-                                    }
-                                    float fractionX = (x*textureScale - floorX);
-                                    float invFractionX = (1F - fractionX);
-                                    
-                                    float b1, b2;
-                                    
-                                    b1 = (invFractionX*srcFloor[floorX*3+2] + fractionX*srcFloor[ceilX*3+2]);
-                                    b2 = (invFractionX*srcCeil[floorX*3+2] + fractionX*srcCeil[ceilX*3+2]);
-                                    dest[x*3+2] = (byte)(invFractionY*b1 + fractionY*b2);
-                                    
-                                    b1 = (invFractionX*srcFloor[floorX*3+1] + fractionX*srcFloor[ceilX*3+1]);
-                                    b2 = (invFractionX*srcCeil[floorX*3+1] + fractionX*srcCeil[ceilX*3+1]);
-                                    dest[x*3+1] = (byte)(invFractionY*b1 + fractionY*b2);
-                                    
-                                    b1 = (invFractionX*srcFloor[floorX*3+0] + fractionX*srcFloor[ceilX*3+0]);
-                                    b2 = (invFractionX*srcCeil[floorX*3+0] + fractionX*srcCeil[ceilX*3+0]);
-                                    dest[x*3+0] = (byte)(invFractionY*b1 + fractionY*b2);
-                                }
-                                if (_bWorkerFlags != 0) {
-                                    loop.Stop();
-                                }
-                            });
-                            
-                            im.UnlockBits(bDataSrc);
-                            if (_bWorkerFlags != 0) {
-                                continue;
-                            }
-                        }
-                    }
-                    
-                    imageBox1.ImIdx = 1;
-                } else {
-                    Marshal.FreeHGlobal(imBackground);
-                    imBackground = IntPtr.Zero;
-                    
-                    textureWidth = 0;
-                    textureHeight = 0;
-                    
-                    imageBox1.ImIdx = 0;
-                }
-                
-                flags &= ~BWorkerFlagBackgroundChanged;
-            }
-            
-            if ((flags & BWorkerFlagPreviewChanged) != 0) {
-                if (previewIdx != -1) {
-                    ((BackgroundWorker)sender).ReportProgress(-1, resources.GetString("Status_GeneratingPreview", culture));
-                    
-                    int textureWrapMode = (int)previewWrapMode[previewIdx];
-                    
-                    int dotColor = (previewDotColor[previewIdx].ToArgb() & 0x00FFFFFF);
-                    if (dotColor != prevDotColor) {
-                        byte dotR = (byte)(dotColor >> 16);
-                        byte dotG = (byte)(dotColor >> 8);
-                        byte dotB = (byte)(dotColor >> 0);
-                        
-                        prevDotColor = -1;
-                        
-                        Parallel.For(0, 256, (i) => {
-                            for (int j = 0; j <= ImColorWhite; j += ImColorStep) {
-                                float invAlpha = (j / 255F);
-                                float alpha = (1F - invAlpha);
-                                lookupTable4[i*256+j] = (byte)(alpha*dotR + invAlpha*i);
-                                lookupTable5[i*256+j] = (byte)(alpha*dotG + invAlpha*i);
-                                lookupTable6[i*256+j] = (byte)(alpha*dotB + invAlpha*i);
-                            }
-                            lookupTable4[i*256+255] = (byte)i;
-                            lookupTable5[i*256+255] = (byte)i;
-                            lookupTable6[i*256+255] = (byte)i;
-                        });
-                        if (_bWorkerFlags != 0) {
-                            continue;
-                        }
-                        
-                        prevDotColor = dotColor;
-                    }
-                    
-                    Parallel.For(0, height, (y, loop) => {
-                        byte* src = (byte*)(imDest + y*scanWidth);
-                        byte* dest = (byte*)(imPreview + y*scanWidth2);
-                        
-                        byte* src2;
-                        if ((textureWrapMode & 2) != 0) {
-                            if (((y / textureHeight) % 2) == 1) {
-                                src2 = (byte*)(imBackground + (textureHeight - y + y/textureHeight*textureHeight - 1)*textureWidth*3);
-                            } else {
-                                src2 = (byte*)(imBackground + (y - y/textureHeight*textureHeight)*textureWidth*3);
-                            }
-                        } else {
-                            src2 = (byte*)(imBackground + (y - y/textureHeight*textureHeight)*textureWidth*3);
-                        }
-                        
-                        int j = textureWidth;
-                        for (int x = 0; x < width;) {
-                            if ((x + j) > width) {
-                                j = (width-x);
-                            }
-                            for (int i = 0; i < j; x++, i++) {
-                                dest[x*3+2] = lookupTable4[src2[i*3+2]*256 + src[x]];
-                                dest[x*3+1] = lookupTable5[src2[i*3+1]*256 + src[x]];
-                                dest[x*3+0] = lookupTable6[src2[i*3+0]*256 + src[x]];
-                            }
-                            
-                            if ((textureWrapMode & 1) == 0) {
-                                continue;
-                            }
-                            
-                            if ((x + j) > width) {
-                                j = (width-x);
-                            }
-                            for (int i = (textureWidth-1); i >= (textureWidth-j); x++, i--) {
-                                dest[x*3+2] = lookupTable4[src2[i*3+2]*256 + src[x]];
-                                dest[x*3+1] = lookupTable5[src2[i*3+1]*256 + src[x]];
-                                dest[x*3+0] = lookupTable6[src2[i*3+0]*256 + src[x]];
-                            }
-                        }
-                        if (_bWorkerFlags != 0) {
-                            loop.Stop();
-                        }
-                    });
-                    if (_bWorkerFlags != 0) {
-                        continue;
-                    }
-                }
-                
-                imageBox1.StartPointX = (-left / (width/dpiX));
-                imageBox1.StartPointY = (-top / (height/dpiY));
-                imageBox1.Invalidate(false);
-                
-                flags &= ~(BWorkerFlagPreviewChanged|BWorkerFlagRedrawOrigin);
-            }
-            
-            if ((flags & BWorkerFlagDoWork) != 0) {
+            if ((flags & BWorkerFlags.CalcJobTime) != 0) {
                 ((BackgroundWorker)sender).ReportProgress(-1, resources.GetString("Status_CalculatingWorkTime", culture));
                 
                 int pixelsCount = 0;
@@ -1242,56 +1034,54 @@ partial class image2gcode {
                 
                 float rapidSpeed = (gcG0Speed/60000F);
                 
-                if (_1bitPalette) {
-                    F[0] = (gcSpeed/60000F);
-                } else {
-                    if (isImpactGraver) {
-                        for (int i = 0; i <= ImColorWhite; i += ImColorStep) {
-                            F[i] = (gcSpeed/60000F);
-                        }
-                    } else {
-                        float p1 = (gcSpeedGraph[1]/60000F);
-                        float p7 = (gcSpeedGraph[0]/60000F);
-                        
-                        float p2 = (3*ImColorWhite*(1F-gcSpeedGraph[2]));
-                        float p3 = (3F*(p1 - (p1-p7)*gcSpeedGraph[3]));
-                        float p4 = (3*ImColorWhite*(1F-gcSpeedGraph[4]));
-                        float p5 = (3F*(p1 - (p1-p7)*gcSpeedGraph[5]));
-                        
-                        int color = (ImColorWhite-ImColorStep);
-                        
-                        float x0 = ImColorWhite;
-                        float y0 = p1;
-                        
-                        F[ImColorWhite] = p1;
-                        for (int i = 1; i < BezierSegmentsCount; i++) {
-                            float t = ((float)i/BezierSegmentsCount);
-                            float inv_t = (1F - t);
-                            
-                            float x1 = (inv_t*inv_t*inv_t*ImColorWhite + inv_t*inv_t*t*p2 + t*t*inv_t*p4);
-                            float y1 = (inv_t*inv_t*inv_t*p1 + inv_t*inv_t*t*p3 + t*t*inv_t*p5 + t*t*t*p7);
-                            if (x1 < color) {
-                                F[color] = (y0 + (color-x0) * (y1-y0) / (x1-x0));
-                                
-                                color -= ImColorStep;
-                                if (color == 0) {
-                                    break;
-                                }
-                            }
-                            
-                            x0 = x1;
-                            y0 = y1;
-                        }
-                        F[0] = p7;
+                if (_1bitPalette || isImpactGraver) {
+                    for (int i = 0; i <= ImColorWhite; i += ImColorStep) {
+                        F[i] = (gcSpeed/60000F);
                     }
+                } else {
+                    float p1 = (gcSpeedGraph[1]/60000F);
+                    float p7 = (gcSpeedGraph[0]/60000F);
+                    
+                    float p2 = (3*ImColorWhite*(1F-gcSpeedGraph[2]));
+                    float p3 = (3F*(p1 - (p1-p7)*gcSpeedGraph[3]));
+                    float p4 = (3*ImColorWhite*(1F-gcSpeedGraph[4]));
+                    float p5 = (3F*(p1 - (p1-p7)*gcSpeedGraph[5]));
+                    
+                    int color = (ImColorWhite-ImColorStep);
+                    
+                    float x0 = ImColorWhite;
+                    float y0 = p1;
+                    
+                    F[ImColorWhite] = p1;
+                    for (int i = 1; i < BezierSegmentsCount; i++) {
+                        float t = ((float)i/BezierSegmentsCount);
+                        float inv_t = (1F - t);
+                        
+                        float x1 = (inv_t*inv_t*inv_t*ImColorWhite + inv_t*inv_t*t*p2 + t*t*inv_t*p4);
+                        float y1 = (inv_t*inv_t*inv_t*p1 + inv_t*inv_t*t*p3 + t*t*inv_t*p5 + t*t*t*p7);
+                        if (x1 < color) {
+                            F[color] = (y0 + (color-x0) * (y1-y0) / (x1-x0));
+                            
+                            color -= ImColorStep;
+                            if (color == 0) {
+                                break;
+                            }
+                        }
+                        
+                        x0 = x1;
+                        y0 = y1;
+                    }
+                    F[0] = p7;
                 }
+                
                 F[255] = (gcWhiteSpeed/60000F);
                 
                 bool bidirectional = gcBidirectional;
-                int numberOfPasses = gcNumberOfPasses;
                 
                 if (isNichromeBurner) {
                     CleaningStrategy cleaningStrategy = gcCleaningStrategy;
+                    bool stripOnTheLeftSide = ((width + (int)(left*dpiX - 0.5F)) > 0);
+                    
                     float stripWidth = gcStripWidth;
                     float stripSpeed = (gcStripSpeed/60000F);
                     float cleaningFieldWidth = gcCleaningFieldWidth;
@@ -1304,38 +1094,41 @@ partial class image2gcode {
                     
                     int cleaningRowsCount;
                     switch (cleaningStrategy) {
-                        case CleaningStrategy.Always:
+                        case CleaningStrategy.None:
+                            cleaningRowsCount = height;
+                            break;
+                        case CleaningStrategy.AfterNRows:
+                            cleaningRowsCount = gcCleaningRowsCount;
+                            break;
+                        default:
                             if (bidirectional) {
                                 cleaningRowsCount = 2;
                             } else {
                                 cleaningRowsCount = 1;
                             }
                             break;
-                        case CleaningStrategy.AfterNRows:
-                            cleaningRowsCount = (gcCleaningRowsCount*numberOfPasses);
-                            break;
-                        case CleaningStrategy.Distance:
-                            cleaningRowsCount = (int)(gcCleaningDistance / (width/dpiX) + 0.5F);
-                            if (cleaningRowsCount == 0) {
-                                cleaningRowsCount = 1;
-                            }
-                            break;
-                        default:
-                            cleaningRowsCount = (height*numberOfPasses);
-                            break;
                     }
                     
-                    int n = ((height*numberOfPasses-1) / cleaningRowsCount);
+                    int n = ((height-1) / cleaningRowsCount);
                     jobTime += (int)(((stripWidth-cleaningFieldWidth)/stripSpeed + cleaningFieldWidth*2*numberOfCleaningCycles/cleaningFieldSpeed) * n);
                     
-                    if (!bidirectional) {
-                        jobTime += (int)(width*height*numberOfPasses/dpiX / rapidSpeed);
-                    } else {
+                    if (bidirectional) {
                         if ((cleaningRowsCount % 2) == 1) {
                             jobTime += (int)(width*n/dpiX / rapidSpeed);
                         }
-                        if (((height*numberOfPasses - cleaningRowsCount*n) % 2) == 1) {
+                        if (((height - cleaningRowsCount*n) % 2) == 1) {
                             jobTime += (int)(width/dpiX / rapidSpeed);
+                        }
+                    } else {
+                        jobTime += (int)(width*height/dpiX / rapidSpeed);
+                    }
+                    if (stripOnTheLeftSide) {
+                        if (left > 0F) {
+                            jobTime += (int)(left*(2+2*n) / rapidSpeed);
+                        }
+                    } else {
+                        if (width/dpiX < -left) {
+                            jobTime -= (int)((width/dpiX + left)*(2+2*n) / rapidSpeed);
                         }
                     }
                     
@@ -1356,16 +1149,11 @@ partial class image2gcode {
                         }
                         
                         int t = 0;
-                        
-                        t += (int)(j[0]/dpiX / F[0]);
-                        if (!_1bitPalette) {
-                            for (int i = ImColorStep; i <= ImColorWhite; i += ImColorStep) {
-                                t += (int)(j[i]/dpiX / F[i]);
-                            }
+                        for (int i = 0; i <= ImColorWhite; i += ImColorStep) {
+                            t += (int)(j[i]/dpiX / F[i]);
                         }
                         t += (int)(j[255]/dpiX / F[255]);
                         
-                        t *= numberOfPasses;
                         Interlocked.Add(ref jobTime, t);
                     });
                     if (_bWorkerFlags != 0) {
@@ -1374,25 +1162,27 @@ partial class image2gcode {
                     
                     pixelsCount = (width*height);
                 } else {
+                    int numberOfPasses = 1;
+                    if (isImpactGraver) {
+                        numberOfPasses = gcNumberOfPasses;
+                    }
+                    
                     bool skipWhite = gcSkipWhite;
                     float whiteDistance = gcWhiteDistance;
                     
-                    float accel = (gcAccel/1000000F);
+                    bool burnFromBottomToTop = gcBurnFromBottomToTop;
                     
-                    acctime[0] = (int)(F[0] / accel);
-                    accdist[0] = (int)(acctime[0]*F[0]/2F * dpiX);
-                    if (!_1bitPalette) {
-                        for (int i = ImColorStep; i <= ImColorWhite; i += ImColorStep) {
-                            acctime[i] = (int)(F[i] / accel);
-                            accdist[i] = (int)(acctime[i]*F[i]/2F * dpiX);
-                        }
+                    float accel = (gcAccel/1000000F);
+                    for (int i = 0; i <= ImColorWhite; i += ImColorStep) {
+                        acctime[i] = (int)(F[i] / accel);
+                        accdist[i] = (int)(acctime[i]*F[i]/2F * dpiX);
                     }
                     
                     acctime[255] = (int)(rapidSpeed / accel);
                     accdist[255] = (int)(acctime[255]*rapidSpeed/2F * dpiX);
                     
-                    int[] X2 = new int[height];
                     int[] X = new int[height];
+                    int[] X2 = new int[height];
                     
                     Parallel.For<int[]>(0, height, () => new int[258], (y, loop, j) => {
                         byte* dest = (byte*)(imDest + y*scanWidth);
@@ -1414,27 +1204,25 @@ partial class image2gcode {
                             }
                         }
                         
-                        X2[y] = (width2 + accdist[dest[width2-1]]);
                         X[y] = (x - accdist[dest[x]]);
+                        X2[y] = (width2 + accdist[dest[width2-1]]);
                         
                         byte prevPixel = dest[x];
-                        int x2 = -1;
                         
                         j[257] += acctime[prevPixel];
-                        for (; x < width2; x++) {
+                        for (int x2 = -1; x < width2; x++) {
                             byte pixel = dest[x];
                             if (pixel != ImColorUltraWhite) {
                                 ++j[256];
                                 if (prevPixel == ImColorUltraWhite) {
                                     int n = (x-x2);
-                                    if (skipWhite && ((n/dpiX) >= whiteDistance)) {
+                                    if (skipWhite && (n/dpiX) >= whiteDistance) {
                                         j[255] += n;
                                     } else {
-                                        byte pixel2 = dest[x2-1];
-                                        if (F[pixel] > F[pixel2]) {
+                                        if (F[pixel] > F[dest[x2-1]]) {
                                             j[pixel] += n;
                                         } else {
-                                            j[pixel2] += n;
+                                            j[dest[x2-1]] += n;
                                         }
                                     }
                                 }
@@ -1459,17 +1247,13 @@ partial class image2gcode {
                             return;
                         }
                         
-                        j[257] += (int)(j[0]/dpiX / F[0]);
-                        if (!_1bitPalette) {
-                            for (int i = ImColorStep; i <= ImColorWhite; i += ImColorStep) {
-                                j[257] += (int)(j[i]/dpiX / F[i]);
-                            }
+                        for (int i = 0; i <= ImColorWhite; i += ImColorStep) {
+                            j[257] += (int)(j[i]/dpiX / F[i]);
                         }
                         j[257] += (int)(j[255]/dpiX / F[255]);
                         
-                        j[257] *= numberOfPasses;
                         Interlocked.Add(ref pixelsCount, j[256]);
-                        Interlocked.Add(ref jobTime, j[257]);
+                        Interlocked.Add(ref jobTime, j[257]*numberOfPasses);
                     });
                     if (_bWorkerFlags != 0) {
                         continue;
@@ -1478,18 +1262,24 @@ partial class image2gcode {
                     bool forward = true;
                     int prevX = 0;
                     
-                    for (int y = 0; y < height; y++) {
-                        if (X[y] == X2[y]) {
+                    for (int x, x2, y = 0; y < height; y++) {
+                        if (burnFromBottomToTop) {
+                            x = X[height-y-1];
+                            x2 = X2[height-y-1];
+                        } else {
+                            x = X[y];
+                            x2 = X2[y];
+                        }
+                        if (x == x2) {
                             continue;
                         }
                         
                         int rapidTravel;
                         if (forward) {
-                            rapidTravel = (X2[y] - prevX);
+                            rapidTravel = (x-prevX);
                         } else {
-                            rapidTravel = (X[y] - prevX);
+                            rapidTravel = (x2-prevX);
                         }
-                        
                         if (rapidTravel < 0) {
                             rapidTravel = -rapidTravel;
                         }
@@ -1500,25 +1290,25 @@ partial class image2gcode {
                             jobTime += (int)(rapidTravel/dpiX / rapidSpeed);
                         }
                         
-                        if (!bidirectional) {
-                            int rapidTravel2 = (X2[y] - X[y]);
-                            if (rapidTravel2 >= (2*accdist[255])) {
-                                jobTime += (int)((2*acctime[255] + (rapidTravel2-2*accdist[255])/dpiX / rapidSpeed) * (numberOfPasses-1));
-                            } else {
-                                jobTime += (int)(rapidTravel2/dpiX / rapidSpeed * (numberOfPasses-1));
-                            }
-                            prevX = X[y];
-                        } else {
+                        if (bidirectional) {
                             if ((numberOfPasses % 2) == 1) {
                                 if (forward) {
-                                    prevX = X[y];
+                                    prevX = x2;
                                 } else {
-                                    prevX = X2[y];
+                                    prevX = x;
                                 }
                                 forward = !forward;
                             } else {
-                                prevX = X2[y];
+                                prevX = x;
                             }
+                        } else {
+                            int jj = (x2-x);
+                            if (jj >= (2*accdist[255])) {
+                                jobTime += ((2*acctime[255] + (int)((jj-2*accdist[255])/dpiX / rapidSpeed)) * (numberOfPasses-1));
+                            } else {
+                                jobTime += ((int)(jj/dpiX / rapidSpeed) * (numberOfPasses-1));
+                            }
+                            prevX = x2;
                         }
                     }
                     if (_bWorkerFlags != 0) {
@@ -1529,15 +1319,17 @@ partial class image2gcode {
                 gcPixelsCount = pixelsCount;
                 gcJobTime = jobTime;
                 
-                flags &= ~BWorkerFlagDoWork;
+                flags &= ~BWorkerFlags.CalcJobTime;
             }
             
-            if ((flags & BWorkerFlagRedrawOrigin) != 0) {
+            if ((flags & (BWorkerFlags.RedrawPreview|BWorkerFlags.RedrawOrigin)) != 0) {
                 imageBox1.StartPointX = (-left / (width/dpiX));
                 imageBox1.StartPointY = (-top / (height/dpiY));
+                
+                imageBox1.ImIdx = 0;
                 imageBox1.Invalidate(false);
                 
-                flags &= ~BWorkerFlagRedrawOrigin;
+                flags &= ~(BWorkerFlags.RedrawPreview|BWorkerFlags.RedrawOrigin);
             }
             
             ((BackgroundWorker)sender).ReportProgress(100, resources.GetString("Status_Ready", culture));
@@ -1549,22 +1341,19 @@ partial class image2gcode {
         Marshal.FreeHGlobal((IntPtr)lookupTable);
         Marshal.FreeHGlobal((IntPtr)lookupTable2);
         
-        Marshal.FreeHGlobal((IntPtr)lookupTable4);
-        Marshal.FreeHGlobal((IntPtr)lookupTable5);
-        Marshal.FreeHGlobal((IntPtr)lookupTable6);
-        
         Marshal.FreeHGlobal((IntPtr)F);
         
         Marshal.FreeHGlobal((IntPtr)acctime);
         Marshal.FreeHGlobal((IntPtr)accdist);
         
-        Marshal.FreeHGlobal(imBackground);
+        Marshal.FreeHGlobal(imTemp);
         
         imSrc.Dispose();
         
         imageBox1.ImIdx = -1;
+        //imageBox1.Invalidate(false);
+        
         lock (imResizeLock) {
-            Marshal.FreeHGlobal(imPreview);
             Marshal.FreeHGlobal(imResized);
             Marshal.FreeHGlobal(imDest);
         }

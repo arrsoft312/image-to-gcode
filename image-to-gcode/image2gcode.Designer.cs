@@ -18,7 +18,6 @@ partial class image2gcode {
         this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         this.reloadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-        this.export2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
         this.languageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -29,6 +28,13 @@ partial class image2gcode {
         this.clipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+        this.rotate270ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+        this.rotate90ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+        this.flipXYToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+        this.toolStripSeparator12 = new System.Windows.Forms.ToolStripSeparator();
+        this.flipXToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+        this.flipYToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+        this.toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
         this.cropToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         this.presetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         this.loadPresetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -47,13 +53,8 @@ partial class image2gcode {
         this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
         this.machineTypeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         this.laserEngraverToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-        this.impactGraverToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         this.nichromeBurnerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-        this.originToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-        this.topRightToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-        this.topLeftToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-        this.bottomLeftToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-        this.bottomRightToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+        this.impactGraverToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         this.G0SpdToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
         this.toolStripMenuItem7 = new System.Windows.Forms.ToolStripMenuItem();
@@ -61,17 +62,23 @@ partial class image2gcode {
         this.toolStripMenuItem9 = new System.Windows.Forms.ToolStripMenuItem();
         this.toolStripMenuItem10 = new System.Windows.Forms.ToolStripMenuItem();
         this.toolStripMenuItem11 = new System.Windows.Forms.ToolStripMenuItem();
-        this.goToNextLineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+        this.rotarySpeedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         this.toolStripMenuItem12 = new System.Windows.Forms.ToolStripMenuItem();
         this.toolStripMenuItem13 = new System.Windows.Forms.ToolStripMenuItem();
         this.toolStripMenuItem14 = new System.Windows.Forms.ToolStripMenuItem();
-        this.returnToOriginToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+        this.toolStripMenuItem22 = new System.Windows.Forms.ToolStripMenuItem();
+        this.toolStripMenuItem23 = new System.Windows.Forms.ToolStripMenuItem();
+        this.accelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         this.toolStripMenuItem15 = new System.Windows.Forms.ToolStripMenuItem();
         this.toolStripMenuItem16 = new System.Windows.Forms.ToolStripMenuItem();
         this.toolStripMenuItem17 = new System.Windows.Forms.ToolStripMenuItem();
         this.toolStripMenuItem18 = new System.Windows.Forms.ToolStripMenuItem();
         this.toolStripMenuItem19 = new System.Windows.Forms.ToolStripMenuItem();
         this.toolStripMenuItem20 = new System.Windows.Forms.ToolStripMenuItem();
+        this.nichromeOnOffCommandToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+        this.toolStripMenuItem24 = new System.Windows.Forms.ToolStripMenuItem();
+        this.toolStripMenuItem25 = new System.Windows.Forms.ToolStripMenuItem();
+        this.burnFromBottomToTopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         this.doNotReturnYToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         this.toolStripSeparator13 = new System.Windows.Forms.ToolStripSeparator();
         this.machineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -82,7 +89,6 @@ partial class image2gcode {
         this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripMenuItem();
         this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripMenuItem();
         this.sendToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-        this.send2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
         this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
@@ -91,9 +97,6 @@ partial class image2gcode {
         this.websiteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
         this.CH341SERToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-        this.checkForUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-        this.toolStripSeparator12 = new System.Windows.Forms.ToolStripSeparator();
-        this.donateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
         this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         this.toolStrip1 = new System.Windows.Forms.ToolStrip();
@@ -136,13 +139,6 @@ partial class image2gcode {
         this.label8 = new System.Windows.Forms.Label();
         this.label9 = new System.Windows.Forms.Label();
         this.trackBar4 = new System.Windows.Forms.TrackBar();
-        this.label13 = new System.Windows.Forms.Label();
-        this.tableLayoutPanel11 = new System.Windows.Forms.TableLayoutPanel();
-        this.button1 = new System.Windows.Forms.Button();
-        this.button2 = new System.Windows.Forms.Button();
-        this.button3 = new System.Windows.Forms.Button();
-        this.button4 = new System.Windows.Forms.Button();
-        this.button5 = new System.Windows.Forms.Button();
         this.label10 = new System.Windows.Forms.Label();
         this.tableLayoutPanel10 = new System.Windows.Forms.TableLayoutPanel();
         this.label11 = new System.Windows.Forms.Label();
@@ -150,41 +146,19 @@ partial class image2gcode {
         this.label12 = new System.Windows.Forms.Label();
         this.comboBox3 = new System.Windows.Forms.ComboBox();
         this.checkBox4 = new System.Windows.Forms.CheckBox();
-        this.label46 = new System.Windows.Forms.Label();
-        this.tableLayoutPanel40 = new System.Windows.Forms.TableLayoutPanel();
-        this.button33 = new System.Windows.Forms.Button();
-        this.button34 = new System.Windows.Forms.Button();
-        this.button35 = new System.Windows.Forms.Button();
-        this.button36 = new System.Windows.Forms.Button();
-        this.button37 = new System.Windows.Forms.Button();
-        this.button38 = new System.Windows.Forms.Button();
-        this.tableLayoutPanel34 = new System.Windows.Forms.TableLayoutPanel();
-        this.tableLayoutPanel35 = new System.Windows.Forms.TableLayoutPanel();
-        this.label47 = new System.Windows.Forms.Label();
-        this.comboBox12 = new System.Windows.Forms.ComboBox();
-        this.tableLayoutPanel38 = new System.Windows.Forms.TableLayoutPanel();
-        this.label50 = new System.Windows.Forms.Label();
-        this.comboBox13 = new System.Windows.Forms.ComboBox();
-        this.tableLayoutPanel39 = new System.Windows.Forms.TableLayoutPanel();
-        this.label51 = new System.Windows.Forms.Label();
-        this.trackBar5 = new System.Windows.Forms.TrackBar();
-        this.tableLayoutPanel36 = new System.Windows.Forms.TableLayoutPanel();
-        this.label48 = new System.Windows.Forms.Label();
-        this.button31 = new System.Windows.Forms.Button();
-        this.button32 = new System.Windows.Forms.Button();
         this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
         this.imageBox1 = new ImageBox();
         this.tableLayoutPanel13 = new System.Windows.Forms.TableLayoutPanel();
         this.tableLayoutPanel14 = new System.Windows.Forms.TableLayoutPanel();
-        this.button6 = new System.Windows.Forms.Button();
-        this.button7 = new System.Windows.Forms.Button();
         this.button8 = new System.Windows.Forms.Button();
-        this.button9 = new System.Windows.Forms.Button();
-        this.button10 = new System.Windows.Forms.Button();
+        this.button7 = new System.Windows.Forms.Button();
+        this.button6 = new System.Windows.Forms.Button();
         this.button11 = new System.Windows.Forms.Button();
-        this.button12 = new System.Windows.Forms.Button();
-        this.button13 = new System.Windows.Forms.Button();
+        this.button10 = new System.Windows.Forms.Button();
+        this.button9 = new System.Windows.Forms.Button();
         this.button14 = new System.Windows.Forms.Button();
+        this.button13 = new System.Windows.Forms.Button();
+        this.button12 = new System.Windows.Forms.Button();
         this.tableLayoutPanel15 = new System.Windows.Forms.TableLayoutPanel();
         this.label15 = new System.Windows.Forms.Label();
         this.textBox1 = new System.Windows.Forms.TextBox();
@@ -194,20 +168,21 @@ partial class image2gcode {
         this.textBox3 = new System.Windows.Forms.TextBox();
         this.label18 = new System.Windows.Forms.Label();
         this.textBox4 = new System.Windows.Forms.TextBox();
+        this.tableLayoutPanel34 = new System.Windows.Forms.TableLayoutPanel();
+        this.checkBox5 = new System.Windows.Forms.CheckBox();
+        this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+        this.tableLayoutPanel30 = new System.Windows.Forms.TableLayoutPanel();
         this.label19 = new System.Windows.Forms.Label();
         this.comboBox4 = new System.Windows.Forms.ComboBox();
-        this.label20 = new System.Windows.Forms.Label();
-        this.checkBox5 = new System.Windows.Forms.CheckBox();
         this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
         this.tableLayoutPanel17 = new System.Windows.Forms.TableLayoutPanel();
         this.label21 = new System.Windows.Forms.Label();
         this.textBox5 = new System.Windows.Forms.TextBox();
         this.label22 = new System.Windows.Forms.Label();
         this.textBox6 = new System.Windows.Forms.TextBox();
-        this.label23 = new System.Windows.Forms.Label();
-        this.textBox7 = new System.Windows.Forms.TextBox();
+        this.tableLayoutPanel29 = new System.Windows.Forms.TableLayoutPanel();
         this.label24 = new System.Windows.Forms.Label();
-        this.textBox8 = new System.Windows.Forms.TextBox();
+        this.comboBox9 = new System.Windows.Forms.ComboBox();
         this.tableLayoutPanel18 = new System.Windows.Forms.TableLayoutPanel();
         this.label25 = new System.Windows.Forms.Label();
         this.textBox9 = new System.Windows.Forms.TextBox();
@@ -238,17 +213,12 @@ partial class image2gcode {
         this.button30 = new System.Windows.Forms.Label();
         this.checkBox7 = new System.Windows.Forms.CheckBox();
         this.tableLayoutPanel26 = new System.Windows.Forms.TableLayoutPanel();
-        this.checkBox8 = new System.Windows.Forms.CheckBox();
         this.tableLayoutPanel24 = new System.Windows.Forms.TableLayoutPanel();
         this.label31 = new System.Windows.Forms.Label();
         this.comboBox5 = new System.Windows.Forms.ComboBox();
         this.tableLayoutPanel25 = new System.Windows.Forms.TableLayoutPanel();
         this.label32 = new System.Windows.Forms.Label();
         this.comboBox6 = new System.Windows.Forms.ComboBox();
-        this.label33 = new System.Windows.Forms.Label();
-        this.textBox16 = new System.Windows.Forms.TextBox();
-        this.label34 = new System.Windows.Forms.Label();
-        this.comboBox7 = new System.Windows.Forms.ComboBox();
         this.label35 = new System.Windows.Forms.Label();
         this.textBox17 = new System.Windows.Forms.TextBox();
         this.label36 = new System.Windows.Forms.Label();
@@ -259,17 +229,13 @@ partial class image2gcode {
         this.textBox20 = new System.Windows.Forms.TextBox();
         this.label39 = new System.Windows.Forms.Label();
         this.comboBox8 = new System.Windows.Forms.ComboBox();
+        this.tableLayoutPanel11 = new System.Windows.Forms.TableLayoutPanel();
+        this.checkBox3 = new System.Windows.Forms.CheckBox();
         this.tableLayoutPanel27 = new System.Windows.Forms.TableLayoutPanel();
-        this.label40 = new System.Windows.Forms.Label();
-        this.comboBox9 = new System.Windows.Forms.ComboBox();
-        this.checkBox10 = new System.Windows.Forms.CheckBox();
-        this.tableLayoutPanel29 = new System.Windows.Forms.TableLayoutPanel();
-        this.tableLayoutPanel30 = new System.Windows.Forms.TableLayoutPanel();
-        this.label42 = new System.Windows.Forms.Label();
-        this.textBox15 = new System.Windows.Forms.TextBox();
-        this.label43 = new System.Windows.Forms.Label();
-        this.textBox21 = new System.Windows.Forms.TextBox();
-        this.checkBox11 = new System.Windows.Forms.CheckBox();
+        this.label13 = new System.Windows.Forms.Label();
+        this.textBox7 = new System.Windows.Forms.TextBox();
+        this.label23 = new System.Windows.Forms.Label();
+        this.textBox8 = new System.Windows.Forms.TextBox();
         this.textBox22 = new System.Windows.Forms.TextBox();
         this.tableLayoutPanel31 = new System.Windows.Forms.TableLayoutPanel();
         this.button15 = new System.Windows.Forms.Button();
@@ -295,7 +261,6 @@ partial class image2gcode {
         this.saveFileDialog3 = new System.Windows.Forms.SaveFileDialog();
         this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
         this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
-        this.colorDialog1 = new System.Windows.Forms.ColorDialog();
         this.menuStrip1.SuspendLayout();
         this.toolStrip1.SuspendLayout();
         this.statusStrip1.SuspendLayout();
@@ -314,21 +279,16 @@ partial class image2gcode {
         ((System.ComponentModel.ISupportInitialize)(this.trackBar3)).BeginInit();
         this.tableLayoutPanel9.SuspendLayout();
         ((System.ComponentModel.ISupportInitialize)(this.trackBar4)).BeginInit();
-        this.tableLayoutPanel11.SuspendLayout();
         this.tableLayoutPanel10.SuspendLayout();
-        this.tableLayoutPanel40.SuspendLayout();
-        this.tableLayoutPanel34.SuspendLayout();
-        this.tableLayoutPanel35.SuspendLayout();
-        this.tableLayoutPanel38.SuspendLayout();
-        this.tableLayoutPanel39.SuspendLayout();
-        ((System.ComponentModel.ISupportInitialize)(this.trackBar5)).BeginInit();
-        this.tableLayoutPanel36.SuspendLayout();
         this.tableLayoutPanel3.SuspendLayout();
         this.tableLayoutPanel13.SuspendLayout();
         this.tableLayoutPanel14.SuspendLayout();
         this.tableLayoutPanel15.SuspendLayout();
+        this.tableLayoutPanel34.SuspendLayout();
+        this.tableLayoutPanel30.SuspendLayout();
         this.tableLayoutPanel4.SuspendLayout();
         this.tableLayoutPanel17.SuspendLayout();
+        this.tableLayoutPanel29.SuspendLayout();
         this.tableLayoutPanel18.SuspendLayout();
         this.tableLayoutPanel19.SuspendLayout();
         this.tableLayoutPanel20.SuspendLayout();
@@ -342,9 +302,8 @@ partial class image2gcode {
         this.tableLayoutPanel26.SuspendLayout();
         this.tableLayoutPanel24.SuspendLayout();
         this.tableLayoutPanel25.SuspendLayout();
+        this.tableLayoutPanel11.SuspendLayout();
         this.tableLayoutPanel27.SuspendLayout();
-        this.tableLayoutPanel29.SuspendLayout();
-        this.tableLayoutPanel30.SuspendLayout();
         this.tableLayoutPanel31.SuspendLayout();
         this.SuspendLayout();
         // 
@@ -367,7 +326,6 @@ partial class image2gcode {
                         this.openToolStripMenuItem,
                         this.reloadToolStripMenuItem,
                         this.exportToolStripMenuItem,
-                        this.export2ToolStripMenuItem,
                         this.closeToolStripMenuItem,
                         this.toolStripSeparator1,
                         this.languageToolStripMenuItem,
@@ -396,18 +354,8 @@ partial class image2gcode {
         this.exportToolStripMenuItem.Enabled = false;
         this.exportToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("exportToolStripMenuItem.Image")));
         this.exportToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
-        this.exportToolStripMenuItem.Tag = image2gcode.GcOutputMode.NormalOutput;
         this.exportToolStripMenuItem.Text = "&Save G-code...";
         this.exportToolStripMenuItem.Click += new System.EventHandler(this.ExportToolStripMenuItemClick);
-        // 
-        // export2ToolStripMenuItem
-        // 
-        this.export2ToolStripMenuItem.Enabled = false;
-        this.export2ToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("export2ToolStripMenuItem.Image")));
-        this.export2ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.E)));
-        this.export2ToolStripMenuItem.Tag = image2gcode.GcOutputMode.WrappedOutput;
-        this.export2ToolStripMenuItem.Text = "Save G-code (&Wrapped Output)...";
-        this.export2ToolStripMenuItem.Click += new System.EventHandler(this.ExportToolStripMenuItemClick);
         // 
         // closeToolStripMenuItem
         // 
@@ -445,6 +393,13 @@ partial class image2gcode {
                         this.clipboardToolStripMenuItem,
                         this.saveToolStripMenuItem,
                         this.toolStripSeparator2,
+                        this.rotate270ToolStripMenuItem,
+                        this.rotate90ToolStripMenuItem,
+                        this.flipXYToolStripMenuItem,
+                        this.toolStripSeparator12,
+                        this.flipXToolStripMenuItem,
+                        this.flipYToolStripMenuItem,
+                        this.toolStripSeparator11,
                         this.cropToolStripMenuItem});
         this.imageToolStripMenuItem.Text = "I&mage";
         this.imageToolStripMenuItem.DropDownClosed += new System.EventHandler(this.ImageToolStripMenuItemDropDownClosed);
@@ -465,6 +420,41 @@ partial class image2gcode {
         this.saveToolStripMenuItem.Text = "S&ave a copy as...";
         this.saveToolStripMenuItem.Click += new System.EventHandler(this.SaveToolStripMenuItemClick);
         // 
+        // rotate270ToolStripMenuItem
+        // 
+        this.rotate270ToolStripMenuItem.Enabled = false;
+        this.rotate270ToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("rotate270ToolStripMenuItem.Image")));
+        this.rotate270ToolStripMenuItem.Text = "Rotate &left 90";
+        this.rotate270ToolStripMenuItem.Click += new System.EventHandler(this.RotateFlipButtonClick);
+        // 
+        // rotate90ToolStripMenuItem
+        // 
+        this.rotate90ToolStripMenuItem.Enabled = false;
+        this.rotate90ToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("rotate90ToolStripMenuItem.Image")));
+        this.rotate90ToolStripMenuItem.Text = "Rotate &right 90";
+        this.rotate90ToolStripMenuItem.Click += new System.EventHandler(this.RotateFlipButtonClick);
+        // 
+        // flipXYToolStripMenuItem
+        // 
+        this.flipXYToolStripMenuItem.Enabled = false;
+        this.flipXYToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("flipXYToolStripMenuItem.Image")));
+        this.flipXYToolStripMenuItem.Text = "Ro&tate 180";
+        this.flipXYToolStripMenuItem.Click += new System.EventHandler(this.RotateFlipButtonClick);
+        // 
+        // flipXToolStripMenuItem
+        // 
+        this.flipXToolStripMenuItem.Enabled = false;
+        this.flipXToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("flipXToolStripMenuItem.Image")));
+        this.flipXToolStripMenuItem.Text = "Flip &horizontal";
+        this.flipXToolStripMenuItem.Click += new System.EventHandler(this.RotateFlipButtonClick);
+        // 
+        // flipYToolStripMenuItem
+        // 
+        this.flipYToolStripMenuItem.Enabled = false;
+        this.flipYToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("flipYToolStripMenuItem.Image")));
+        this.flipYToolStripMenuItem.Text = "Flip &vertical";
+        this.flipYToolStripMenuItem.Click += new System.EventHandler(this.RotateFlipButtonClick);
+        // 
         // cropToolStripMenuItem
         // 
         this.cropToolStripMenuItem.Enabled = false;
@@ -482,10 +472,11 @@ partial class image2gcode {
                         this.resetPowerGraphToolStripMenuItem,
                         this.toolStripSeparator8,
                         this.machineTypeToolStripMenuItem,
-                        this.originToolStripMenuItem,
                         this.G0SpdToolStripMenuItem,
-                        this.goToNextLineToolStripMenuItem,
-                        this.returnToOriginToolStripMenuItem,
+                        this.rotarySpeedToolStripMenuItem,
+                        this.accelToolStripMenuItem,
+                        this.nichromeOnOffCommandToolStripMenuItem,
+                        this.burnFromBottomToTopToolStripMenuItem,
                         this.doNotReturnYToolStripMenuItem,
                         this.toolStripSeparator13});
         this.presetToolStripMenuItem.Enabled = false;
@@ -571,8 +562,8 @@ partial class image2gcode {
         this.machineTypeToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
         this.machineTypeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
                         this.laserEngraverToolStripMenuItem,
-                        this.impactGraverToolStripMenuItem,
-                        this.nichromeBurnerToolStripMenuItem});
+                        this.nichromeBurnerToolStripMenuItem,
+                        this.impactGraverToolStripMenuItem});
         this.machineTypeToolStripMenuItem.Text = "&Machine Type";
         this.machineTypeToolStripMenuItem.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.MachineTypeToolStripMenuItemDropDownItemClicked);
         // 
@@ -582,52 +573,17 @@ partial class image2gcode {
         this.laserEngraverToolStripMenuItem.Tag = image2gcode.MachineType.LaserEngraver;
         this.laserEngraverToolStripMenuItem.Text = "LaserEngraver";
         // 
-        // impactGraverToolStripMenuItem
-        // 
-        this.impactGraverToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-        this.impactGraverToolStripMenuItem.Tag = image2gcode.MachineType.ImpactGraver;
-        this.impactGraverToolStripMenuItem.Text = "ImpactGraver";
-        // 
         // nichromeBurnerToolStripMenuItem
         // 
         this.nichromeBurnerToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
         this.nichromeBurnerToolStripMenuItem.Tag = image2gcode.MachineType.NichromeBurner;
         this.nichromeBurnerToolStripMenuItem.Text = "NichromeBurner";
         // 
-        // originToolStripMenuItem
+        // impactGraverToolStripMenuItem
         // 
-        this.originToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-        this.originToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-                        this.topRightToolStripMenuItem,
-                        this.topLeftToolStripMenuItem,
-                        this.bottomLeftToolStripMenuItem,
-                        this.bottomRightToolStripMenuItem});
-        this.originToolStripMenuItem.Text = "Machine &Origin";
-        this.originToolStripMenuItem.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.OriginToolStripMenuItemDropDownItemClicked);
-        // 
-        // topRightToolStripMenuItem
-        // 
-        this.topRightToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-        this.topRightToolStripMenuItem.Tag = image2gcode.Origin.TopRight;
-        this.topRightToolStripMenuItem.Text = "TopRight";
-        // 
-        // topLeftToolStripMenuItem
-        // 
-        this.topLeftToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-        this.topLeftToolStripMenuItem.Tag = image2gcode.Origin.TopLeft;
-        this.topLeftToolStripMenuItem.Text = "TopLeft";
-        // 
-        // bottomLeftToolStripMenuItem
-        // 
-        this.bottomLeftToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-        this.bottomLeftToolStripMenuItem.Tag = image2gcode.Origin.BottomLeft;
-        this.bottomLeftToolStripMenuItem.Text = "BottomLeft";
-        // 
-        // bottomRightToolStripMenuItem
-        // 
-        this.bottomRightToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-        this.bottomRightToolStripMenuItem.Tag = image2gcode.Origin.BottomRight;
-        this.bottomRightToolStripMenuItem.Text = "BottomRight";
+        this.impactGraverToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+        this.impactGraverToolStripMenuItem.Tag = image2gcode.MachineType.ImpactGraver;
+        this.impactGraverToolStripMenuItem.Text = "ImpactGraver";
         // 
         // G0SpdToolStripMenuItem
         // 
@@ -678,82 +634,123 @@ partial class image2gcode {
         this.toolStripMenuItem11.Tag = 18000F;
         this.toolStripMenuItem11.Text = "18000";
         // 
-        // goToNextLineToolStripMenuItem
+        // rotarySpeedToolStripMenuItem
         // 
-        this.goToNextLineToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-        this.goToNextLineToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+        this.rotarySpeedToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+        this.rotarySpeedToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
                         this.toolStripMenuItem12,
                         this.toolStripMenuItem13,
-                        this.toolStripMenuItem14});
-        this.goToNextLineToolStripMenuItem.Text = "&Go to Next Line";
-        this.goToNextLineToolStripMenuItem.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.GoToNextLineToolStripMenuItemDropDownItemClicked);
+                        this.toolStripMenuItem14,
+                        this.toolStripMenuItem22,
+                        this.toolStripMenuItem23});
+        this.rotarySpeedToolStripMenuItem.Text = "R&otary Speed";
+        this.rotarySpeedToolStripMenuItem.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.RotarySpeedToolStripMenuItemDropDownItemClicked);
         // 
         // toolStripMenuItem12
         // 
         this.toolStripMenuItem12.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-        this.toolStripMenuItem12.Tag = image2gcode.GoToNextLineType.XYatTheSameTime;
-        this.toolStripMenuItem12.Text = "XYatTheSameTime";
+        this.toolStripMenuItem12.Tag = 500F;
+        this.toolStripMenuItem12.Text = "500";
         // 
         // toolStripMenuItem13
         // 
         this.toolStripMenuItem13.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-        this.toolStripMenuItem13.Tag = image2gcode.GoToNextLineType.FirstXThenY;
-        this.toolStripMenuItem13.Text = "FirstXThenY";
+        this.toolStripMenuItem13.Tag = 800F;
+        this.toolStripMenuItem13.Text = "800";
         // 
         // toolStripMenuItem14
         // 
         this.toolStripMenuItem14.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-        this.toolStripMenuItem14.Tag = image2gcode.GoToNextLineType.FirstYThenX;
-        this.toolStripMenuItem14.Text = "FirstYThenX";
+        this.toolStripMenuItem14.Tag = 1000F;
+        this.toolStripMenuItem14.Text = "1000";
         // 
-        // returnToOriginToolStripMenuItem
+        // toolStripMenuItem22
         // 
-        this.returnToOriginToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-        this.returnToOriginToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+        this.toolStripMenuItem22.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+        this.toolStripMenuItem22.Tag = 1500F;
+        this.toolStripMenuItem22.Text = "1500";
+        // 
+        // toolStripMenuItem23
+        // 
+        this.toolStripMenuItem23.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+        this.toolStripMenuItem23.Tag = 2000F;
+        this.toolStripMenuItem23.Text = "2000";
+        // 
+        // accelToolStripMenuItem
+        // 
+        this.accelToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+        this.accelToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
                         this.toolStripMenuItem15,
                         this.toolStripMenuItem16,
                         this.toolStripMenuItem17,
                         this.toolStripMenuItem18,
                         this.toolStripMenuItem19,
                         this.toolStripMenuItem20});
-        this.returnToOriginToolStripMenuItem.Text = "Return to O&rigin";
-        this.returnToOriginToolStripMenuItem.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.ReturnToOriginToolStripMenuItemDropDownItemClicked);
+        this.accelToolStripMenuItem.Text = "A&cceleration";
+        this.accelToolStripMenuItem.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.AccelToolStripMenuItemDropDownItemClicked);
         // 
         // toolStripMenuItem15
         // 
         this.toolStripMenuItem15.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-        this.toolStripMenuItem15.Tag = image2gcode.ReturnToOriginType.None;
-        this.toolStripMenuItem15.Text = "None";
+        this.toolStripMenuItem15.Tag = 1000F;
+        this.toolStripMenuItem15.Text = "1000";
         // 
         // toolStripMenuItem16
         // 
         this.toolStripMenuItem16.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-        this.toolStripMenuItem16.Tag = image2gcode.ReturnToOriginType.XYatTheSameTime;
-        this.toolStripMenuItem16.Text = "XYatTheSameTime";
+        this.toolStripMenuItem16.Tag = 3000F;
+        this.toolStripMenuItem16.Text = "3000";
         // 
         // toolStripMenuItem17
         // 
         this.toolStripMenuItem17.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-        this.toolStripMenuItem17.Tag = image2gcode.ReturnToOriginType.FirstXThenY;
-        this.toolStripMenuItem17.Text = "FirstXThenY";
+        this.toolStripMenuItem17.Tag = 5000F;
+        this.toolStripMenuItem17.Text = "5000";
         // 
         // toolStripMenuItem18
         // 
         this.toolStripMenuItem18.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-        this.toolStripMenuItem18.Tag = image2gcode.ReturnToOriginType.FirstYThenX;
-        this.toolStripMenuItem18.Text = "FirstYThenX";
+        this.toolStripMenuItem18.Tag = 10000F;
+        this.toolStripMenuItem18.Text = "10000";
         // 
         // toolStripMenuItem19
         // 
         this.toolStripMenuItem19.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-        this.toolStripMenuItem19.Tag = image2gcode.ReturnToOriginType.XAxis;
-        this.toolStripMenuItem19.Text = "XAxis";
+        this.toolStripMenuItem19.Tag = 15000F;
+        this.toolStripMenuItem19.Text = "15000";
         // 
         // toolStripMenuItem20
         // 
         this.toolStripMenuItem20.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-        this.toolStripMenuItem20.Tag = image2gcode.ReturnToOriginType.YAxis;
-        this.toolStripMenuItem20.Text = "YAxis";
+        this.toolStripMenuItem20.Tag = 20000F;
+        this.toolStripMenuItem20.Text = "20000";
+        // 
+        // nichromeOnOffCommandToolStripMenuItem
+        // 
+        this.nichromeOnOffCommandToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+        this.nichromeOnOffCommandToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+                        this.toolStripMenuItem24,
+                        this.toolStripMenuItem25});
+        this.nichromeOnOffCommandToolStripMenuItem.Text = "Nichrome O&n/Off command";
+        this.nichromeOnOffCommandToolStripMenuItem.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.NichromeOnOffCommandToolStripMenuItemDropDownItemClicked);
+        // 
+        // toolStripMenuItem24
+        // 
+        this.toolStripMenuItem24.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+        this.toolStripMenuItem24.Tag = image2gcode.NichromeControl.Default_M3_M5;
+        this.toolStripMenuItem24.Text = "Default_M3_M5";
+        // 
+        // toolStripMenuItem25
+        // 
+        this.toolStripMenuItem25.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+        this.toolStripMenuItem25.Tag = image2gcode.NichromeControl.OUT2_M8_M9;
+        this.toolStripMenuItem25.Text = "OUT2_M8_M9";
+        // 
+        // burnFromBottomToTopToolStripMenuItem
+        // 
+        this.burnFromBottomToTopToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+        this.burnFromBottomToTopToolStripMenuItem.Text = "Burn from &Bottom to Top";
+        this.burnFromBottomToTopToolStripMenuItem.Click += new System.EventHandler(this.BurnFromBottomToTopToolStripMenuItemClick);
         // 
         // doNotReturnYToolStripMenuItem
         // 
@@ -768,7 +765,6 @@ partial class image2gcode {
                         this.portToolStripMenuItem,
                         this.baudToolStripMenuItem,
                         this.sendToolStripMenuItem,
-                        this.send2ToolStripMenuItem,
                         this.toolStripSeparator3,
                         this.settingsToolStripMenuItem,
                         this.toolStripSeparator4,
@@ -822,18 +818,8 @@ partial class image2gcode {
         this.sendToolStripMenuItem.Enabled = false;
         this.sendToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("sendToolStripMenuItem.Image")));
         this.sendToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
-        this.sendToolStripMenuItem.Tag = image2gcode.GcOutputMode.NormalOutput;
         this.sendToolStripMenuItem.Text = "S&end...";
         this.sendToolStripMenuItem.Click += new System.EventHandler(this.SendToolStripMenuItemClick);
-        // 
-        // send2ToolStripMenuItem
-        // 
-        this.send2ToolStripMenuItem.Enabled = false;
-        this.send2ToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("send2ToolStripMenuItem.Image")));
-        this.send2ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.P)));
-        this.send2ToolStripMenuItem.Tag = image2gcode.GcOutputMode.WrappedOutput;
-        this.send2ToolStripMenuItem.Text = "Send (&Wrapped Output)...";
-        this.send2ToolStripMenuItem.Click += new System.EventHandler(this.SendToolStripMenuItemClick);
         // 
         // settingsToolStripMenuItem
         // 
@@ -855,9 +841,6 @@ partial class image2gcode {
                         this.websiteToolStripMenuItem,
                         this.toolStripSeparator5,
                         this.CH341SERToolStripMenuItem,
-                        this.checkForUpdatesToolStripMenuItem,
-                        this.toolStripSeparator12,
-                        this.donateToolStripMenuItem,
                         this.toolStripSeparator7,
                         this.aboutToolStripMenuItem});
         this.helpToolStripMenuItem.Text = "H&elp";
@@ -865,8 +848,8 @@ partial class image2gcode {
         // websiteToolStripMenuItem
         // 
         this.websiteToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-        this.websiteToolStripMenuItem.Tag = "https://www.image2gcode.ru/";
-        this.websiteToolStripMenuItem.Text = "Image2GCode Web&site";
+        this.websiteToolStripMenuItem.Tag = "https://github.com/arrsoft312/image-to-gcode";
+        this.websiteToolStripMenuItem.Text = "Page on &GitHub";
         this.websiteToolStripMenuItem.Click += new System.EventHandler(this.UrlToolStripMenuItemClick);
         // 
         // CH341SERToolStripMenuItem
@@ -875,20 +858,6 @@ partial class image2gcode {
         this.CH341SERToolStripMenuItem.Tag = "http://www.wch-ic.com/downloads/CH341SER_EXE.html";
         this.CH341SERToolStripMenuItem.Text = "Do&wnload COM-port driver";
         this.CH341SERToolStripMenuItem.Click += new System.EventHandler(this.UrlToolStripMenuItemClick);
-        // 
-        // checkForUpdatesToolStripMenuItem
-        // 
-        this.checkForUpdatesToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-        this.checkForUpdatesToolStripMenuItem.Tag = "https://www.image2gcode.ru/news/";
-        this.checkForUpdatesToolStripMenuItem.Text = "Check for &updates";
-        this.checkForUpdatesToolStripMenuItem.Click += new System.EventHandler(this.UrlToolStripMenuItemClick);
-        // 
-        // donateToolStripMenuItem
-        // 
-        this.donateToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-        this.donateToolStripMenuItem.Tag = "https://www.image2gcode.ru/donate/";
-        this.donateToolStripMenuItem.Text = "&Donate";
-        this.donateToolStripMenuItem.Click += new System.EventHandler(this.UrlToolStripMenuItemClick);
         // 
         // aboutToolStripMenuItem
         // 
@@ -925,7 +894,6 @@ partial class image2gcode {
         this.exportToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("exportToolStripButton.Image")));
         this.exportToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
         this.exportToolStripButton.Padding = new System.Windows.Forms.Padding(2, 0, 2, 0);
-        this.exportToolStripButton.Tag = image2gcode.GcOutputMode.NormalOutput;
         this.exportToolStripButton.Text = "Save G-code...";
         this.exportToolStripButton.Click += new System.EventHandler(this.ExportToolStripMenuItemClick);
         // 
@@ -936,7 +904,6 @@ partial class image2gcode {
         this.sendToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("sendToolStripButton.Image")));
         this.sendToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
         this.sendToolStripButton.Padding = new System.Windows.Forms.Padding(2, 0, 2, 0);
-        this.sendToolStripButton.Tag = image2gcode.GcOutputMode.NormalOutput;
         this.sendToolStripButton.Text = "Send...";
         this.sendToolStripButton.Click += new System.EventHandler(this.SendToolStripMenuItemClick);
         // 
@@ -1040,16 +1007,11 @@ partial class image2gcode {
         this.tableLayoutPanel2.Controls.Add(this.trackBar3, 0, 8);
         this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel9, 0, 9);
         this.tableLayoutPanel2.Controls.Add(this.trackBar4, 0, 10);
-        this.tableLayoutPanel2.Controls.Add(this.label13, 0, 11);
-        this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel11, 0, 12);
-        this.tableLayoutPanel2.Controls.Add(this.label10, 0, 13);
-        this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel10, 0, 14);
-        this.tableLayoutPanel2.Controls.Add(this.label46, 0, 15);
-        this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel40, 0, 16);
-        this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel34, 0, 17);
+        this.tableLayoutPanel2.Controls.Add(this.label10, 0, 11);
+        this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel10, 0, 12);
         this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
         this.tableLayoutPanel2.Enabled = false;
-        this.tableLayoutPanel2.RowCount = 19;
+        this.tableLayoutPanel2.RowCount = 14;
         this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
         this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
         this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -1061,11 +1023,6 @@ partial class image2gcode {
         this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
         this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
         this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
-        this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-        this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-        this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-        this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-        this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
         this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
         this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
         this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -1379,97 +1336,12 @@ partial class image2gcode {
         this.trackBar4.Value = 100;
         this.trackBar4.Scroll += new System.EventHandler(this.Control_ValueChanged);
         // 
-        // label13
-        // 
-        this.label13.AutoSize = true;
-        this.label13.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.label13.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
-        this.label13.TabIndex = 13;
-        this.label13.Text = "Rotate/Flip Image:";
-        this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-        // 
-        // tableLayoutPanel11
-        // 
-        this.tableLayoutPanel11.AutoSize = true;
-        this.tableLayoutPanel11.ColumnCount = 6;
-        this.tableLayoutPanel11.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-        this.tableLayoutPanel11.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 32F));
-        this.tableLayoutPanel11.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 32F));
-        this.tableLayoutPanel11.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 32F));
-        this.tableLayoutPanel11.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 32F));
-        this.tableLayoutPanel11.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 32F));
-        this.tableLayoutPanel11.Controls.Add(this.button1, 1, 0);
-        this.tableLayoutPanel11.Controls.Add(this.button2, 2, 0);
-        this.tableLayoutPanel11.Controls.Add(this.button3, 3, 0);
-        this.tableLayoutPanel11.Controls.Add(this.button4, 4, 0);
-        this.tableLayoutPanel11.Controls.Add(this.button5, 5, 0);
-        this.tableLayoutPanel11.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.tableLayoutPanel11.Margin = new System.Windows.Forms.Padding(0);
-        this.tableLayoutPanel11.RowCount = 1;
-        this.tableLayoutPanel11.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
-        this.tableLayoutPanel11.TabIndex = 14;
-        // 
-        // button1
-        // 
-        this.button1.AutoSize = true;
-        this.button1.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.button1.FlatAppearance.BorderSize = 0;
-        this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-        this.button1.Image = ((System.Drawing.Image)(resources.GetObject("button1.Image")));
-        this.button1.TabIndex = 0;
-        this.button1.UseVisualStyleBackColor = true;
-        this.button1.Click += new System.EventHandler(this.RotateFlipButtonClick);
-        // 
-        // button2
-        // 
-        this.button2.AutoSize = true;
-        this.button2.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.button2.FlatAppearance.BorderSize = 0;
-        this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-        this.button2.Image = ((System.Drawing.Image)(resources.GetObject("button2.Image")));
-        this.button2.TabIndex = 1;
-        this.button2.UseVisualStyleBackColor = true;
-        this.button2.Click += new System.EventHandler(this.RotateFlipButtonClick);
-        // 
-        // button3
-        // 
-        this.button3.AutoSize = true;
-        this.button3.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.button3.FlatAppearance.BorderSize = 0;
-        this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-        this.button3.Image = ((System.Drawing.Image)(resources.GetObject("button3.Image")));
-        this.button3.TabIndex = 2;
-        this.button3.UseVisualStyleBackColor = true;
-        this.button3.Click += new System.EventHandler(this.RotateFlipButtonClick);
-        // 
-        // button4
-        // 
-        this.button4.AutoSize = true;
-        this.button4.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.button4.FlatAppearance.BorderSize = 0;
-        this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-        this.button4.Image = ((System.Drawing.Image)(resources.GetObject("button4.Image")));
-        this.button4.TabIndex = 3;
-        this.button4.UseVisualStyleBackColor = true;
-        this.button4.Click += new System.EventHandler(this.RotateFlipButtonClick);
-        // 
-        // button5
-        // 
-        this.button5.AutoSize = true;
-        this.button5.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.button5.FlatAppearance.BorderSize = 0;
-        this.button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-        this.button5.Image = ((System.Drawing.Image)(resources.GetObject("button5.Image")));
-        this.button5.TabIndex = 4;
-        this.button5.UseVisualStyleBackColor = true;
-        this.button5.Click += new System.EventHandler(this.RotateFlipButtonClick);
-        // 
         // label10
         // 
         this.label10.AutoSize = true;
         this.label10.Dock = System.Windows.Forms.DockStyle.Fill;
         this.label10.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
-        this.label10.TabIndex = 15;
+        this.label10.TabIndex = 13;
         this.label10.Text = "Image resolution (&DPI):";
         this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
         // 
@@ -1490,7 +1362,7 @@ partial class image2gcode {
         this.tableLayoutPanel10.RowCount = 2;
         this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
         this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
-        this.tableLayoutPanel10.TabIndex = 16;
+        this.tableLayoutPanel10.TabIndex = 14;
         // 
         // label11
         // 
@@ -1555,304 +1427,6 @@ partial class image2gcode {
         this.checkBox4.UseVisualStyleBackColor = true;
         this.checkBox4.CheckedChanged += new System.EventHandler(this.Control_ValueChanged);
         // 
-        // label46
-        // 
-        this.label46.AutoSize = true;
-        this.label46.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.label46.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
-        this.label46.TabIndex = 17;
-        this.label46.Text = "Result Preview:";
-        this.label46.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-        // 
-        // tableLayoutPanel40
-        // 
-        this.tableLayoutPanel40.AutoSize = true;
-        this.tableLayoutPanel40.ColumnCount = 7;
-        this.tableLayoutPanel40.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-        this.tableLayoutPanel40.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 32F));
-        this.tableLayoutPanel40.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 31F));
-        this.tableLayoutPanel40.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-        this.tableLayoutPanel40.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-        this.tableLayoutPanel40.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-        this.tableLayoutPanel40.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 31F));
-        this.tableLayoutPanel40.Controls.Add(this.button33, 1, 0);
-        this.tableLayoutPanel40.Controls.Add(this.button34, 2, 0);
-        this.tableLayoutPanel40.Controls.Add(this.button35, 3, 0);
-        this.tableLayoutPanel40.Controls.Add(this.button36, 4, 0);
-        this.tableLayoutPanel40.Controls.Add(this.button37, 5, 0);
-        this.tableLayoutPanel40.Controls.Add(this.button38, 6, 0);
-        this.tableLayoutPanel40.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.tableLayoutPanel40.Margin = new System.Windows.Forms.Padding(0);
-        this.tableLayoutPanel40.RowCount = 1;
-        this.tableLayoutPanel40.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31F));
-        this.tableLayoutPanel40.TabIndex = 18;
-        // 
-        // button33
-        // 
-        this.button33.AutoSize = true;
-        this.button33.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.button33.FlatAppearance.BorderSize = 0;
-        this.button33.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-        this.button33.Margin = new System.Windows.Forms.Padding(3, 3, 3, 2);
-        this.button33.TabIndex = 0;
-        this.button33.TabStop = false;
-        this.button33.Tag = -1;
-        this.button33.UseVisualStyleBackColor = false;
-        this.button33.Click += new System.EventHandler(this.PreviewButtonClick);
-        this.button33.Paint += new System.Windows.Forms.PaintEventHandler(this.PreviewButtonPaint);
-        // 
-        // button34
-        // 
-        this.button34.AutoSize = true;
-        this.button34.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.button34.FlatAppearance.BorderSize = 0;
-        this.button34.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-        this.button34.Margin = new System.Windows.Forms.Padding(3, 3, 2, 2);
-        this.button34.TabIndex = 1;
-        this.button34.TabStop = false;
-        this.button34.Tag = 0;
-        this.button34.UseVisualStyleBackColor = false;
-        this.button34.Click += new System.EventHandler(this.PreviewButtonClick);
-        this.button34.Paint += new System.Windows.Forms.PaintEventHandler(this.PreviewButtonPaint);
-        // 
-        // button35
-        // 
-        this.button35.AutoSize = true;
-        this.button35.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.button35.FlatAppearance.BorderSize = 0;
-        this.button35.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-        this.button35.Margin = new System.Windows.Forms.Padding(2, 3, 2, 2);
-        this.button35.TabIndex = 2;
-        this.button35.TabStop = false;
-        this.button35.Tag = 1;
-        this.button35.UseVisualStyleBackColor = false;
-        this.button35.Click += new System.EventHandler(this.PreviewButtonClick);
-        this.button35.Paint += new System.Windows.Forms.PaintEventHandler(this.PreviewButtonPaint);
-        // 
-        // button36
-        // 
-        this.button36.AutoSize = true;
-        this.button36.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.button36.FlatAppearance.BorderSize = 0;
-        this.button36.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-        this.button36.Margin = new System.Windows.Forms.Padding(2, 3, 2, 2);
-        this.button36.TabIndex = 3;
-        this.button36.TabStop = false;
-        this.button36.Tag = 2;
-        this.button36.UseVisualStyleBackColor = false;
-        this.button36.Click += new System.EventHandler(this.PreviewButtonClick);
-        this.button36.Paint += new System.Windows.Forms.PaintEventHandler(this.PreviewButtonPaint);
-        // 
-        // button37
-        // 
-        this.button37.AutoSize = true;
-        this.button37.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.button37.FlatAppearance.BorderSize = 0;
-        this.button37.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-        this.button37.Margin = new System.Windows.Forms.Padding(2, 3, 2, 2);
-        this.button37.TabIndex = 4;
-        this.button37.TabStop = false;
-        this.button37.Tag = 3;
-        this.button37.UseVisualStyleBackColor = false;
-        this.button37.Click += new System.EventHandler(this.PreviewButtonClick);
-        this.button37.Paint += new System.Windows.Forms.PaintEventHandler(this.PreviewButtonPaint);
-        // 
-        // button38
-        // 
-        this.button38.AutoSize = true;
-        this.button38.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.button38.FlatAppearance.BorderSize = 0;
-        this.button38.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-        this.button38.Margin = new System.Windows.Forms.Padding(2, 3, 3, 2);
-        this.button38.TabIndex = 5;
-        this.button38.TabStop = false;
-        this.button38.Tag = 4;
-        this.button38.UseVisualStyleBackColor = false;
-        this.button38.Click += new System.EventHandler(this.PreviewButtonClick);
-        this.button38.Paint += new System.Windows.Forms.PaintEventHandler(this.PreviewButtonPaint);
-        // 
-        // tableLayoutPanel34
-        // 
-        this.tableLayoutPanel34.AutoSize = true;
-        this.tableLayoutPanel34.ColumnCount = 1;
-        this.tableLayoutPanel34.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-        this.tableLayoutPanel34.Controls.Add(this.tableLayoutPanel35, 0, 0);
-        this.tableLayoutPanel34.Controls.Add(this.tableLayoutPanel38, 0, 1);
-        this.tableLayoutPanel34.Controls.Add(this.tableLayoutPanel39, 0, 2);
-        this.tableLayoutPanel34.Controls.Add(this.tableLayoutPanel36, 0, 3);
-        this.tableLayoutPanel34.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.tableLayoutPanel34.Margin = new System.Windows.Forms.Padding(0);
-        this.tableLayoutPanel34.RowCount = 4;
-        this.tableLayoutPanel34.RowStyles.Add(new System.Windows.Forms.RowStyle());
-        this.tableLayoutPanel34.RowStyles.Add(new System.Windows.Forms.RowStyle());
-        this.tableLayoutPanel34.RowStyles.Add(new System.Windows.Forms.RowStyle());
-        this.tableLayoutPanel34.RowStyles.Add(new System.Windows.Forms.RowStyle());
-        this.tableLayoutPanel34.TabIndex = 19;
-        // 
-        // tableLayoutPanel35
-        // 
-        this.tableLayoutPanel35.AutoSize = true;
-        this.tableLayoutPanel35.ColumnCount = 2;
-        this.tableLayoutPanel35.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-        this.tableLayoutPanel35.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-        this.tableLayoutPanel35.Controls.Add(this.label47, 0, 0);
-        this.tableLayoutPanel35.Controls.Add(this.comboBox12, 1, 0);
-        this.tableLayoutPanel35.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.tableLayoutPanel35.Margin = new System.Windows.Forms.Padding(0);
-        this.tableLayoutPanel35.RowCount = 1;
-        this.tableLayoutPanel35.RowStyles.Add(new System.Windows.Forms.RowStyle());
-        this.tableLayoutPanel35.TabIndex = 0;
-        // 
-        // label47
-        // 
-        this.label47.AutoSize = true;
-        this.label47.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.label47.Margin = new System.Windows.Forms.Padding(3, 1, 3, 2);
-        this.label47.TabIndex = 0;
-        this.label47.Text = "Ba&ckground:";
-        this.label47.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-        // 
-        // comboBox12
-        // 
-        this.comboBox12.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.comboBox12.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-        this.comboBox12.Items.AddRange(new object[] {
-                        "SolidColor"});
-        this.comboBox12.Margin = new System.Windows.Forms.Padding(3, 1, 3, 2);
-        this.comboBox12.Size = new System.Drawing.Size();
-        this.comboBox12.TabIndex = 1;
-        this.comboBox12.Tag = 6291636;
-        this.comboBox12.SelectedIndexChanged += new System.EventHandler(this.Control_ValueChanged);
-        // 
-        // tableLayoutPanel38
-        // 
-        this.tableLayoutPanel38.AutoSize = true;
-        this.tableLayoutPanel38.ColumnCount = 2;
-        this.tableLayoutPanel38.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-        this.tableLayoutPanel38.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-        this.tableLayoutPanel38.Controls.Add(this.label50, 0, 0);
-        this.tableLayoutPanel38.Controls.Add(this.comboBox13, 1, 0);
-        this.tableLayoutPanel38.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.tableLayoutPanel38.Enabled = false;
-        this.tableLayoutPanel38.Margin = new System.Windows.Forms.Padding(0);
-        this.tableLayoutPanel38.RowCount = 1;
-        this.tableLayoutPanel38.RowStyles.Add(new System.Windows.Forms.RowStyle());
-        this.tableLayoutPanel38.TabIndex = 1;
-        // 
-        // label50
-        // 
-        this.label50.AutoSize = true;
-        this.label50.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.label50.Margin = new System.Windows.Forms.Padding(3, 1, 3, 2);
-        this.label50.TabIndex = 0;
-        this.label50.Text = "&Wrap Mode:";
-        this.label50.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-        // 
-        // comboBox13
-        // 
-        this.comboBox13.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.comboBox13.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-        this.comboBox13.Items.AddRange(new object[] {
-                        System.Drawing.Drawing2D.WrapMode.Tile,
-                        System.Drawing.Drawing2D.WrapMode.TileFlipXY,
-                        System.Drawing.Drawing2D.WrapMode.TileFlipX,
-                        System.Drawing.Drawing2D.WrapMode.TileFlipY});
-        this.comboBox13.Margin = new System.Windows.Forms.Padding(3, 1, 3, 2);
-        this.comboBox13.Size = new System.Drawing.Size();
-        this.comboBox13.TabIndex = 1;
-        this.comboBox13.Tag = 2097333;
-        this.comboBox13.SelectedIndexChanged += new System.EventHandler(this.Control_ValueChanged);
-        // 
-        // tableLayoutPanel39
-        // 
-        this.tableLayoutPanel39.AutoSize = true;
-        this.tableLayoutPanel39.ColumnCount = 2;
-        this.tableLayoutPanel39.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-        this.tableLayoutPanel39.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-        this.tableLayoutPanel39.Controls.Add(this.label51, 0, 0);
-        this.tableLayoutPanel39.Controls.Add(this.trackBar5, 1, 0);
-        this.tableLayoutPanel39.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.tableLayoutPanel39.Enabled = false;
-        this.tableLayoutPanel39.Margin = new System.Windows.Forms.Padding(0);
-        this.tableLayoutPanel39.RowCount = 1;
-        this.tableLayoutPanel39.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
-        this.tableLayoutPanel39.TabIndex = 2;
-        // 
-        // label51
-        // 
-        this.label51.AutoSize = true;
-        this.label51.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.label51.Margin = new System.Windows.Forms.Padding(3, 1, 3, 2);
-        this.label51.TabIndex = 0;
-        this.label51.Text = "Si&ze:";
-        this.label51.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-        // 
-        // trackBar5
-        // 
-        this.trackBar5.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.trackBar5.Margin = new System.Windows.Forms.Padding(0, 1, 0, 2);
-        this.trackBar5.Maximum = 200;
-        this.trackBar5.Minimum = 50;
-        this.trackBar5.TabIndex = 1;
-        this.trackBar5.Tag = 6291894;
-        this.trackBar5.TickStyle = System.Windows.Forms.TickStyle.None;
-        this.trackBar5.Value = 100;
-        this.trackBar5.Scroll += new System.EventHandler(this.Control_ValueChanged);
-        // 
-        // tableLayoutPanel36
-        // 
-        this.tableLayoutPanel36.AutoSize = true;
-        this.tableLayoutPanel36.ColumnCount = 4;
-        this.tableLayoutPanel36.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-        this.tableLayoutPanel36.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 65F));
-        this.tableLayoutPanel36.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 65F));
-        this.tableLayoutPanel36.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-        this.tableLayoutPanel36.Controls.Add(this.label48, 0, 0);
-        this.tableLayoutPanel36.Controls.Add(this.button31, 1, 0);
-        this.tableLayoutPanel36.Controls.Add(this.button32, 2, 0);
-        this.tableLayoutPanel36.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.tableLayoutPanel36.Margin = new System.Windows.Forms.Padding(0);
-        this.tableLayoutPanel36.RowCount = 1;
-        this.tableLayoutPanel36.RowStyles.Add(new System.Windows.Forms.RowStyle());
-        this.tableLayoutPanel36.TabIndex = 3;
-        // 
-        // label48
-        // 
-        this.label48.AutoSize = true;
-        this.label48.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.label48.Margin = new System.Windows.Forms.Padding(3, 1, 3, 2);
-        this.label48.TabIndex = 0;
-        this.label48.Text = "&Color:";
-        this.label48.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-        // 
-        // button31
-        // 
-        this.button31.AutoSize = true;
-        this.button31.BackColor = System.Drawing.Color.White;
-        this.button31.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.button31.ForeColor = System.Drawing.Color.Black;
-        this.button31.Margin = new System.Windows.Forms.Padding(3, 1, 3, 2);
-        this.button31.TabIndex = 1;
-        this.button31.Text = "BG";
-        this.button31.UseCompatibleTextRendering = true;
-        this.button31.UseVisualStyleBackColor = false;
-        this.button31.BackColorChanged += new System.EventHandler(this.PreviewColorButtonBackColorChanged);
-        this.button31.Click += new System.EventHandler(this.PreviewColorButton1Click);
-        // 
-        // button32
-        // 
-        this.button32.AutoSize = true;
-        this.button32.BackColor = System.Drawing.Color.Black;
-        this.button32.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.button32.ForeColor = System.Drawing.Color.White;
-        this.button32.Margin = new System.Windows.Forms.Padding(3, 1, 3, 3);
-        this.button32.TabIndex = 2;
-        this.button32.Text = "DOT";
-        this.button32.UseCompatibleTextRendering = true;
-        this.button32.UseVisualStyleBackColor = false;
-        this.button32.BackColorChanged += new System.EventHandler(this.PreviewColorButtonBackColorChanged);
-        this.button32.Click += new System.EventHandler(this.PreviewColorButton2Click);
-        // 
         // tableLayoutPanel3
         // 
         this.tableLayoutPanel3.AutoSize = true;
@@ -1881,12 +1455,16 @@ partial class image2gcode {
         // tableLayoutPanel13
         // 
         this.tableLayoutPanel13.AutoSize = true;
-        this.tableLayoutPanel13.ColumnCount = 3;
+        this.tableLayoutPanel13.ColumnCount = 5;
+        this.tableLayoutPanel13.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+        this.tableLayoutPanel13.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
         this.tableLayoutPanel13.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
         this.tableLayoutPanel13.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
         this.tableLayoutPanel13.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
         this.tableLayoutPanel13.Controls.Add(this.tableLayoutPanel14, 0, 0);
         this.tableLayoutPanel13.Controls.Add(this.tableLayoutPanel15, 1, 0);
+        this.tableLayoutPanel13.Controls.Add(this.tableLayoutPanel34, 2, 0);
+        this.tableLayoutPanel13.Controls.Add(this.tableLayoutPanel30, 3, 0);
         this.tableLayoutPanel13.Dock = System.Windows.Forms.DockStyle.Fill;
         this.tableLayoutPanel13.Enabled = false;
         this.tableLayoutPanel13.Margin = new System.Windows.Forms.Padding(0);
@@ -1898,39 +1476,40 @@ partial class image2gcode {
         // 
         this.tableLayoutPanel14.AutoSize = true;
         this.tableLayoutPanel14.ColumnCount = 3;
-        this.tableLayoutPanel14.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 14F));
-        this.tableLayoutPanel14.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 14F));
-        this.tableLayoutPanel14.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 14F));
-        this.tableLayoutPanel14.Controls.Add(this.button6, 2, 0);
-        this.tableLayoutPanel14.Controls.Add(this.button7, 1, 0);
-        this.tableLayoutPanel14.Controls.Add(this.button8, 0, 0);
-        this.tableLayoutPanel14.Controls.Add(this.button9, 2, 1);
-        this.tableLayoutPanel14.Controls.Add(this.button10, 1, 1);
-        this.tableLayoutPanel14.Controls.Add(this.button11, 0, 1);
-        this.tableLayoutPanel14.Controls.Add(this.button12, 2, 2);
-        this.tableLayoutPanel14.Controls.Add(this.button13, 1, 2);
-        this.tableLayoutPanel14.Controls.Add(this.button14, 0, 2);
+        this.tableLayoutPanel14.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 12F));
+        this.tableLayoutPanel14.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 12F));
+        this.tableLayoutPanel14.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 12F));
+        this.tableLayoutPanel14.Controls.Add(this.button8, 0, 1);
+        this.tableLayoutPanel14.Controls.Add(this.button7, 1, 1);
+        this.tableLayoutPanel14.Controls.Add(this.button6, 2, 1);
+        this.tableLayoutPanel14.Controls.Add(this.button11, 0, 2);
+        this.tableLayoutPanel14.Controls.Add(this.button10, 1, 2);
+        this.tableLayoutPanel14.Controls.Add(this.button9, 2, 2);
+        this.tableLayoutPanel14.Controls.Add(this.button14, 0, 3);
+        this.tableLayoutPanel14.Controls.Add(this.button13, 1, 3);
+        this.tableLayoutPanel14.Controls.Add(this.button12, 2, 3);
         this.tableLayoutPanel14.Dock = System.Windows.Forms.DockStyle.Fill;
         this.tableLayoutPanel14.Margin = new System.Windows.Forms.Padding(0);
-        this.tableLayoutPanel14.RowCount = 4;
-        this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 14F));
-        this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 14F));
-        this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 14F));
-        this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+        this.tableLayoutPanel14.RowCount = 5;
+        this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+        this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 12F));
+        this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 12F));
+        this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 12F));
+        this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
         this.tableLayoutPanel14.TabIndex = 0;
         // 
-        // button6
+        // button8
         // 
-        this.button6.AutoSize = true;
-        this.button6.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.button6.FlatAppearance.BorderSize = 0;
-        this.button6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-        this.button6.Margin = new System.Windows.Forms.Padding(1);
-        this.button6.TabIndex = 0;
-        this.button6.Tag = 0;
-        this.button6.UseVisualStyleBackColor = true;
-        this.button6.Click += new System.EventHandler(this.ImOriginButtonClick);
-        this.button6.Paint += new System.Windows.Forms.PaintEventHandler(this.ImOriginButtonPaint);
+        this.button8.AutoSize = true;
+        this.button8.Dock = System.Windows.Forms.DockStyle.Fill;
+        this.button8.FlatAppearance.BorderSize = 0;
+        this.button8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+        this.button8.Margin = new System.Windows.Forms.Padding(1);
+        this.button8.TabIndex = 0;
+        this.button8.Tag = 0;
+        this.button8.UseVisualStyleBackColor = true;
+        this.button8.Click += new System.EventHandler(this.ImOriginButtonClick);
+        this.button8.Paint += new System.Windows.Forms.PaintEventHandler(this.ImOriginButtonPaint);
         // 
         // button7
         // 
@@ -1940,36 +1519,36 @@ partial class image2gcode {
         this.button7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
         this.button7.Margin = new System.Windows.Forms.Padding(1);
         this.button7.TabIndex = 1;
-        this.button7.Tag = 1;
+        this.button7.Tag = 2;
         this.button7.UseVisualStyleBackColor = true;
         this.button7.Click += new System.EventHandler(this.ImOriginButtonClick);
         this.button7.Paint += new System.Windows.Forms.PaintEventHandler(this.ImOriginButtonPaint);
         // 
-        // button8
+        // button6
         // 
-        this.button8.AutoSize = true;
-        this.button8.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.button8.FlatAppearance.BorderSize = 0;
-        this.button8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-        this.button8.Margin = new System.Windows.Forms.Padding(1);
-        this.button8.TabIndex = 2;
-        this.button8.Tag = 2;
-        this.button8.UseVisualStyleBackColor = true;
-        this.button8.Click += new System.EventHandler(this.ImOriginButtonClick);
-        this.button8.Paint += new System.Windows.Forms.PaintEventHandler(this.ImOriginButtonPaint);
+        this.button6.AutoSize = true;
+        this.button6.Dock = System.Windows.Forms.DockStyle.Fill;
+        this.button6.FlatAppearance.BorderSize = 0;
+        this.button6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+        this.button6.Margin = new System.Windows.Forms.Padding(1);
+        this.button6.TabIndex = 2;
+        this.button6.Tag = 1;
+        this.button6.UseVisualStyleBackColor = true;
+        this.button6.Click += new System.EventHandler(this.ImOriginButtonClick);
+        this.button6.Paint += new System.Windows.Forms.PaintEventHandler(this.ImOriginButtonPaint);
         // 
-        // button9
+        // button11
         // 
-        this.button9.AutoSize = true;
-        this.button9.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.button9.FlatAppearance.BorderSize = 0;
-        this.button9.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-        this.button9.Margin = new System.Windows.Forms.Padding(1);
-        this.button9.TabIndex = 3;
-        this.button9.Tag = 3;
-        this.button9.UseVisualStyleBackColor = true;
-        this.button9.Click += new System.EventHandler(this.ImOriginButtonClick);
-        this.button9.Paint += new System.Windows.Forms.PaintEventHandler(this.ImOriginButtonPaint);
+        this.button11.AutoSize = true;
+        this.button11.Dock = System.Windows.Forms.DockStyle.Fill;
+        this.button11.FlatAppearance.BorderSize = 0;
+        this.button11.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+        this.button11.Margin = new System.Windows.Forms.Padding(1);
+        this.button11.TabIndex = 3;
+        this.button11.Tag = 8;
+        this.button11.UseVisualStyleBackColor = true;
+        this.button11.Click += new System.EventHandler(this.ImOriginButtonClick);
+        this.button11.Paint += new System.Windows.Forms.PaintEventHandler(this.ImOriginButtonPaint);
         // 
         // button10
         // 
@@ -1979,36 +1558,36 @@ partial class image2gcode {
         this.button10.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
         this.button10.Margin = new System.Windows.Forms.Padding(1);
         this.button10.TabIndex = 4;
-        this.button10.Tag = 4;
+        this.button10.Tag = 10;
         this.button10.UseVisualStyleBackColor = true;
         this.button10.Click += new System.EventHandler(this.ImOriginButtonClick);
         this.button10.Paint += new System.Windows.Forms.PaintEventHandler(this.ImOriginButtonPaint);
         // 
-        // button11
+        // button9
         // 
-        this.button11.AutoSize = true;
-        this.button11.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.button11.FlatAppearance.BorderSize = 0;
-        this.button11.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-        this.button11.Margin = new System.Windows.Forms.Padding(1);
-        this.button11.TabIndex = 5;
-        this.button11.Tag = 5;
-        this.button11.UseVisualStyleBackColor = true;
-        this.button11.Click += new System.EventHandler(this.ImOriginButtonClick);
-        this.button11.Paint += new System.Windows.Forms.PaintEventHandler(this.ImOriginButtonPaint);
+        this.button9.AutoSize = true;
+        this.button9.Dock = System.Windows.Forms.DockStyle.Fill;
+        this.button9.FlatAppearance.BorderSize = 0;
+        this.button9.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+        this.button9.Margin = new System.Windows.Forms.Padding(1);
+        this.button9.TabIndex = 5;
+        this.button9.Tag = 9;
+        this.button9.UseVisualStyleBackColor = true;
+        this.button9.Click += new System.EventHandler(this.ImOriginButtonClick);
+        this.button9.Paint += new System.Windows.Forms.PaintEventHandler(this.ImOriginButtonPaint);
         // 
-        // button12
+        // button14
         // 
-        this.button12.AutoSize = true;
-        this.button12.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.button12.FlatAppearance.BorderSize = 0;
-        this.button12.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-        this.button12.Margin = new System.Windows.Forms.Padding(1);
-        this.button12.TabIndex = 6;
-        this.button12.Tag = 6;
-        this.button12.UseVisualStyleBackColor = true;
-        this.button12.Click += new System.EventHandler(this.ImOriginButtonClick);
-        this.button12.Paint += new System.Windows.Forms.PaintEventHandler(this.ImOriginButtonPaint);
+        this.button14.AutoSize = true;
+        this.button14.Dock = System.Windows.Forms.DockStyle.Fill;
+        this.button14.FlatAppearance.BorderSize = 0;
+        this.button14.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+        this.button14.Margin = new System.Windows.Forms.Padding(1);
+        this.button14.TabIndex = 6;
+        this.button14.Tag = 4;
+        this.button14.UseVisualStyleBackColor = true;
+        this.button14.Click += new System.EventHandler(this.ImOriginButtonClick);
+        this.button14.Paint += new System.Windows.Forms.PaintEventHandler(this.ImOriginButtonPaint);
         // 
         // button13
         // 
@@ -2018,59 +1597,53 @@ partial class image2gcode {
         this.button13.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
         this.button13.Margin = new System.Windows.Forms.Padding(1);
         this.button13.TabIndex = 7;
-        this.button13.Tag = 7;
+        this.button13.Tag = 6;
         this.button13.UseVisualStyleBackColor = true;
         this.button13.Click += new System.EventHandler(this.ImOriginButtonClick);
         this.button13.Paint += new System.Windows.Forms.PaintEventHandler(this.ImOriginButtonPaint);
         // 
-        // button14
+        // button12
         // 
-        this.button14.AutoSize = true;
-        this.button14.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.button14.FlatAppearance.BorderSize = 0;
-        this.button14.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-        this.button14.Margin = new System.Windows.Forms.Padding(1);
-        this.button14.TabIndex = 8;
-        this.button14.Tag = 8;
-        this.button14.UseVisualStyleBackColor = true;
-        this.button14.Click += new System.EventHandler(this.ImOriginButtonClick);
-        this.button14.Paint += new System.Windows.Forms.PaintEventHandler(this.ImOriginButtonPaint);
+        this.button12.AutoSize = true;
+        this.button12.Dock = System.Windows.Forms.DockStyle.Fill;
+        this.button12.FlatAppearance.BorderSize = 0;
+        this.button12.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+        this.button12.Margin = new System.Windows.Forms.Padding(1);
+        this.button12.TabIndex = 8;
+        this.button12.Tag = 5;
+        this.button12.UseVisualStyleBackColor = true;
+        this.button12.Click += new System.EventHandler(this.ImOriginButtonClick);
+        this.button12.Paint += new System.Windows.Forms.PaintEventHandler(this.ImOriginButtonPaint);
         // 
         // tableLayoutPanel15
         // 
         this.tableLayoutPanel15.AutoSize = true;
-        this.tableLayoutPanel15.ColumnCount = 6;
+        this.tableLayoutPanel15.ColumnCount = 4;
         this.tableLayoutPanel15.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-        this.tableLayoutPanel15.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 75F));
+        this.tableLayoutPanel15.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60F));
         this.tableLayoutPanel15.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-        this.tableLayoutPanel15.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 75F));
-        this.tableLayoutPanel15.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-        this.tableLayoutPanel15.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-        this.tableLayoutPanel15.Controls.Add(this.label15, 0, 0);
-        this.tableLayoutPanel15.Controls.Add(this.textBox1, 1, 0);
-        this.tableLayoutPanel15.Controls.Add(this.label16, 0, 1);
-        this.tableLayoutPanel15.Controls.Add(this.textBox2, 1, 1);
-        this.tableLayoutPanel15.Controls.Add(this.label17, 2, 0);
-        this.tableLayoutPanel15.Controls.Add(this.textBox3, 3, 0);
-        this.tableLayoutPanel15.Controls.Add(this.label18, 2, 1);
-        this.tableLayoutPanel15.Controls.Add(this.textBox4, 3, 1);
-        this.tableLayoutPanel15.Controls.Add(this.label19, 4, 0);
-        this.tableLayoutPanel15.Controls.Add(this.comboBox4, 5, 0);
-        this.tableLayoutPanel15.Controls.Add(this.label20, 4, 1);
-        this.tableLayoutPanel15.Controls.Add(this.checkBox5, 5, 1);
+        this.tableLayoutPanel15.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+        this.tableLayoutPanel15.Controls.Add(this.label15, 0, 1);
+        this.tableLayoutPanel15.Controls.Add(this.textBox1, 1, 1);
+        this.tableLayoutPanel15.Controls.Add(this.label16, 0, 2);
+        this.tableLayoutPanel15.Controls.Add(this.textBox2, 1, 2);
+        this.tableLayoutPanel15.Controls.Add(this.label17, 2, 1);
+        this.tableLayoutPanel15.Controls.Add(this.textBox3, 3, 1);
+        this.tableLayoutPanel15.Controls.Add(this.label18, 2, 2);
+        this.tableLayoutPanel15.Controls.Add(this.textBox4, 3, 2);
         this.tableLayoutPanel15.Dock = System.Windows.Forms.DockStyle.Fill;
         this.tableLayoutPanel15.Margin = new System.Windows.Forms.Padding(0);
-        this.tableLayoutPanel15.RowCount = 3;
+        this.tableLayoutPanel15.RowCount = 4;
+        this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
         this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle());
         this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle());
-        this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+        this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
         this.tableLayoutPanel15.TabIndex = 1;
         // 
         // label15
         // 
         this.label15.AutoSize = true;
         this.label15.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.label15.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
         this.label15.TabIndex = 0;
         this.label15.Text = "X:";
         this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -2080,10 +1653,10 @@ partial class image2gcode {
         this.textBox1.BackColor = System.Drawing.SystemColors.Control;
         this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
         this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.textBox1.Margin = new System.Windows.Forms.Padding(2, 4, 3, 4);
+        this.textBox1.Margin = new System.Windows.Forms.Padding(0, 3, 3, 2);
         this.textBox1.Size = new System.Drawing.Size();
         this.textBox1.TabIndex = 1;
-        this.textBox1.Tag = 1117068;
+        this.textBox1.Tag = 1133452;
         this.textBox1.Text = "0";
         this.textBox1.TextChanged += new System.EventHandler(this.Control_ValueChanged);
         // 
@@ -2091,7 +1664,6 @@ partial class image2gcode {
         // 
         this.label16.AutoSize = true;
         this.label16.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.label16.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
         this.label16.TabIndex = 2;
         this.label16.Text = "Y:";
         this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -2101,10 +1673,10 @@ partial class image2gcode {
         this.textBox2.BackColor = System.Drawing.SystemColors.Control;
         this.textBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
         this.textBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.textBox2.Margin = new System.Windows.Forms.Padding(2, 4, 3, 4);
+        this.textBox2.Margin = new System.Windows.Forms.Padding(0, 3, 3, 2);
         this.textBox2.Size = new System.Drawing.Size();
         this.textBox2.TabIndex = 3;
-        this.textBox2.Tag = 1117069;
+        this.textBox2.Tag = 1133453;
         this.textBox2.Text = "0";
         this.textBox2.TextChanged += new System.EventHandler(this.Control_ValueChanged);
         // 
@@ -2112,7 +1684,6 @@ partial class image2gcode {
         // 
         this.label17.AutoSize = true;
         this.label17.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.label17.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
         this.label17.TabIndex = 4;
         this.label17.Text = "&Width:";
         this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -2122,7 +1693,7 @@ partial class image2gcode {
         this.textBox3.BackColor = System.Drawing.SystemColors.Control;
         this.textBox3.BorderStyle = System.Windows.Forms.BorderStyle.None;
         this.textBox3.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.textBox3.Margin = new System.Windows.Forms.Padding(2, 4, 3, 4);
+        this.textBox3.Margin = new System.Windows.Forms.Padding(0, 3, 3, 2);
         this.textBox3.Size = new System.Drawing.Size();
         this.textBox3.TabIndex = 5;
         this.textBox3.Tag = 2192270;
@@ -2133,7 +1704,6 @@ partial class image2gcode {
         // 
         this.label18.AutoSize = true;
         this.label18.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.label18.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
         this.label18.TabIndex = 6;
         this.label18.Text = "Hei&ght:";
         this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -2143,18 +1713,73 @@ partial class image2gcode {
         this.textBox4.BackColor = System.Drawing.SystemColors.Control;
         this.textBox4.BorderStyle = System.Windows.Forms.BorderStyle.None;
         this.textBox4.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.textBox4.Margin = new System.Windows.Forms.Padding(2, 4, 3, 4);
+        this.textBox4.Margin = new System.Windows.Forms.Padding(0, 3, 3, 2);
         this.textBox4.Size = new System.Drawing.Size();
         this.textBox4.TabIndex = 7;
         this.textBox4.Tag = 2192271;
         this.textBox4.Text = "0";
         this.textBox4.TextChanged += new System.EventHandler(this.Control_ValueChanged);
         // 
+        // tableLayoutPanel34
+        // 
+        this.tableLayoutPanel34.AutoSize = true;
+        this.tableLayoutPanel34.ColumnCount = 1;
+        this.tableLayoutPanel34.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 22F));
+        this.tableLayoutPanel34.Controls.Add(this.checkBox5, 0, 1);
+        this.tableLayoutPanel34.Dock = System.Windows.Forms.DockStyle.Fill;
+        this.tableLayoutPanel34.Margin = new System.Windows.Forms.Padding(0);
+        this.tableLayoutPanel34.RowCount = 3;
+        this.tableLayoutPanel34.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+        this.tableLayoutPanel34.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
+        this.tableLayoutPanel34.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+        this.tableLayoutPanel34.TabIndex = 2;
+        // 
+        // checkBox5
+        // 
+        this.checkBox5.Appearance = System.Windows.Forms.Appearance.Button;
+        this.checkBox5.AutoSize = true;
+        this.checkBox5.Checked = true;
+        this.checkBox5.CheckState = System.Windows.Forms.CheckState.Checked;
+        this.checkBox5.Dock = System.Windows.Forms.DockStyle.Fill;
+        this.checkBox5.FlatAppearance.BorderSize = 0;
+        this.checkBox5.FlatAppearance.CheckedBackColor = System.Drawing.SystemColors.Control;
+        this.checkBox5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+        this.checkBox5.ImageIndex = 1;
+        this.checkBox5.ImageList = this.imageList1;
+        this.checkBox5.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+        this.checkBox5.TabIndex = 0;
+        this.checkBox5.Tag = 273;
+        this.checkBox5.UseVisualStyleBackColor = true;
+        this.checkBox5.CheckedChanged += new System.EventHandler(this.Control_ValueChanged);
+        // 
+        // imageList1
+        // 
+        this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
+        this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
+        this.imageList1.Images.SetKeyName(0, "vchain-broken");
+        this.imageList1.Images.SetKeyName(1, "vchain");
+        // 
+        // tableLayoutPanel30
+        // 
+        this.tableLayoutPanel30.AutoSize = true;
+        this.tableLayoutPanel30.ColumnCount = 2;
+        this.tableLayoutPanel30.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+        this.tableLayoutPanel30.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+        this.tableLayoutPanel30.Controls.Add(this.label19, 0, 1);
+        this.tableLayoutPanel30.Controls.Add(this.comboBox4, 1, 1);
+        this.tableLayoutPanel30.Dock = System.Windows.Forms.DockStyle.Fill;
+        this.tableLayoutPanel30.Margin = new System.Windows.Forms.Padding(0);
+        this.tableLayoutPanel30.RowCount = 3;
+        this.tableLayoutPanel30.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+        this.tableLayoutPanel30.RowStyles.Add(new System.Windows.Forms.RowStyle());
+        this.tableLayoutPanel30.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+        this.tableLayoutPanel30.TabIndex = 3;
+        // 
         // label19
         // 
         this.label19.AutoSize = true;
         this.label19.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.label19.TabIndex = 8;
+        this.label19.TabIndex = 0;
         this.label19.Text = "Inter&polation:";
         this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
         // 
@@ -2168,33 +1793,10 @@ partial class image2gcode {
                         System.Drawing.Drawing2D.InterpolationMode.Bicubic,
                         System.Drawing.Drawing2D.InterpolationMode.HighQualityBilinear,
                         System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic});
-        this.comboBox4.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
         this.comboBox4.Size = new System.Drawing.Size();
-        this.comboBox4.TabIndex = 9;
+        this.comboBox4.TabIndex = 1;
         this.comboBox4.Tag = 2121872;
         this.comboBox4.SelectedIndexChanged += new System.EventHandler(this.Control_ValueChanged);
-        // 
-        // label20
-        // 
-        this.label20.AutoSize = true;
-        this.label20.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.label20.TabIndex = 10;
-        this.label20.Text = "Aspect ratio:";
-        this.label20.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-        // 
-        // checkBox5
-        // 
-        this.checkBox5.AutoSize = true;
-        this.checkBox5.Checked = true;
-        this.checkBox5.CheckState = System.Windows.Forms.CheckState.Checked;
-        this.checkBox5.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.checkBox5.FlatStyle = System.Windows.Forms.FlatStyle.System;
-        this.checkBox5.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
-        this.checkBox5.TabIndex = 11;
-        this.checkBox5.Tag = 273;
-        this.checkBox5.Text = "&Keep aspect ratio";
-        this.checkBox5.UseVisualStyleBackColor = true;
-        this.checkBox5.CheckedChanged += new System.EventHandler(this.Control_ValueChanged);
         // 
         // tableLayoutPanel4
         // 
@@ -2202,22 +1804,23 @@ partial class image2gcode {
         this.tableLayoutPanel4.ColumnCount = 1;
         this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
         this.tableLayoutPanel4.Controls.Add(this.tableLayoutPanel17, 0, 0);
-        this.tableLayoutPanel4.Controls.Add(this.tableLayoutPanel18, 0, 1);
-        this.tableLayoutPanel4.Controls.Add(this.checkBox12, 0, 2);
-        this.tableLayoutPanel4.Controls.Add(this.checkBox6, 0, 3);
-        this.tableLayoutPanel4.Controls.Add(this.tableLayoutPanel19, 0, 4);
-        this.tableLayoutPanel4.Controls.Add(this.tableLayoutPanel20, 0, 5);
-        this.tableLayoutPanel4.Controls.Add(this.tableLayoutPanel21, 0, 6);
-        this.tableLayoutPanel4.Controls.Add(this.checkBox7, 0, 7);
-        this.tableLayoutPanel4.Controls.Add(this.tableLayoutPanel26, 0, 8);
-        this.tableLayoutPanel4.Controls.Add(this.tableLayoutPanel27, 0, 10);
-        this.tableLayoutPanel4.Controls.Add(this.checkBox10, 0, 11);
-        this.tableLayoutPanel4.Controls.Add(this.tableLayoutPanel29, 0, 12);
-        this.tableLayoutPanel4.Controls.Add(this.textBox22, 0, 13);
-        this.tableLayoutPanel4.Controls.Add(this.tableLayoutPanel31, 0, 14);
+        this.tableLayoutPanel4.Controls.Add(this.tableLayoutPanel29, 0, 1);
+        this.tableLayoutPanel4.Controls.Add(this.tableLayoutPanel18, 0, 2);
+        this.tableLayoutPanel4.Controls.Add(this.checkBox12, 0, 3);
+        this.tableLayoutPanel4.Controls.Add(this.checkBox6, 0, 4);
+        this.tableLayoutPanel4.Controls.Add(this.tableLayoutPanel19, 0, 5);
+        this.tableLayoutPanel4.Controls.Add(this.tableLayoutPanel20, 0, 6);
+        this.tableLayoutPanel4.Controls.Add(this.tableLayoutPanel21, 0, 7);
+        this.tableLayoutPanel4.Controls.Add(this.checkBox7, 0, 8);
+        this.tableLayoutPanel4.Controls.Add(this.tableLayoutPanel26, 0, 9);
+        this.tableLayoutPanel4.Controls.Add(this.tableLayoutPanel11, 0, 10);
+        this.tableLayoutPanel4.Controls.Add(this.textBox22, 0, 12);
+        this.tableLayoutPanel4.Controls.Add(this.tableLayoutPanel31, 0, 13);
         this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
         this.tableLayoutPanel4.Enabled = false;
-        this.tableLayoutPanel4.RowCount = 15;
+        this.tableLayoutPanel4.RowCount = 14;
+        this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
+        this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
         this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
         this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
         this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -2228,9 +1831,6 @@ partial class image2gcode {
         this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
         this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
         this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-        this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
-        this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
-        this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
         this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
         this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
         this.tableLayoutPanel4.TabIndex = 2;
@@ -2245,15 +1845,9 @@ partial class image2gcode {
         this.tableLayoutPanel17.Controls.Add(this.textBox5, 1, 0);
         this.tableLayoutPanel17.Controls.Add(this.label22, 0, 1);
         this.tableLayoutPanel17.Controls.Add(this.textBox6, 1, 1);
-        this.tableLayoutPanel17.Controls.Add(this.label23, 0, 2);
-        this.tableLayoutPanel17.Controls.Add(this.textBox7, 1, 2);
-        this.tableLayoutPanel17.Controls.Add(this.label24, 0, 3);
-        this.tableLayoutPanel17.Controls.Add(this.textBox8, 1, 3);
         this.tableLayoutPanel17.Dock = System.Windows.Forms.DockStyle.Fill;
         this.tableLayoutPanel17.Margin = new System.Windows.Forms.Padding(0);
-        this.tableLayoutPanel17.RowCount = 4;
-        this.tableLayoutPanel17.RowStyles.Add(new System.Windows.Forms.RowStyle());
-        this.tableLayoutPanel17.RowStyles.Add(new System.Windows.Forms.RowStyle());
+        this.tableLayoutPanel17.RowCount = 2;
         this.tableLayoutPanel17.RowStyles.Add(new System.Windows.Forms.RowStyle());
         this.tableLayoutPanel17.RowStyles.Add(new System.Windows.Forms.RowStyle());
         this.tableLayoutPanel17.TabIndex = 0;
@@ -2294,43 +1888,39 @@ partial class image2gcode {
         this.textBox6.Tag = 5011;
         this.textBox6.TextChanged += new System.EventHandler(this.Control_ValueChanged);
         // 
-        // label23
+        // tableLayoutPanel29
         // 
-        this.label23.AutoSize = true;
-        this.label23.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.label23.Margin = new System.Windows.Forms.Padding(3, 0, 3, 2);
-        this.label23.TabIndex = 4;
-        this.label23.Text = "A&ccel:";
-        this.label23.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-        // 
-        // textBox7
-        // 
-        this.textBox7.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.textBox7.Margin = new System.Windows.Forms.Padding(3, 0, 3, 2);
-        this.textBox7.Size = new System.Drawing.Size();
-        this.textBox7.TabIndex = 5;
-        this.textBox7.Tag = 21396;
-        this.textBox7.TextChanged += new System.EventHandler(this.Control_ValueChanged);
+        this.tableLayoutPanel29.AutoSize = true;
+        this.tableLayoutPanel29.ColumnCount = 2;
+        this.tableLayoutPanel29.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+        this.tableLayoutPanel29.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+        this.tableLayoutPanel29.Controls.Add(this.label24, 0, 0);
+        this.tableLayoutPanel29.Controls.Add(this.comboBox9, 1, 0);
+        this.tableLayoutPanel29.Dock = System.Windows.Forms.DockStyle.Fill;
+        this.tableLayoutPanel29.Margin = new System.Windows.Forms.Padding(0);
+        this.tableLayoutPanel29.RowCount = 1;
+        this.tableLayoutPanel29.RowStyles.Add(new System.Windows.Forms.RowStyle());
+        this.tableLayoutPanel29.TabIndex = 1;
+        this.tableLayoutPanel29.Visible = false;
         // 
         // label24
         // 
         this.label24.AutoSize = true;
         this.label24.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.label24.Enabled = false;
-        this.label24.Margin = new System.Windows.Forms.Padding(3, 1, 3, 3);
-        this.label24.TabIndex = 6;
-        this.label24.Text = "Shif&t:";
+        this.label24.TabIndex = 0;
+        this.label24.Text = "Passes Co&unt:";
         this.label24.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
         // 
-        // textBox8
+        // comboBox9
         // 
-        this.textBox8.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.textBox8.Enabled = false;
-        this.textBox8.Margin = new System.Windows.Forms.Padding(3, 1, 3, 3);
-        this.textBox8.Size = new System.Drawing.Size();
-        this.textBox8.TabIndex = 7;
-        this.textBox8.Tag = 2965;
-        this.textBox8.TextChanged += new System.EventHandler(this.Control_ValueChanged);
+        this.comboBox9.Dock = System.Windows.Forms.DockStyle.Fill;
+        this.comboBox9.Items.AddRange(new object[] {
+                        1,
+                        2});
+        this.comboBox9.Size = new System.Drawing.Size();
+        this.comboBox9.TabIndex = 1;
+        this.comboBox9.Tag = 22420;
+        this.comboBox9.TextChanged += new System.EventHandler(this.Control_ValueChanged);
         // 
         // tableLayoutPanel18
         // 
@@ -2344,7 +1934,7 @@ partial class image2gcode {
         this.tableLayoutPanel18.Margin = new System.Windows.Forms.Padding(0);
         this.tableLayoutPanel18.RowCount = 1;
         this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle());
-        this.tableLayoutPanel18.TabIndex = 1;
+        this.tableLayoutPanel18.TabIndex = 2;
         this.tableLayoutPanel18.Visible = false;
         // 
         // label25
@@ -2369,7 +1959,7 @@ partial class image2gcode {
         this.checkBox12.Dock = System.Windows.Forms.DockStyle.Fill;
         this.checkBox12.FlatStyle = System.Windows.Forms.FlatStyle.System;
         this.checkBox12.Margin = new System.Windows.Forms.Padding(6, 3, 6, 3);
-        this.checkBox12.TabIndex = 2;
+        this.checkBox12.TabIndex = 3;
         this.checkBox12.Tag = 307;
         this.checkBox12.Text = "Air Assist";
         this.checkBox12.UseVisualStyleBackColor = true;
@@ -2383,7 +1973,7 @@ partial class image2gcode {
         this.checkBox6.Dock = System.Windows.Forms.DockStyle.Fill;
         this.checkBox6.FlatStyle = System.Windows.Forms.FlatStyle.System;
         this.checkBox6.Margin = new System.Windows.Forms.Padding(6, 3, 6, 0);
-        this.checkBox6.TabIndex = 3;
+        this.checkBox6.TabIndex = 4;
         this.checkBox6.Tag = 49431;
         this.checkBox6.Text = "Cha&nge speed on white";
         this.checkBox6.UseVisualStyleBackColor = true;
@@ -2404,7 +1994,7 @@ partial class image2gcode {
         this.tableLayoutPanel19.RowCount = 2;
         this.tableLayoutPanel19.RowStyles.Add(new System.Windows.Forms.RowStyle());
         this.tableLayoutPanel19.RowStyles.Add(new System.Windows.Forms.RowStyle());
-        this.tableLayoutPanel19.TabIndex = 4;
+        this.tableLayoutPanel19.TabIndex = 5;
         // 
         // label26
         // 
@@ -2454,7 +2044,7 @@ partial class image2gcode {
         this.tableLayoutPanel20.RowCount = 2;
         this.tableLayoutPanel20.RowStyles.Add(new System.Windows.Forms.RowStyle());
         this.tableLayoutPanel20.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 71F));
-        this.tableLayoutPanel20.TabIndex = 5;
+        this.tableLayoutPanel20.TabIndex = 6;
         // 
         // tableLayoutPanel22
         // 
@@ -2562,7 +2152,7 @@ partial class image2gcode {
         this.tableLayoutPanel21.RowCount = 2;
         this.tableLayoutPanel21.RowStyles.Add(new System.Windows.Forms.RowStyle());
         this.tableLayoutPanel21.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 71F));
-        this.tableLayoutPanel21.TabIndex = 6;
+        this.tableLayoutPanel21.TabIndex = 7;
         // 
         // tableLayoutPanel23
         // 
@@ -2663,7 +2253,7 @@ partial class image2gcode {
         this.checkBox7.Dock = System.Windows.Forms.DockStyle.Fill;
         this.checkBox7.FlatStyle = System.Windows.Forms.FlatStyle.System;
         this.checkBox7.Margin = new System.Windows.Forms.Padding(6, 3, 6, 3);
-        this.checkBox7.TabIndex = 7;
+        this.checkBox7.TabIndex = 8;
         this.checkBox7.Tag = 49437;
         this.checkBox7.Text = "&Bidirectional";
         this.checkBox7.UseVisualStyleBackColor = true;
@@ -2674,31 +2264,15 @@ partial class image2gcode {
         this.tableLayoutPanel26.AutoSize = true;
         this.tableLayoutPanel26.ColumnCount = 1;
         this.tableLayoutPanel26.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-        this.tableLayoutPanel26.Controls.Add(this.checkBox8, 0, 0);
-        this.tableLayoutPanel26.Controls.Add(this.tableLayoutPanel24, 0, 1);
-        this.tableLayoutPanel26.Controls.Add(this.tableLayoutPanel25, 0, 2);
+        this.tableLayoutPanel26.Controls.Add(this.tableLayoutPanel24, 0, 0);
+        this.tableLayoutPanel26.Controls.Add(this.tableLayoutPanel25, 0, 1);
         this.tableLayoutPanel26.Dock = System.Windows.Forms.DockStyle.Fill;
         this.tableLayoutPanel26.Margin = new System.Windows.Forms.Padding(0);
-        this.tableLayoutPanel26.RowCount = 3;
+        this.tableLayoutPanel26.RowCount = 2;
         this.tableLayoutPanel26.RowStyles.Add(new System.Windows.Forms.RowStyle());
         this.tableLayoutPanel26.RowStyles.Add(new System.Windows.Forms.RowStyle());
-        this.tableLayoutPanel26.RowStyles.Add(new System.Windows.Forms.RowStyle());
-        this.tableLayoutPanel26.TabIndex = 8;
+        this.tableLayoutPanel26.TabIndex = 9;
         this.tableLayoutPanel26.Visible = false;
-        // 
-        // checkBox8
-        // 
-        this.checkBox8.AutoSize = true;
-        this.checkBox8.Checked = true;
-        this.checkBox8.CheckState = System.Windows.Forms.CheckState.Checked;
-        this.checkBox8.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.checkBox8.FlatStyle = System.Windows.Forms.FlatStyle.System;
-        this.checkBox8.Margin = new System.Windows.Forms.Padding(6, 3, 6, 3);
-        this.checkBox8.TabIndex = 0;
-        this.checkBox8.Tag = 286;
-        this.checkBox8.Text = "B&urn to the Cleaning Strip";
-        this.checkBox8.UseVisualStyleBackColor = true;
-        this.checkBox8.CheckedChanged += new System.EventHandler(this.Control_ValueChanged);
         // 
         // tableLayoutPanel24
         // 
@@ -2712,7 +2286,7 @@ partial class image2gcode {
         this.tableLayoutPanel24.Margin = new System.Windows.Forms.Padding(0);
         this.tableLayoutPanel24.RowCount = 1;
         this.tableLayoutPanel24.RowStyles.Add(new System.Windows.Forms.RowStyle());
-        this.tableLayoutPanel24.TabIndex = 1;
+        this.tableLayoutPanel24.TabIndex = 0;
         // 
         // label31
         // 
@@ -2730,8 +2304,7 @@ partial class image2gcode {
         this.comboBox5.Items.AddRange(new object[] {
                         image2gcode.CleaningStrategy.None,
                         image2gcode.CleaningStrategy.Always,
-                        image2gcode.CleaningStrategy.AfterNRows,
-                        image2gcode.CleaningStrategy.Distance});
+                        image2gcode.CleaningStrategy.AfterNRows});
         this.comboBox5.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
         this.comboBox5.Size = new System.Drawing.Size();
         this.comboBox5.TabIndex = 1;
@@ -2746,33 +2319,27 @@ partial class image2gcode {
         this.tableLayoutPanel25.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
         this.tableLayoutPanel25.Controls.Add(this.label32, 0, 0);
         this.tableLayoutPanel25.Controls.Add(this.comboBox6, 1, 0);
-        this.tableLayoutPanel25.Controls.Add(this.label33, 0, 1);
-        this.tableLayoutPanel25.Controls.Add(this.textBox16, 1, 1);
-        this.tableLayoutPanel25.Controls.Add(this.label34, 0, 2);
-        this.tableLayoutPanel25.Controls.Add(this.comboBox7, 1, 2);
-        this.tableLayoutPanel25.Controls.Add(this.label35, 0, 3);
-        this.tableLayoutPanel25.Controls.Add(this.textBox17, 1, 3);
-        this.tableLayoutPanel25.Controls.Add(this.label36, 0, 4);
-        this.tableLayoutPanel25.Controls.Add(this.textBox18, 1, 4);
-        this.tableLayoutPanel25.Controls.Add(this.label37, 0, 5);
-        this.tableLayoutPanel25.Controls.Add(this.textBox19, 1, 5);
-        this.tableLayoutPanel25.Controls.Add(this.label38, 0, 6);
-        this.tableLayoutPanel25.Controls.Add(this.textBox20, 1, 6);
-        this.tableLayoutPanel25.Controls.Add(this.label39, 0, 7);
-        this.tableLayoutPanel25.Controls.Add(this.comboBox8, 1, 7);
+        this.tableLayoutPanel25.Controls.Add(this.label35, 0, 1);
+        this.tableLayoutPanel25.Controls.Add(this.textBox17, 1, 1);
+        this.tableLayoutPanel25.Controls.Add(this.label36, 0, 2);
+        this.tableLayoutPanel25.Controls.Add(this.textBox18, 1, 2);
+        this.tableLayoutPanel25.Controls.Add(this.label37, 0, 3);
+        this.tableLayoutPanel25.Controls.Add(this.textBox19, 1, 3);
+        this.tableLayoutPanel25.Controls.Add(this.label38, 0, 4);
+        this.tableLayoutPanel25.Controls.Add(this.textBox20, 1, 4);
+        this.tableLayoutPanel25.Controls.Add(this.label39, 0, 5);
+        this.tableLayoutPanel25.Controls.Add(this.comboBox8, 1, 5);
         this.tableLayoutPanel25.Dock = System.Windows.Forms.DockStyle.Fill;
         this.tableLayoutPanel25.Enabled = false;
         this.tableLayoutPanel25.Margin = new System.Windows.Forms.Padding(0);
-        this.tableLayoutPanel25.RowCount = 8;
+        this.tableLayoutPanel25.RowCount = 6;
         this.tableLayoutPanel25.RowStyles.Add(new System.Windows.Forms.RowStyle());
         this.tableLayoutPanel25.RowStyles.Add(new System.Windows.Forms.RowStyle());
         this.tableLayoutPanel25.RowStyles.Add(new System.Windows.Forms.RowStyle());
         this.tableLayoutPanel25.RowStyles.Add(new System.Windows.Forms.RowStyle());
         this.tableLayoutPanel25.RowStyles.Add(new System.Windows.Forms.RowStyle());
         this.tableLayoutPanel25.RowStyles.Add(new System.Windows.Forms.RowStyle());
-        this.tableLayoutPanel25.RowStyles.Add(new System.Windows.Forms.RowStyle());
-        this.tableLayoutPanel25.RowStyles.Add(new System.Windows.Forms.RowStyle());
-        this.tableLayoutPanel25.TabIndex = 2;
+        this.tableLayoutPanel25.TabIndex = 1;
         // 
         // label32
         // 
@@ -2797,53 +2364,13 @@ partial class image2gcode {
         this.comboBox6.Tag = 22432;
         this.comboBox6.TextChanged += new System.EventHandler(this.Control_ValueChanged);
         // 
-        // label33
-        // 
-        this.label33.AutoSize = true;
-        this.label33.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.label33.Margin = new System.Windows.Forms.Padding(3, 2, 3, 1);
-        this.label33.TabIndex = 2;
-        this.label33.Text = "&Distance:";
-        this.label33.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-        // 
-        // textBox16
-        // 
-        this.textBox16.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.textBox16.Margin = new System.Windows.Forms.Padding(3, 2, 3, 1);
-        this.textBox16.Size = new System.Drawing.Size();
-        this.textBox16.TabIndex = 3;
-        this.textBox16.Tag = 21409;
-        this.textBox16.TextChanged += new System.EventHandler(this.Control_ValueChanged);
-        // 
-        // label34
-        // 
-        this.label34.AutoSize = true;
-        this.label34.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.label34.Margin = new System.Windows.Forms.Padding(3, 2, 3, 1);
-        this.label34.TabIndex = 4;
-        this.label34.Text = "S&trip Position:";
-        this.label34.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-        // 
-        // comboBox7
-        // 
-        this.comboBox7.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.comboBox7.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-        this.comboBox7.Items.AddRange(new object[] {
-                        image2gcode.StripPositionType.Right,
-                        image2gcode.StripPositionType.Left});
-        this.comboBox7.Margin = new System.Windows.Forms.Padding(3, 2, 3, 1);
-        this.comboBox7.Size = new System.Drawing.Size();
-        this.comboBox7.TabIndex = 5;
-        this.comboBox7.Tag = 162;
-        this.comboBox7.SelectedIndexChanged += new System.EventHandler(this.Control_ValueChanged);
-        // 
         // label35
         // 
         this.label35.AutoSize = true;
         this.label35.Dock = System.Windows.Forms.DockStyle.Fill;
         this.label35.Margin = new System.Windows.Forms.Padding(3, 2, 3, 1);
-        this.label35.TabIndex = 6;
-        this.label35.Text = "&Width:";
+        this.label35.TabIndex = 2;
+        this.label35.Text = "Strip &Width:";
         this.label35.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
         // 
         // textBox17
@@ -2851,7 +2378,7 @@ partial class image2gcode {
         this.textBox17.Dock = System.Windows.Forms.DockStyle.Fill;
         this.textBox17.Margin = new System.Windows.Forms.Padding(3, 2, 3, 1);
         this.textBox17.Size = new System.Drawing.Size();
-        this.textBox17.TabIndex = 7;
+        this.textBox17.TabIndex = 3;
         this.textBox17.Tag = 21411;
         this.textBox17.TextChanged += new System.EventHandler(this.Control_ValueChanged);
         // 
@@ -2860,7 +2387,7 @@ partial class image2gcode {
         this.label36.AutoSize = true;
         this.label36.Dock = System.Windows.Forms.DockStyle.Fill;
         this.label36.Margin = new System.Windows.Forms.Padding(3, 2, 3, 1);
-        this.label36.TabIndex = 8;
+        this.label36.TabIndex = 4;
         this.label36.Text = "Sp&d on the Strip:";
         this.label36.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
         // 
@@ -2869,7 +2396,7 @@ partial class image2gcode {
         this.textBox18.Dock = System.Windows.Forms.DockStyle.Fill;
         this.textBox18.Margin = new System.Windows.Forms.Padding(3, 2, 3, 1);
         this.textBox18.Size = new System.Drawing.Size();
-        this.textBox18.TabIndex = 9;
+        this.textBox18.TabIndex = 5;
         this.textBox18.Tag = 21412;
         this.textBox18.TextChanged += new System.EventHandler(this.Control_ValueChanged);
         // 
@@ -2878,7 +2405,7 @@ partial class image2gcode {
         this.label37.AutoSize = true;
         this.label37.Dock = System.Windows.Forms.DockStyle.Fill;
         this.label37.Margin = new System.Windows.Forms.Padding(3, 2, 3, 1);
-        this.label37.TabIndex = 10;
+        this.label37.TabIndex = 6;
         this.label37.Text = "Cleaning Fiel&d:";
         this.label37.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
         // 
@@ -2887,7 +2414,7 @@ partial class image2gcode {
         this.textBox19.Dock = System.Windows.Forms.DockStyle.Fill;
         this.textBox19.Margin = new System.Windows.Forms.Padding(3, 2, 3, 1);
         this.textBox19.Size = new System.Drawing.Size();
-        this.textBox19.TabIndex = 11;
+        this.textBox19.TabIndex = 7;
         this.textBox19.Tag = 21413;
         this.textBox19.TextChanged += new System.EventHandler(this.Control_ValueChanged);
         // 
@@ -2896,7 +2423,7 @@ partial class image2gcode {
         this.label38.AutoSize = true;
         this.label38.Dock = System.Windows.Forms.DockStyle.Fill;
         this.label38.Margin = new System.Windows.Forms.Padding(3, 2, 3, 1);
-        this.label38.TabIndex = 12;
+        this.label38.TabIndex = 8;
         this.label38.Text = "Cleaning Spee&d:";
         this.label38.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
         // 
@@ -2905,7 +2432,7 @@ partial class image2gcode {
         this.textBox20.Dock = System.Windows.Forms.DockStyle.Fill;
         this.textBox20.Margin = new System.Windows.Forms.Padding(3, 2, 3, 1);
         this.textBox20.Size = new System.Drawing.Size();
-        this.textBox20.TabIndex = 13;
+        this.textBox20.TabIndex = 9;
         this.textBox20.Tag = 21414;
         this.textBox20.TextChanged += new System.EventHandler(this.Control_ValueChanged);
         // 
@@ -2914,7 +2441,7 @@ partial class image2gcode {
         this.label39.AutoSize = true;
         this.label39.Dock = System.Windows.Forms.DockStyle.Fill;
         this.label39.Margin = new System.Windows.Forms.Padding(3, 2, 3, 3);
-        this.label39.TabIndex = 14;
+        this.label39.TabIndex = 10;
         this.label39.Text = "&Cycles:";
         this.label39.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
         // 
@@ -2927,9 +2454,35 @@ partial class image2gcode {
                         3});
         this.comboBox8.Margin = new System.Windows.Forms.Padding(3, 2, 3, 3);
         this.comboBox8.Size = new System.Drawing.Size();
-        this.comboBox8.TabIndex = 15;
+        this.comboBox8.TabIndex = 11;
         this.comboBox8.Tag = 22439;
         this.comboBox8.TextChanged += new System.EventHandler(this.Control_ValueChanged);
+        // 
+        // tableLayoutPanel11
+        // 
+        this.tableLayoutPanel11.AutoSize = true;
+        this.tableLayoutPanel11.ColumnCount = 1;
+        this.tableLayoutPanel11.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+        this.tableLayoutPanel11.Controls.Add(this.checkBox3, 0, 0);
+        this.tableLayoutPanel11.Controls.Add(this.tableLayoutPanel27, 0, 1);
+        this.tableLayoutPanel11.Dock = System.Windows.Forms.DockStyle.Fill;
+        this.tableLayoutPanel11.Margin = new System.Windows.Forms.Padding(0);
+        this.tableLayoutPanel11.RowCount = 2;
+        this.tableLayoutPanel11.RowStyles.Add(new System.Windows.Forms.RowStyle());
+        this.tableLayoutPanel11.RowStyles.Add(new System.Windows.Forms.RowStyle());
+        this.tableLayoutPanel11.TabIndex = 10;
+        // 
+        // checkBox3
+        // 
+        this.checkBox3.AutoSize = true;
+        this.checkBox3.Dock = System.Windows.Forms.DockStyle.Fill;
+        this.checkBox3.FlatStyle = System.Windows.Forms.FlatStyle.System;
+        this.checkBox3.Margin = new System.Windows.Forms.Padding(6, 3, 6, 0);
+        this.checkBox3.TabIndex = 0;
+        this.checkBox3.Tag = 33064;
+        this.checkBox3.Text = "R&otary Output";
+        this.checkBox3.UseVisualStyleBackColor = true;
+        this.checkBox3.CheckedChanged += new System.EventHandler(this.Control_ValueChanged);
         // 
         // tableLayoutPanel27
         // 
@@ -2937,125 +2490,53 @@ partial class image2gcode {
         this.tableLayoutPanel27.ColumnCount = 2;
         this.tableLayoutPanel27.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
         this.tableLayoutPanel27.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-        this.tableLayoutPanel27.Controls.Add(this.label40, 0, 0);
-        this.tableLayoutPanel27.Controls.Add(this.comboBox9, 1, 0);
+        this.tableLayoutPanel27.Controls.Add(this.label13, 0, 0);
+        this.tableLayoutPanel27.Controls.Add(this.textBox7, 1, 0);
+        this.tableLayoutPanel27.Controls.Add(this.label23, 0, 1);
+        this.tableLayoutPanel27.Controls.Add(this.textBox8, 1, 1);
         this.tableLayoutPanel27.Dock = System.Windows.Forms.DockStyle.Fill;
+        this.tableLayoutPanel27.Enabled = false;
         this.tableLayoutPanel27.Margin = new System.Windows.Forms.Padding(0);
-        this.tableLayoutPanel27.RowCount = 1;
+        this.tableLayoutPanel27.RowCount = 2;
         this.tableLayoutPanel27.RowStyles.Add(new System.Windows.Forms.RowStyle());
-        this.tableLayoutPanel27.TabIndex = 9;
+        this.tableLayoutPanel27.RowStyles.Add(new System.Windows.Forms.RowStyle());
+        this.tableLayoutPanel27.TabIndex = 1;
         // 
-        // label40
+        // label13
         // 
-        this.label40.AutoSize = true;
-        this.label40.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.label40.TabIndex = 0;
-        this.label40.Text = "Number of &Passes:";
-        this.label40.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+        this.label13.AutoSize = true;
+        this.label13.Dock = System.Windows.Forms.DockStyle.Fill;
+        this.label13.Margin = new System.Windows.Forms.Padding(3, 3, 3, 1);
+        this.label13.TabIndex = 0;
+        this.label13.Text = "MM per Revol&ution:";
+        this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
         // 
-        // comboBox9
+        // textBox7
         // 
-        this.comboBox9.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.comboBox9.Items.AddRange(new object[] {
-                        1,
-                        2});
-        this.comboBox9.Size = new System.Drawing.Size();
-        this.comboBox9.TabIndex = 1;
-        this.comboBox9.Tag = 22440;
-        this.comboBox9.Text = "1";
-        this.comboBox9.TextChanged += new System.EventHandler(this.Control_ValueChanged);
+        this.textBox7.Dock = System.Windows.Forms.DockStyle.Fill;
+        this.textBox7.Margin = new System.Windows.Forms.Padding(3, 3, 3, 1);
+        this.textBox7.Size = new System.Drawing.Size();
+        this.textBox7.TabIndex = 1;
+        this.textBox7.Tag = 5033;
+        this.textBox7.TextChanged += new System.EventHandler(this.Control_ValueChanged);
         // 
-        // checkBox10
+        // label23
         // 
-        this.checkBox10.AutoSize = true;
-        this.checkBox10.Checked = true;
-        this.checkBox10.CheckState = System.Windows.Forms.CheckState.Checked;
-        this.checkBox10.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.checkBox10.FlatStyle = System.Windows.Forms.FlatStyle.System;
-        this.checkBox10.Margin = new System.Windows.Forms.Padding(6, 3, 6, 0);
-        this.checkBox10.TabIndex = 10;
-        this.checkBox10.Tag = 33067;
-        this.checkBox10.Text = "Prepend Image Frame to G-code";
-        this.checkBox10.UseVisualStyleBackColor = true;
-        this.checkBox10.CheckedChanged += new System.EventHandler(this.Control_ValueChanged);
+        this.label23.AutoSize = true;
+        this.label23.Dock = System.Windows.Forms.DockStyle.Fill;
+        this.label23.Margin = new System.Windows.Forms.Padding(3, 2, 3, 3);
+        this.label23.TabIndex = 2;
+        this.label23.Text = "Cylinder Diame&ter:";
+        this.label23.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
         // 
-        // tableLayoutPanel29
+        // textBox8
         // 
-        this.tableLayoutPanel29.AutoSize = true;
-        this.tableLayoutPanel29.ColumnCount = 1;
-        this.tableLayoutPanel29.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-        this.tableLayoutPanel29.Controls.Add(this.tableLayoutPanel30, 0, 0);
-        this.tableLayoutPanel29.Controls.Add(this.checkBox11, 0, 1);
-        this.tableLayoutPanel29.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.tableLayoutPanel29.Margin = new System.Windows.Forms.Padding(0);
-        this.tableLayoutPanel29.RowCount = 2;
-        this.tableLayoutPanel29.RowStyles.Add(new System.Windows.Forms.RowStyle());
-        this.tableLayoutPanel29.RowStyles.Add(new System.Windows.Forms.RowStyle());
-        this.tableLayoutPanel29.TabIndex = 11;
-        // 
-        // tableLayoutPanel30
-        // 
-        this.tableLayoutPanel30.AutoSize = true;
-        this.tableLayoutPanel30.ColumnCount = 2;
-        this.tableLayoutPanel30.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-        this.tableLayoutPanel30.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-        this.tableLayoutPanel30.Controls.Add(this.label42, 0, 0);
-        this.tableLayoutPanel30.Controls.Add(this.textBox15, 1, 0);
-        this.tableLayoutPanel30.Controls.Add(this.label43, 0, 1);
-        this.tableLayoutPanel30.Controls.Add(this.textBox21, 1, 1);
-        this.tableLayoutPanel30.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.tableLayoutPanel30.Margin = new System.Windows.Forms.Padding(0);
-        this.tableLayoutPanel30.RowCount = 2;
-        this.tableLayoutPanel30.RowStyles.Add(new System.Windows.Forms.RowStyle());
-        this.tableLayoutPanel30.RowStyles.Add(new System.Windows.Forms.RowStyle());
-        this.tableLayoutPanel30.TabIndex = 0;
-        // 
-        // label42
-        // 
-        this.label42.AutoSize = true;
-        this.label42.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.label42.Margin = new System.Windows.Forms.Padding(3);
-        this.label42.TabIndex = 0;
-        this.label42.Text = "Frame Spee&d:";
-        this.label42.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-        // 
-        // textBox15
-        // 
-        this.textBox15.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.textBox15.Size = new System.Drawing.Size();
-        this.textBox15.TabIndex = 1;
-        this.textBox15.Tag = 5036;
-        this.textBox15.TextChanged += new System.EventHandler(this.Control_ValueChanged);
-        // 
-        // label43
-        // 
-        this.label43.AutoSize = true;
-        this.label43.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.label43.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
-        this.label43.TabIndex = 2;
-        this.label43.Text = "Frame &Power:";
-        this.label43.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-        // 
-        // textBox21
-        // 
-        this.textBox21.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.textBox21.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
-        this.textBox21.Size = new System.Drawing.Size();
-        this.textBox21.TabIndex = 3;
-        this.textBox21.Tag = 941;
-        this.textBox21.TextChanged += new System.EventHandler(this.Control_ValueChanged);
-        // 
-        // checkBox11
-        // 
-        this.checkBox11.AutoSize = true;
-        this.checkBox11.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.checkBox11.FlatStyle = System.Windows.Forms.FlatStyle.System;
-        this.checkBox11.Margin = new System.Windows.Forms.Padding(6, 3, 6, 3);
-        this.checkBox11.TabIndex = 1;
-        this.checkBox11.Tag = 302;
-        this.checkBox11.Text = "Image work area";
-        this.checkBox11.UseVisualStyleBackColor = true;
-        this.checkBox11.CheckedChanged += new System.EventHandler(this.Control_ValueChanged);
+        this.textBox8.Dock = System.Windows.Forms.DockStyle.Fill;
+        this.textBox8.Margin = new System.Windows.Forms.Padding(3, 2, 3, 3);
+        this.textBox8.Size = new System.Drawing.Size();
+        this.textBox8.TabIndex = 3;
+        this.textBox8.Tag = 5034;
+        this.textBox8.TextChanged += new System.EventHandler(this.Control_ValueChanged);
         // 
         // textBox22
         // 
@@ -3063,7 +2544,7 @@ partial class image2gcode {
         this.textBox22.BorderStyle = System.Windows.Forms.BorderStyle.None;
         this.textBox22.Dock = System.Windows.Forms.DockStyle.Fill;
         this.textBox22.Size = new System.Drawing.Size();
-        this.textBox22.TabIndex = 12;
+        this.textBox22.TabIndex = 11;
         this.textBox22.TabStop = false;
         this.textBox22.Tag = 594863;
         this.textBox22.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
@@ -3100,7 +2581,7 @@ partial class image2gcode {
         this.tableLayoutPanel31.RowCount = 2;
         this.tableLayoutPanel31.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
         this.tableLayoutPanel31.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-        this.tableLayoutPanel31.TabIndex = 13;
+        this.tableLayoutPanel31.TabIndex = 12;
         // 
         // button15
         // 
@@ -3113,8 +2594,6 @@ partial class image2gcode {
         this.button15.Margin = new System.Windows.Forms.Padding(1, 3, 2, 2);
         this.button15.TabIndex = 0;
         this.button15.TabStop = false;
-        this.button15.Tag = 0;
-        this.button15.Text = "00";
         this.button15.UseCompatibleTextRendering = true;
         this.button15.UseVisualStyleBackColor = false;
         this.button15.Click += new System.EventHandler(this.PresetButtonClick);
@@ -3130,8 +2609,6 @@ partial class image2gcode {
         this.button16.Margin = new System.Windows.Forms.Padding(1, 3, 2, 2);
         this.button16.TabIndex = 1;
         this.button16.TabStop = false;
-        this.button16.Tag = 1;
-        this.button16.Text = "01";
         this.button16.UseCompatibleTextRendering = true;
         this.button16.UseVisualStyleBackColor = false;
         this.button16.Click += new System.EventHandler(this.PresetButtonClick);
@@ -3147,8 +2624,6 @@ partial class image2gcode {
         this.button17.Margin = new System.Windows.Forms.Padding(1, 3, 2, 2);
         this.button17.TabIndex = 2;
         this.button17.TabStop = false;
-        this.button17.Tag = 2;
-        this.button17.Text = "02";
         this.button17.UseCompatibleTextRendering = true;
         this.button17.UseVisualStyleBackColor = false;
         this.button17.Click += new System.EventHandler(this.PresetButtonClick);
@@ -3164,8 +2639,6 @@ partial class image2gcode {
         this.button18.Margin = new System.Windows.Forms.Padding(1, 3, 2, 2);
         this.button18.TabIndex = 3;
         this.button18.TabStop = false;
-        this.button18.Tag = 3;
-        this.button18.Text = "03";
         this.button18.UseCompatibleTextRendering = true;
         this.button18.UseVisualStyleBackColor = false;
         this.button18.Click += new System.EventHandler(this.PresetButtonClick);
@@ -3181,8 +2654,6 @@ partial class image2gcode {
         this.button19.Margin = new System.Windows.Forms.Padding(1, 3, 2, 2);
         this.button19.TabIndex = 4;
         this.button19.TabStop = false;
-        this.button19.Tag = 4;
-        this.button19.Text = "04";
         this.button19.UseCompatibleTextRendering = true;
         this.button19.UseVisualStyleBackColor = false;
         this.button19.Click += new System.EventHandler(this.PresetButtonClick);
@@ -3198,8 +2669,6 @@ partial class image2gcode {
         this.button20.Margin = new System.Windows.Forms.Padding(1, 3, 2, 2);
         this.button20.TabIndex = 5;
         this.button20.TabStop = false;
-        this.button20.Tag = 5;
-        this.button20.Text = "05";
         this.button20.UseCompatibleTextRendering = true;
         this.button20.UseVisualStyleBackColor = false;
         this.button20.Click += new System.EventHandler(this.PresetButtonClick);
@@ -3215,8 +2684,6 @@ partial class image2gcode {
         this.button21.Margin = new System.Windows.Forms.Padding(1, 3, 3, 2);
         this.button21.TabIndex = 6;
         this.button21.TabStop = false;
-        this.button21.Tag = 6;
-        this.button21.Text = "06";
         this.button21.UseCompatibleTextRendering = true;
         this.button21.UseVisualStyleBackColor = false;
         this.button21.Click += new System.EventHandler(this.PresetButtonClick);
@@ -3232,8 +2699,6 @@ partial class image2gcode {
         this.button22.Margin = new System.Windows.Forms.Padding(1, 2, 2, 3);
         this.button22.TabIndex = 7;
         this.button22.TabStop = false;
-        this.button22.Tag = 7;
-        this.button22.Text = "07";
         this.button22.UseCompatibleTextRendering = true;
         this.button22.UseVisualStyleBackColor = false;
         this.button22.Click += new System.EventHandler(this.PresetButtonClick);
@@ -3249,8 +2714,6 @@ partial class image2gcode {
         this.button23.Margin = new System.Windows.Forms.Padding(1, 2, 2, 3);
         this.button23.TabIndex = 8;
         this.button23.TabStop = false;
-        this.button23.Tag = 8;
-        this.button23.Text = "08";
         this.button23.UseCompatibleTextRendering = true;
         this.button23.UseVisualStyleBackColor = false;
         this.button23.Click += new System.EventHandler(this.PresetButtonClick);
@@ -3266,8 +2729,6 @@ partial class image2gcode {
         this.button24.Margin = new System.Windows.Forms.Padding(1, 2, 2, 3);
         this.button24.TabIndex = 9;
         this.button24.TabStop = false;
-        this.button24.Tag = 9;
-        this.button24.Text = "09";
         this.button24.UseCompatibleTextRendering = true;
         this.button24.UseVisualStyleBackColor = false;
         this.button24.Click += new System.EventHandler(this.PresetButtonClick);
@@ -3283,8 +2744,6 @@ partial class image2gcode {
         this.button25.Margin = new System.Windows.Forms.Padding(1, 2, 2, 3);
         this.button25.TabIndex = 10;
         this.button25.TabStop = false;
-        this.button25.Tag = 10;
-        this.button25.Text = "10";
         this.button25.UseCompatibleTextRendering = true;
         this.button25.UseVisualStyleBackColor = false;
         this.button25.Click += new System.EventHandler(this.PresetButtonClick);
@@ -3300,8 +2759,6 @@ partial class image2gcode {
         this.button26.Margin = new System.Windows.Forms.Padding(1, 2, 2, 3);
         this.button26.TabIndex = 11;
         this.button26.TabStop = false;
-        this.button26.Tag = 11;
-        this.button26.Text = "11";
         this.button26.UseCompatibleTextRendering = true;
         this.button26.UseVisualStyleBackColor = false;
         this.button26.Click += new System.EventHandler(this.PresetButtonClick);
@@ -3317,8 +2774,6 @@ partial class image2gcode {
         this.button27.Margin = new System.Windows.Forms.Padding(1, 2, 2, 3);
         this.button27.TabIndex = 12;
         this.button27.TabStop = false;
-        this.button27.Tag = 12;
-        this.button27.Text = "12";
         this.button27.UseCompatibleTextRendering = true;
         this.button27.UseVisualStyleBackColor = false;
         this.button27.Click += new System.EventHandler(this.PresetButtonClick);
@@ -3334,8 +2789,6 @@ partial class image2gcode {
         this.button28.Margin = new System.Windows.Forms.Padding(1, 2, 3, 3);
         this.button28.TabIndex = 13;
         this.button28.TabStop = false;
-        this.button28.Tag = 13;
-        this.button28.Text = "13";
         this.button28.UseCompatibleTextRendering = true;
         this.button28.UseVisualStyleBackColor = false;
         this.button28.Click += new System.EventHandler(this.PresetButtonClick);
@@ -3385,12 +2838,6 @@ partial class image2gcode {
         this.backgroundWorker2.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.BackgroundWorker2ProgressChanged);
         this.backgroundWorker2.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.BackgroundWorker2RunWorkerCompleted);
         // 
-        // colorDialog1
-        // 
-        this.colorDialog1.AnyColor = true;
-        this.colorDialog1.FullOpen = true;
-        this.colorDialog1.SolidColorOnly = true;
-        // 
         // image2gcode
         // 
         this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3438,23 +2885,8 @@ partial class image2gcode {
         this.tableLayoutPanel9.ResumeLayout(false);
         this.tableLayoutPanel9.PerformLayout();
         ((System.ComponentModel.ISupportInitialize)(this.trackBar4)).EndInit();
-        this.tableLayoutPanel11.ResumeLayout(false);
-        this.tableLayoutPanel11.PerformLayout();
         this.tableLayoutPanel10.ResumeLayout(false);
         this.tableLayoutPanel10.PerformLayout();
-        this.tableLayoutPanel40.ResumeLayout(false);
-        this.tableLayoutPanel40.PerformLayout();
-        this.tableLayoutPanel34.ResumeLayout(false);
-        this.tableLayoutPanel34.PerformLayout();
-        this.tableLayoutPanel35.ResumeLayout(false);
-        this.tableLayoutPanel35.PerformLayout();
-        this.tableLayoutPanel38.ResumeLayout(false);
-        this.tableLayoutPanel38.PerformLayout();
-        this.tableLayoutPanel39.ResumeLayout(false);
-        this.tableLayoutPanel39.PerformLayout();
-        ((System.ComponentModel.ISupportInitialize)(this.trackBar5)).EndInit();
-        this.tableLayoutPanel36.ResumeLayout(false);
-        this.tableLayoutPanel36.PerformLayout();
         this.tableLayoutPanel3.ResumeLayout(false);
         this.tableLayoutPanel3.PerformLayout();
         this.tableLayoutPanel13.ResumeLayout(false);
@@ -3463,10 +2895,16 @@ partial class image2gcode {
         this.tableLayoutPanel14.PerformLayout();
         this.tableLayoutPanel15.ResumeLayout(false);
         this.tableLayoutPanel15.PerformLayout();
+        this.tableLayoutPanel34.ResumeLayout(false);
+        this.tableLayoutPanel34.PerformLayout();
+        this.tableLayoutPanel30.ResumeLayout(false);
+        this.tableLayoutPanel30.PerformLayout();
         this.tableLayoutPanel4.ResumeLayout(false);
         this.tableLayoutPanel4.PerformLayout();
         this.tableLayoutPanel17.ResumeLayout(false);
         this.tableLayoutPanel17.PerformLayout();
+        this.tableLayoutPanel29.ResumeLayout(false);
+        this.tableLayoutPanel29.PerformLayout();
         this.tableLayoutPanel18.ResumeLayout(false);
         this.tableLayoutPanel18.PerformLayout();
         this.tableLayoutPanel19.ResumeLayout(false);
@@ -3493,17 +2931,46 @@ partial class image2gcode {
         this.tableLayoutPanel24.PerformLayout();
         this.tableLayoutPanel25.ResumeLayout(false);
         this.tableLayoutPanel25.PerformLayout();
+        this.tableLayoutPanel11.ResumeLayout(false);
+        this.tableLayoutPanel11.PerformLayout();
         this.tableLayoutPanel27.ResumeLayout(false);
         this.tableLayoutPanel27.PerformLayout();
-        this.tableLayoutPanel29.ResumeLayout(false);
-        this.tableLayoutPanel29.PerformLayout();
-        this.tableLayoutPanel30.ResumeLayout(false);
-        this.tableLayoutPanel30.PerformLayout();
         this.tableLayoutPanel31.ResumeLayout(false);
         this.tableLayoutPanel31.PerformLayout();
         this.ResumeLayout(false);
         this.PerformLayout();
     }
+    private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem25;
+    private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem24;
+    private System.Windows.Forms.ToolStripMenuItem nichromeOnOffCommandToolStripMenuItem;
+    private System.Windows.Forms.ToolStripMenuItem burnFromBottomToTopToolStripMenuItem;
+    private System.Windows.Forms.ImageList imageList1;
+    private System.Windows.Forms.TableLayoutPanel tableLayoutPanel34;
+    private System.Windows.Forms.TableLayoutPanel tableLayoutPanel30;
+    private System.Windows.Forms.TableLayoutPanel tableLayoutPanel29;
+    private System.Windows.Forms.ComboBox comboBox9;
+    private System.Windows.Forms.Label label24;
+    private System.Windows.Forms.ToolStripMenuItem impactGraverToolStripMenuItem;
+    private System.Windows.Forms.TextBox textBox8;
+    private System.Windows.Forms.Label label23;
+    private System.Windows.Forms.TextBox textBox7;
+    private System.Windows.Forms.Label label13;
+    private System.Windows.Forms.TableLayoutPanel tableLayoutPanel27;
+    private System.Windows.Forms.CheckBox checkBox3;
+    private System.Windows.Forms.TableLayoutPanel tableLayoutPanel11;
+    private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem23;
+    private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem22;
+    private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem14;
+    private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem13;
+    private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem12;
+    private System.Windows.Forms.ToolStripMenuItem rotarySpeedToolStripMenuItem;
+    private System.Windows.Forms.ToolStripSeparator toolStripSeparator11;
+    private System.Windows.Forms.ToolStripMenuItem flipYToolStripMenuItem;
+    private System.Windows.Forms.ToolStripMenuItem flipXToolStripMenuItem;
+    private System.Windows.Forms.ToolStripSeparator toolStripSeparator12;
+    private System.Windows.Forms.ToolStripMenuItem flipXYToolStripMenuItem;
+    private System.Windows.Forms.ToolStripMenuItem rotate90ToolStripMenuItem;
+    private System.Windows.Forms.ToolStripMenuItem rotate270ToolStripMenuItem;
     private System.Windows.Forms.TableLayoutPanel tableLayoutPanel28;
     private System.Windows.Forms.TrackBar trackBar6;
     private System.Windows.Forms.Label label41;
@@ -3523,9 +2990,6 @@ partial class image2gcode {
     private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem17;
     private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem16;
     private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem15;
-    private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem14;
-    private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem13;
-    private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem12;
     private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem11;
     private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem10;
     private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem9;
@@ -3533,32 +2997,8 @@ partial class image2gcode {
     private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem7;
     private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3;
     private System.Windows.Forms.ToolStripMenuItem doNotReturnYToolStripMenuItem;
-    private System.Windows.Forms.ToolStripMenuItem returnToOriginToolStripMenuItem;
-    private System.Windows.Forms.ToolStripMenuItem goToNextLineToolStripMenuItem;
+    private System.Windows.Forms.ToolStripMenuItem accelToolStripMenuItem;
     private System.Windows.Forms.ToolStripMenuItem G0SpdToolStripMenuItem;
-    private System.Windows.Forms.Button button33;
-    private System.Windows.Forms.Button button34;
-    private System.Windows.Forms.Button button35;
-    private System.Windows.Forms.Button button36;
-    private System.Windows.Forms.Button button37;
-    private System.Windows.Forms.Button button38;
-    private System.Windows.Forms.TableLayoutPanel tableLayoutPanel40;
-    private System.Windows.Forms.ComboBox comboBox13;
-    private System.Windows.Forms.Label label50;
-    private System.Windows.Forms.TableLayoutPanel tableLayoutPanel38;
-    private System.Windows.Forms.Label label51;
-    private System.Windows.Forms.TrackBar trackBar5;
-    private System.Windows.Forms.TableLayoutPanel tableLayoutPanel39;
-    private System.Windows.Forms.ColorDialog colorDialog1;
-    private System.Windows.Forms.Button button31;
-    private System.Windows.Forms.Button button32;
-    private System.Windows.Forms.Label label48;
-    private System.Windows.Forms.TableLayoutPanel tableLayoutPanel36;
-    private System.Windows.Forms.ComboBox comboBox12;
-    private System.Windows.Forms.Label label47;
-    private System.Windows.Forms.TableLayoutPanel tableLayoutPanel35;
-    private System.Windows.Forms.TableLayoutPanel tableLayoutPanel34;
-    private System.Windows.Forms.Label label46;
     private System.IO.Ports.SerialPort serialPort1;
     private System.ComponentModel.BackgroundWorker backgroundWorker2;
     private System.Windows.Forms.CheckBox checkBox12;
@@ -3571,7 +3011,6 @@ partial class image2gcode {
     private System.Windows.Forms.ToolStripSeparator toolStripSeparator9;
     private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem1;
     private System.Windows.Forms.ToolStripMenuItem nichromeBurnerToolStripMenuItem;
-    private System.Windows.Forms.ToolStripMenuItem impactGraverToolStripMenuItem;
     private System.Windows.Forms.ToolStripMenuItem laserEngraverToolStripMenuItem;
     private System.Windows.Forms.ToolStripMenuItem machineTypeToolStripMenuItem;
     private System.Windows.Forms.ToolStripSeparator toolStripSeparator13;
@@ -3587,7 +3026,6 @@ partial class image2gcode {
     private System.Windows.Forms.TableLayoutPanel tableLayoutPanel32;
     private System.Windows.Forms.OpenFileDialog openFileDialog2;
     private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
-    private System.Windows.Forms.ToolStripMenuItem donateToolStripMenuItem;
     private System.Windows.Forms.Button button28;
     private System.Windows.Forms.Button button27;
     private System.Windows.Forms.Button button26;
@@ -3604,14 +3042,6 @@ partial class image2gcode {
     private System.Windows.Forms.Button button15;
     private System.Windows.Forms.TableLayoutPanel tableLayoutPanel31;
     private System.Windows.Forms.TextBox textBox22;
-    private System.Windows.Forms.CheckBox checkBox11;
-    private System.Windows.Forms.TextBox textBox21;
-    private System.Windows.Forms.Label label43;
-    private System.Windows.Forms.TextBox textBox15;
-    private System.Windows.Forms.Label label42;
-    private System.Windows.Forms.TableLayoutPanel tableLayoutPanel30;
-    private System.Windows.Forms.TableLayoutPanel tableLayoutPanel29;
-    private System.Windows.Forms.CheckBox checkBox10;
     private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
     private System.Windows.Forms.ToolStripMenuItem languageToolStripMenuItem;
     private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel6;
@@ -3621,9 +3051,6 @@ partial class image2gcode {
     private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
     private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
     private System.ComponentModel.BackgroundWorker backgroundWorker1;
-    private System.Windows.Forms.ComboBox comboBox9;
-    private System.Windows.Forms.Label label40;
-    private System.Windows.Forms.TableLayoutPanel tableLayoutPanel27;
     private System.Windows.Forms.TableLayoutPanel tableLayoutPanel26;
     private System.Windows.Forms.ComboBox comboBox8;
     private System.Windows.Forms.Label label39;
@@ -3635,17 +3062,12 @@ partial class image2gcode {
     private System.Windows.Forms.Label label36;
     private System.Windows.Forms.TextBox textBox17;
     private System.Windows.Forms.Label label35;
-    private System.Windows.Forms.ComboBox comboBox7;
-    private System.Windows.Forms.Label label34;
-    private System.Windows.Forms.TextBox textBox16;
-    private System.Windows.Forms.Label label33;
     private System.Windows.Forms.ComboBox comboBox6;
     private System.Windows.Forms.Label label32;
     private System.Windows.Forms.TableLayoutPanel tableLayoutPanel25;
     private System.Windows.Forms.ComboBox comboBox5;
     private System.Windows.Forms.Label label31;
     private System.Windows.Forms.TableLayoutPanel tableLayoutPanel24;
-    private System.Windows.Forms.CheckBox checkBox8;
     private System.Windows.Forms.CheckBox checkBox7;
     private System.Windows.Forms.TextBox textBox14;
     private System.Windows.Forms.Label label30;
@@ -3666,10 +3088,6 @@ partial class image2gcode {
     private System.Windows.Forms.TextBox textBox9;
     private System.Windows.Forms.Label label25;
     private System.Windows.Forms.TableLayoutPanel tableLayoutPanel18;
-    private System.Windows.Forms.TextBox textBox8;
-    private System.Windows.Forms.Label label24;
-    private System.Windows.Forms.TextBox textBox7;
-    private System.Windows.Forms.Label label23;
     private System.Windows.Forms.TextBox textBox6;
     private System.Windows.Forms.Label label22;
     private System.Windows.Forms.TextBox textBox5;
@@ -3677,7 +3095,6 @@ partial class image2gcode {
     private System.Windows.Forms.TableLayoutPanel tableLayoutPanel17;
     private System.Windows.Forms.TableLayoutPanel tableLayoutPanel16;
     private System.Windows.Forms.CheckBox checkBox5;
-    private System.Windows.Forms.Label label20;
     private System.Windows.Forms.ComboBox comboBox4;
     private System.Windows.Forms.Label label19;
     private System.Windows.Forms.TextBox textBox4;
@@ -3704,13 +3121,6 @@ partial class image2gcode {
     private System.Windows.Forms.TableLayoutPanel tableLayoutPanel14;
     private System.Windows.Forms.TableLayoutPanel tableLayoutPanel13;
     private ImageBox imageBox1;
-    private System.Windows.Forms.Button button5;
-    private System.Windows.Forms.Button button4;
-    private System.Windows.Forms.Button button3;
-    private System.Windows.Forms.Button button2;
-    private System.Windows.Forms.Button button1;
-    private System.Windows.Forms.TableLayoutPanel tableLayoutPanel11;
-    private System.Windows.Forms.Label label13;
     private System.Windows.Forms.CheckBox checkBox4;
     private System.Windows.Forms.ComboBox comboBox3;
     private System.Windows.Forms.Label label12;
@@ -3745,25 +3155,17 @@ partial class image2gcode {
     private System.Windows.Forms.ToolStripButton sendToolStripButton;
     private System.Windows.Forms.ToolStripButton exportToolStripButton;
     private System.Windows.Forms.ToolStripButton openToolStripButton;
-    private System.Windows.Forms.ToolStripMenuItem bottomRightToolStripMenuItem;
-    private System.Windows.Forms.ToolStripMenuItem bottomLeftToolStripMenuItem;
-    private System.Windows.Forms.ToolStripMenuItem topLeftToolStripMenuItem;
-    private System.Windows.Forms.ToolStripMenuItem topRightToolStripMenuItem;
-    private System.Windows.Forms.ToolStripMenuItem originToolStripMenuItem;
     private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
     private System.Windows.Forms.StatusStrip statusStrip1;
     private System.Windows.Forms.ToolStrip toolStrip1;
-    private System.Windows.Forms.ToolStripMenuItem checkForUpdatesToolStripMenuItem;
     private System.Windows.Forms.ToolStripMenuItem CH341SERToolStripMenuItem;
     private System.Windows.Forms.ToolStripMenuItem websiteToolStripMenuItem;
     private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
-    private System.Windows.Forms.ToolStripSeparator toolStripSeparator12;
     private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
     private System.Windows.Forms.ToolStripMenuItem uploadToolStripMenuItem;
     private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
     private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
     private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-    private System.Windows.Forms.ToolStripMenuItem send2ToolStripMenuItem;
     private System.Windows.Forms.ToolStripMenuItem sendToolStripMenuItem;
     private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem6;
     private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem5;
@@ -3778,7 +3180,6 @@ partial class image2gcode {
     private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
     private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
     private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem;
-    private System.Windows.Forms.ToolStripMenuItem export2ToolStripMenuItem;
     private System.Windows.Forms.ToolStripMenuItem exportToolStripMenuItem;
     private System.Windows.Forms.ToolStripMenuItem reloadToolStripMenuItem;
     private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;

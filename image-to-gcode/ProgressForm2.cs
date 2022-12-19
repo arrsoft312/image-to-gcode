@@ -4,6 +4,8 @@ using System.Windows.Forms;
 
 class ProgressForm2:Form {
     public ProgressForm2(string s) {
+        this.Font = new Font("Segoe UI", 9F);
+        
         Panel panel1 = new Panel();
         TableLayoutPanel tableLayoutPanel1 = new TableLayoutPanel();
         Label label1 = new Label();

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -123,12 +123,6 @@
   <data name="PF_GeneratingGCode" xml:space="preserve">
     <value>G-kód gelerálás...</value>
   </data>
-  <data name="PF_Run" xml:space="preserve">
-    <value>INDÍT</value>
-  </data>
-  <data name="PF_Pause" xml:space="preserve">
-    <value>SZÜNET</value>
-  </data>
   <data name="PF_Abort" xml:space="preserve">
     <value>MEGSZAKÍT</value>
   </data>
@@ -145,7 +139,7 @@
     <value>A vezérlő nem válaszol!</value>
   </data>
   <data name="Error_InvalidPresetFile" xml:space="preserve">
-    <value>&apos;{0}&apos; egy érvénytelen előbeállítás fájl!</value>
+    <value>'{0}' egy érvénytelen előbeállítás fájl!</value>
   </data>
   <data name="Menu_File" xml:space="preserve">
     <value>Fájl</value>
@@ -195,9 +189,6 @@
   <data name="Menu_MachineType" xml:space="preserve">
     <value>Gép típus ({0})</value>
   </data>
-  <data name="Menu_MachineOrigin" xml:space="preserve">
-    <value>Kezdő koordináták ({0})</value>
-  </data>
   <data name="Menu_Machine" xml:space="preserve">
     <value>Gép</value>
   </data>
@@ -218,12 +209,6 @@
   </data>
   <data name="Menu_Help" xml:space="preserve">
     <value>Segítség</value>
-  </data>
-  <data name="Menu_Website" xml:space="preserve">
-    <value>Image2GCode Weboldal</value>
-  </data>
-  <data name="Menu_Donate" xml:space="preserve">
-    <value>Adományoz</value>
   </data>
   <data name="Menu_About" xml:space="preserve">
     <value>Infó...</value>
@@ -303,9 +288,6 @@
   <data name="Im_SameAsX" xml:space="preserve">
     <value>Ugyanaz mint X</value>
   </data>
-  <data name="Im_RotateFlip" xml:space="preserve">
-    <value>Kép elforgatása/megfordítása:</value>
-  </data>
   <data name="Im_Left" xml:space="preserve">
     <value>X:</value>
   </data>
@@ -321,26 +303,17 @@
   <data name="Im_Interpolation" xml:space="preserve">
     <value>Interpoláció:</value>
   </data>
-  <data name="Im_AspectRatio" xml:space="preserve">
-    <value>Képarány:</value>
-  </data>
-  <data name="Im_KeepAspectRatio" xml:space="preserve">
-    <value>Képarány megtartás</value>
-  </data>
   <data name="Gc_Speed" xml:space="preserve">
     <value>Sebesség:</value>
   </data>
   <data name="Gc_Power" xml:space="preserve">
     <value>Erősség:</value>
   </data>
-  <data name="Gc_Accel" xml:space="preserve">
-    <value>Gyorsulás:</value>
+  <data name="Menu_Accel" xml:space="preserve">
+    <value>Gyorsulás ({0:0.#})</value>
   </data>
   <data name="Menu_G0Spd" xml:space="preserve">
     <value>Gyors sebesség ({0:0.#})</value>
-  </data>
-  <data name="Gc_Shift" xml:space="preserve">
-    <value>Váltás:</value>
   </data>
   <data name="Gc_HeatDelay" xml:space="preserve">
     <value>Melegítés késleltetés:</value>
@@ -357,23 +330,11 @@
   <data name="Gc_WhiteDistance" xml:space="preserve">
     <value>Min Távolság:</value>
   </data>
-  <data name="Gc_MaxMinSpeed" xml:space="preserve">
-    <value>Max/Min Speed:</value>
-  </data>
-  <data name="Gc_MinMaxPower" xml:space="preserve">
-    <value>Min/Max Power:</value>
-  </data>
   <data name="Gc_Bidirectional" xml:space="preserve">
     <value>Kétirányú</value>
   </data>
-  <data name="Gc_BurnToTheCleaningStrip" xml:space="preserve">
-    <value>Tisztítósávon égetés</value>
-  </data>
   <data name="Gc_CleaningStrategy" xml:space="preserve">
     <value>Tisztító Stratégia:</value>
-  </data>
-  <data name="Gc_StripSide" xml:space="preserve">
-    <value>Sáv Pozició:</value>
   </data>
   <data name="Gc_StripWidth" xml:space="preserve">
     <value>Szélesség:</value>
@@ -390,62 +351,17 @@
   <data name="Gc_CleaningCycles" xml:space="preserve">
     <value>Ciklusok:</value>
   </data>
-  <data name="Gc_NumberOfPasses" xml:space="preserve">
-    <value>Menetek száma:</value>
-  </data>
-  <data name="Menu_GoToNextLine" xml:space="preserve">
-    <value>Következő sor ({0})</value>
-  </data>
-  <data name="Menu_ReturnToOrigin" xml:space="preserve">
-    <value>Kezdőpontra vissza ({0})</value>
-  </data>
   <data name="Menu_DoNotReturnY" xml:space="preserve">
     <value>Y ne térjen vissza kezdőpontra</value>
-  </data>
-  <data name="Gc_PrependImageFrame" xml:space="preserve">
-    <value>Tegye fel a keretet a G-kódra</value>
-  </data>
-  <data name="Gc_FrameSpeed" xml:space="preserve">
-    <value>Keret Sebesség:</value>
-  </data>
-  <data name="Gc_FramePower" xml:space="preserve">
-    <value>Keret Erősség:</value>
-  </data>
-  <data name="Gc_FrameWorkArea" xml:space="preserve">
-    <value>Kép munkaterület</value>
   </data>
   <data name="Gc_EditGraph" xml:space="preserve">
     <value>ÁBRA MÓDOSÍTÁS</value>
   </data>
-  <data name="DefaultPresetName" xml:space="preserve">
-    <value>Standard Előbeállítás</value>
-  </data>
   <data name="Gc_CleaningRowsCount" xml:space="preserve">
     <value>Sorok száma:</value>
   </data>
-  <data name="Gc_CleaningDistance" xml:space="preserve">
-    <value>Távolság:</value>
-  </data>
-  <data name="Im_ResultPreview" xml:space="preserve">
-    <value>Előnézet:</value>
-  </data>
-  <data name="Im_PreviewBackground" xml:space="preserve">
-    <value>Háttér:</value>
-  </data>
-  <data name="Im_TextureWrapMode" xml:space="preserve">
-    <value>Burkolás Módja:</value>
-  </data>
-  <data name="Im_TextureSize" xml:space="preserve">
-    <value>Méret:</value>
-  </data>
-  <data name="Im_PreviewColor" xml:space="preserve">
-    <value>Szín:</value>
-  </data>
   <data name="Menu_DownloadCH340Driver" xml:space="preserve">
     <value>SOROS-port illesztő letöltés</value>
-  </data>
-  <data name="Menu_CheckForUpdates" xml:space="preserve">
-    <value>Check for updates</value>
   </data>
   <data name="About_Title" xml:space="preserve">
     <value>Infó</value>
@@ -468,32 +384,17 @@
   <data name="Status_ApplyingDithering" xml:space="preserve">
     <value>Zajmoduláció alkalmazása...</value>
   </data>
-  <data name="Status_PreparingTexture" xml:space="preserve">
-    <value>Textúra előkészítése...</value>
-  </data>
-  <data name="Status_GeneratingPreview" xml:space="preserve">
-    <value>Előnézet generálás...</value>
-  </data>
   <data name="Status_CalculatingWorkTime" xml:space="preserve">
     <value>Munkaidő kiszámítása...</value>
   </data>
   <data name="Status_ResizingImage" xml:space="preserve">
     <value>Kép átméretezés...</value>
   </data>
-  <data name="WO_MmPerRevolutionX" xml:space="preserve">
-    <value>MM forradalomonként X:</value>
+  <data name="Gc_MmPerRevolution" xml:space="preserve">
+    <value>MM forradalomonként:</value>
   </data>
-  <data name="WO_MmPerRevolutionY" xml:space="preserve">
-    <value>MM forradalomonként Y:</value>
-  </data>
-  <data name="WO_CylinderDiameter" xml:space="preserve">
+  <data name="Gc_CylinderDiameter" xml:space="preserve">
     <value>Henger átmérője:</value>
-  </data>
-  <data name="WO_AxisBeingWrapped" xml:space="preserve">
-    <value>Tengely körbeforgatva:</value>
-  </data>
-  <data name="WO_label5" xml:space="preserve">
-    <value>Kép körbeforgatva {0:0.#} fokkal a henger körül.</value>
   </data>
   <data name="Menu_SpeedGraphReset" xml:space="preserve">
     <value>Sebesség grafikon visszaállítás</value>
@@ -507,20 +408,11 @@
   <data name="Menu_GraphDefault" xml:space="preserve">
     <value>Alapértelmezett</value>
   </data>
-  <data name="Menu_SaveGCodeWO" xml:space="preserve">
-    <value>G-kód mentés (Körbeforgatott kinemet)...</value>
-  </data>
-  <data name="Menu_SendWO" xml:space="preserve">
-    <value>Küldés (Körbeforgatott kinemet)...</value>
-  </data>
-  <data name="WO_Title" xml:space="preserve">
-    <value>Körbeforgatott kinemet</value>
-  </data>
   <data name="Error_CouldNotFindFile" xml:space="preserve">
-    <value>Nem található &apos;{0}&apos;!</value>
+    <value>Nem található '{0}'!</value>
   </data>
   <data name="Error_InvalidImageFile" xml:space="preserve">
-    <value>&apos;{0}&apos; érvénytelen képformátum!</value>
+    <value>'{0}' érvénytelen képformátum!</value>
   </data>
   <data name="GrblSet_Title" xml:space="preserve">
     <value>Vezérlő Beállítás</value>
@@ -558,26 +450,8 @@
   <data name="GrblSet_HomingDirInvert" xml:space="preserve">
     <value>Hazafutás Irány Invertálás</value>
   </data>
-  <data name="GrblSet_JunctionDeviation" xml:space="preserve">
-    <value>Csomópont eltérés:</value>
-  </data>
-  <data name="GrblSet_ArcTolerance" xml:space="preserve">
-    <value>Ív Tűréshatár:</value>
-  </data>
-  <data name="GrblSet_InvertStEnablePin" xml:space="preserve">
-    <value>Invert Stepper EN Pin</value>
-  </data>
   <data name="GrblSet_CoreXY" xml:space="preserve">
     <value>CoreXY/H-bot Kinematika</value>
-  </data>
-  <data name="GrblSet_HomingFeedRate" xml:space="preserve">
-    <value>Homing Feed Rate:</value>
-  </data>
-  <data name="GrblSet_HomingSeekRate" xml:space="preserve">
-    <value>Homing Seek Rate:</value>
-  </data>
-  <data name="GrblSet_LaserMode" xml:space="preserve">
-    <value>Lézer Mód</value>
   </data>
   <data name="GrblSet_FastGrid" xml:space="preserve">
     <value>Gyors rácsköz:</value>
@@ -612,9 +486,6 @@
   <data name="GrblSet_MarkerPower" xml:space="preserve">
     <value>Jelölő Erősség:</value>
   </data>
-  <data name="GrblSet_FwVer" xml:space="preserve">
-    <value>FW Verzió:</value>
-  </data>
   <data name="Grbl_UnknownParameter" xml:space="preserve">
     <value>A vezérlőtől kapott válasz egy vagy több ismeretlen paramétert tartalmaz. Próbálja meg módosítani a vezérlő beállításait az image2gcode legújabb verziójával.</value>
   </data>
@@ -622,9 +493,9 @@
     <value>Valami elromlott. A vezérlő a következő hibakóddal válaszolt {0}.</value>
   </data>
   <data name="Grbl_GCodeErrorFile" xml:space="preserve">
-    <value>G-kód hiba a következőben &apos;{0}&apos; a {1} sor közelében. A vezérlő a következő hibakóddal válaszolt {2}.</value>
+    <value>G-kód hiba a következőben '{0}' a {1} sor közelében. A vezérlő a következő hibakóddal válaszolt {2}.</value>
   </data>
-  <data name="Error_FileComment" xml:space="preserve">
-    <value>Csak egy százalékjellel kezdődő sor megengedett a G-kód megjegyzésblokkjában.</value>
+  <data name="Gc_NumberOfPasses" xml:space="preserve">
+    <value>Menetek száma:</value>
   </data>
 </root>
