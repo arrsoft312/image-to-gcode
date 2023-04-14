@@ -83,11 +83,6 @@ partial class image2gcode {
         this.toolStripSeparator13 = new System.Windows.Forms.ToolStripSeparator();
         this.machineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         this.portToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-        this.baudToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-        this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-        this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
-        this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripMenuItem();
-        this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripMenuItem();
         this.sendToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
         this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -763,7 +758,6 @@ partial class image2gcode {
         this.machineToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
         this.machineToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
                         this.portToolStripMenuItem,
-                        this.baudToolStripMenuItem,
                         this.sendToolStripMenuItem,
                         this.toolStripSeparator3,
                         this.settingsToolStripMenuItem,
@@ -777,41 +771,6 @@ partial class image2gcode {
         this.portToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
         this.portToolStripMenuItem.Text = "Serial &Port";
         this.portToolStripMenuItem.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.PortToolStripMenuItemDropDownItemClicked);
-        // 
-        // baudToolStripMenuItem
-        // 
-        this.baudToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-        this.baudToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-                        this.toolStripMenuItem2,
-                        this.toolStripMenuItem4,
-                        this.toolStripMenuItem5,
-                        this.toolStripMenuItem6});
-        this.baudToolStripMenuItem.Text = "&Baud Rate";
-        this.baudToolStripMenuItem.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.BaudToolStripMenuItemDropDownItemClicked);
-        // 
-        // toolStripMenuItem2
-        // 
-        this.toolStripMenuItem2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-        this.toolStripMenuItem2.Tag = 19200;
-        this.toolStripMenuItem2.Text = "1&9200";
-        // 
-        // toolStripMenuItem4
-        // 
-        this.toolStripMenuItem4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-        this.toolStripMenuItem4.Tag = 57600;
-        this.toolStripMenuItem4.Text = "5&7600";
-        // 
-        // toolStripMenuItem5
-        // 
-        this.toolStripMenuItem5.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-        this.toolStripMenuItem5.Tag = 115200;
-        this.toolStripMenuItem5.Text = "11&5200";
-        // 
-        // toolStripMenuItem6
-        // 
-        this.toolStripMenuItem6.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-        this.toolStripMenuItem6.Tag = 230400;
-        this.toolStripMenuItem6.Text = "&230400";
         // 
         // sendToolStripMenuItem
         // 
@@ -3167,11 +3126,6 @@ partial class image2gcode {
     private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
     private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
     private System.Windows.Forms.ToolStripMenuItem sendToolStripMenuItem;
-    private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem6;
-    private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem5;
-    private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem4;
-    private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
-    private System.Windows.Forms.ToolStripMenuItem baudToolStripMenuItem;
     private System.Windows.Forms.ToolStripMenuItem portToolStripMenuItem;
     private System.Windows.Forms.ToolStripMenuItem cropToolStripMenuItem;
     private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;

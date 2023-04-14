@@ -162,7 +162,6 @@ partial class image2gcode {
             Func<bool> SendToGrblController;
             
             if (sendToDevice) {
-                serialPort1.BaudRate = baudRate;
                 serialPort1.PortName = comPort;
                 
                 serialPort1.ReadTimeout = 150;

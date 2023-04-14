@@ -32,8 +32,8 @@ using Microsoft.Win32;
 
 partial class image2gcode:Form {
     public const string AppTitle = "image2gcode";
-    public const string AppVersion = "3.2.0";
-    public const string AppVersionBuild = "2022-12-17";
+    public const string AppVersion = "3.2.1";
+    public const string AppVersionBuild = "2023-04-14";
     public const string AppAuthor = "Artur Kurpukov";
     public const string AppCopyright = "Copyright (C) 2017-2023 Artur Kurpukov";
     private const string SettingsVersion = "3.2";
@@ -73,7 +73,6 @@ partial class image2gcode:Form {
     private CultureInfo culture;
     
     private string comPort;
-    private int baudRate;
     
     private float imDpiX = 72F;
     private float imDpiY = 72F;
@@ -180,7 +179,6 @@ partial class image2gcode:Form {
     
     private unsafe void Image2gcodeShown(object sender, EventArgs e) {
         comPort = settings.GetString("ComPort", "COM1");
-        baudRate = settings.GetInt32("BaudRate", 230400);
         
         invalidFileNameChars = Path.GetInvalidFileNameChars();
         
@@ -538,7 +536,6 @@ partial class image2gcode:Form {
         settings.SetInt32("UICulture", culture.LCID);
         
         settings.SetString("ComPort", comPort);
-        settings.SetInt32("BaudRate", baudRate);
         
         settings.SetInt32("Image1bitPalette", im1bitPalette);
         settings.SetInt32("ImageDithering", imDithering);
@@ -845,19 +842,10 @@ partial class image2gcode:Form {
             
             portToolStripMenuItem.DropDownItems.Add(toolStripItem);
         }
-        
-        baudToolStripMenuItem.Text = String.Format(culture, resources.GetString("Menu_BaudRate", culture), baudRate);
-        foreach (ToolStripMenuItem toolStripItem in baudToolStripMenuItem.DropDownItems) {
-            toolStripItem.Checked = ((int)toolStripItem.Tag == baudRate);
-        }
     }
     
     private void PortToolStripMenuItemDropDownItemClicked(object sender, ToolStripItemClickedEventArgs e) {
         comPort = e.ClickedItem.Text;
-    }
-    
-    private void BaudToolStripMenuItemDropDownItemClicked(object sender, ToolStripItemClickedEventArgs e) {
-        baudRate = (int)e.ClickedItem.Tag;
     }
     
     private void ExportToolStripMenuItemClick(object sender, EventArgs e) {

@@ -195,9 +195,6 @@
   <data name="Menu_SerialPort" xml:space="preserve">
     <value>Puerto serie ({0})</value>
   </data>
-  <data name="Menu_BaudRate" xml:space="preserve">
-    <value>Tasa de transferencia ({0})</value>
-  </data>
   <data name="Menu_Send" xml:space="preserve">
     <value>Enviar...</value>
   </data>

@@ -17,7 +17,6 @@ partial class image2gcode {
             progressForm3.Update();
             
             try {
-                serialPort1.BaudRate = baudRate;
                 serialPort1.PortName = comPort;
                 
                 serialPort1.ReadTimeout = 500;
@@ -137,7 +136,13 @@ partial class image2gcode {
         int prevReadTimeout = serialPort1.ReadTimeout;
         try {
             serialPort1.ReadTimeout = 250;
-            for (int i = 0; i < 15; i++) {
+            for (int i = 0; i < 16; i++) {
+                if ((i % 4) == 0) {
+                    serialPort1.BaudRate = 230400;
+                } else if ((i % 4) == 3) {
+                    serialPort1.BaudRate = 115200;
+                }
+                
                 serialPort1.Write("\n\n");
                 
                 string resp = null;

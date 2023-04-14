@@ -252,9 +252,6 @@
   <data name="Btn_Send" xml:space="preserve">
     <value>Отправить...</value>
   </data>
-  <data name="Menu_BaudRate" xml:space="preserve">
-    <value>Бод-рейт ({0})</value>
-  </data>
   <data name="Im_SameAsX" xml:space="preserve">
     <value>Как по X</value>
   </data>
